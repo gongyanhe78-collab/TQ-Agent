@@ -1,0 +1,49 @@
+# 虚拟环境
+.venv
+.venv/
+venv/
+env/
+ENV/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE 配置
+.idea/
+.vscode/
+
+# 环境变量
+.env
+.env.local
+
+# 数据库文件
+*.sqlite3
+*.db
+*.sqlite
+
+# 向量数据库和索引
+data/document_index/
+data/document_images/
+data/image_metadata.json
+data/standard_cases.json
+data/index/
+
+# 原始资料文件
+resource/
+*.pdf
+*.whl
+
+# 其他常见忽略
+*.log
+.DS_Store
+node_modules/
+
+# 构建产物
+frontend/dist/
+
+# 临时文件
+weather_qa_results.json
+*.tmp
+*.bak
