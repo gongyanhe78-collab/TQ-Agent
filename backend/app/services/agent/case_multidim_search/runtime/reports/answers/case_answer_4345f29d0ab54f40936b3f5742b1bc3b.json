@@ -1,0 +1,531 @@
+{
+  "answer_id": "case_answer_4345f29d0ab54f40936b3f5742b1bc3b",
+  "title": "山西省气象灾害个例多维分析报告",
+  "question": "年份：2025；月份：5月；灾种：高温",
+  "answer": "本次检索围绕高温获得 1 个有效个例，并对其中 1 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与其他伴随灾种共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+  "sections": [
+    {
+      "heading": "一、时间分布分析",
+      "content": "时间演变上，命中过程覆盖5月，整体集中于暖季；各月样本数量接近，未出现单一月份明显占优。这种分布说明当前材料中的过程具有明确时段集中性，后续对比应优先选择相同时段的个例。"
+    },
+    {
+      "heading": "二、灾种结构分析",
+      "content": "灾种关系上，高温是本次检索的主分析对象，命中个例可围绕其发生时段、强度证据和伴随灾种展开复盘。当前样本未形成稳定的其他伴随灾种，复合关系仍需更多材料验证。业务上建议按“主导灾种—伴随灾种—影响区域—强度证据”的顺序拆解，先判断每个个例的主风险，再评估多灾种叠加是否会放大交通、农业、电力或城市运行影响。 本次报告的业务视角为：高温视角重点关注最高气温、高温持续时间、副热带高压或大陆高压、电力负荷、人体健康和农业影响；优先核查最高气温、高温持续天数。"
+    },
+    {
+      "heading": "三、影响区域分析",
+      "content": "空间影响涉及 16 个地市或区域，其中临汾、吕梁、大同在 1 个命中个例中反复出现，并延伸至太原、山西中部、山西北部等区域。这里统计的是地市被个例涉及的次数，同一个例可以同时计入多个地市，因此只用于识别高频影响区，不能解释为互斥占比或各地受灾强度。"
+    },
+    {
+      "heading": "四、关键强度指标分析",
+      "content": "各过程的实况强度表明，最高气温达32℃。相关数值均可在对应天气过程的正式业务材料中核验；材料未明确记录的指标在汇总表中保留为“—”，不作推断。"
+    }
+  ],
+  "images": [],
+  "charts": [
+    {
+      "visual_id": "case_answer_4345f29d0ab54f40936b3f5742b1bc3b-chart-1",
+      "visual_type": "generated_chart",
+      "title": "灾种频次分布",
+      "chart_key": "disaster_frequency",
+      "url": "/api/case-multidim/assets/case_answer_4345f29d0ab54f40936b3f5742b1bc3b-chart-1.png",
+      "path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_4345f29d0ab54f40936b3f5742b1bc3b-chart-1.png",
+      "source": "该图确认高温为唯一检索灾种，提示业务复盘需聚焦单一主导风险。监测时应优先核查最高气温实况与持续时长，避免将未验证的伴随灾害纳入研判，确保证据链完整且指向明确。"
+    },
+    {
+      "visual_id": "case_answer_4345f29d0ab54f40936b3f5742b1bc3b-chart-2",
+      "visual_type": "generated_chart",
+      "title": "主要影响区域命中个例数",
+      "chart_key": "spatial",
+      "url": "/api/case-multidim/assets/case_answer_4345f29d0ab54f40936b3f5742b1bc3b-chart-2.png",
+      "path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_4345f29d0ab54f40936b3f5742b1bc3b-chart-2.png",
+      "source": "业务启示：临汾可作为空间复核的优先区域，后续应结合地形、站点密度和灾情记录判断集中原因。"
+    }
+  ],
+  "evidence": [
+    {
+      "case_id": "FST2025-5-std-case-004",
+      "title": "5月19~21日高温天气",
+      "date_range": "2025年5月19-21日",
+      "source_pdf": "FST2025-5.pdf",
+      "matched_fields": [
+        "date",
+        "disaster"
+      ],
+      "reason": "date、disaster"
+    }
+  ],
+  "search_response": {
+    "question": "年份：2025；月份：5月；灾种：高温",
+    "parsed_query": {
+      "start_date": "",
+      "end_date": "",
+      "years": [
+        2025
+      ],
+      "months": [
+        5
+      ],
+      "disaster_types": [
+        "高温"
+      ],
+      "cities": [],
+      "areas": [],
+      "limit": 50
+    },
+    "retrieval_mode": "structured_json_then_case_chunks",
+    "result_count": 1,
+    "displayed_result_count": 1,
+    "answer": "本次检索围绕高温获得 1 个有效个例，并对其中 1 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与其他伴随灾种共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+    "analysis": {
+      "executive_summary": "本次检索围绕高温获得 1 个有效个例，并对其中 1 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与其他伴随灾种共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+      "analysis_case_count": 1,
+      "displayed_case_count": 1,
+      "key_findings": [
+        "时间证据表明过程集中在暖季的5月，各月样本数量接近，未出现单一月份明显占优。",
+        "灾种关系显示，高温是本次检索的主分析对象，命中个例可围绕其发生时段、强度证据和伴随灾种展开复盘。当前样本未形成稳定的其他伴随灾种，复合关系仍需更多材料验证。",
+        "空间影响以临汾、吕梁、大同出现最为频繁，并延伸至多个山地、盆地和城市区域。",
+        "强度特征表现为：最高气温达 32℃（5月19-21日）。"
+      ],
+      "disaster_view": "高温视角重点关注最高气温、高温持续时间、副热带高压或大陆高压、电力负荷、人体健康和农业影响；优先核查最高气温、高温持续天数。",
+      "sections": {
+        "temporal": "时间演变上，命中过程覆盖5月，整体集中于暖季；各月样本数量接近，未出现单一月份明显占优。这种分布说明当前材料中的过程具有明确时段集中性，后续对比应优先选择相同时段的个例。",
+        "disaster": "灾种关系上，高温是本次检索的主分析对象，命中个例可围绕其发生时段、强度证据和伴随灾种展开复盘。当前样本未形成稳定的其他伴随灾种，复合关系仍需更多材料验证。业务上建议按“主导灾种—伴随灾种—影响区域—强度证据”的顺序拆解，先判断每个个例的主风险，再评估多灾种叠加是否会放大交通、农业、电力或城市运行影响。 本次报告的业务视角为：高温视角重点关注最高气温、高温持续时间、副热带高压或大陆高压、电力负荷、人体健康和农业影响；优先核查最高气温、高温持续天数。",
+        "spatial": "空间影响涉及 16 个地市或区域，其中临汾、吕梁、大同在 1 个命中个例中反复出现，并延伸至太原、山西中部、山西北部等区域。这里统计的是地市被个例涉及的次数，同一个例可以同时计入多个地市，因此只用于识别高频影响区，不能解释为互斥占比或各地受灾强度。",
+        "intensity": "各过程的实况强度表明，最高气温达32℃。相关数值均可在对应天气过程的正式业务材料中核验；材料未明确记录的指标在汇总表中保留为“—”，不作推断。"
+      },
+      "representative_cases": [
+        {
+          "case_id": "FST2025-5-std-case-004",
+          "title": "5月19~21日高温天气",
+          "reason": "材料包含可核验量化记录",
+          "summary": "2025年5月19-21日，太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部出现以高温为主的天气过程。四、 5月19~21日高温天气1 天气实况5月19日07 时至 20日07 时，我省各地最高气温介于 29.7℃（神池）～40.7℃（阳泉矿区）之间，阳泉和运城的全域，太原、长治、晋城、晋中和临汾的大部，忻州和吕梁的部分共 80 个县（市、。；配套图件说明涉及项目 内容 影响系统 地面冷锋，冷高压，冷涡 数值预报产品应用 EC 能够较好的预报出大风落区和强 度，GFS 预报的大风量级偏小严重， 从形势场来看，GFS 预报的地面气旋 和冷锋位置偏东。 预报着。"
+        }
+      ],
+      "overview_intensity_tables": [
+        {
+          "key": "heat",
+          "title": "高温类强度汇总",
+          "columns": [
+            {
+              "key": "max_temperature",
+              "label": "最高气温",
+              "metric_names": [
+                "最高气温"
+              ],
+              "prefer_min": false
+            }
+          ],
+          "rows": [
+            {
+              "case_id": "FST2025-5-std-case-004",
+              "case": "5月19-21日",
+              "title": "5月19~21日高温天气",
+              "main_disasters": "高温",
+              "concurrent_disasters": "—",
+              "metrics": {
+                "max_temperature": "32 ℃"
+              },
+              "metric_values": {
+                "max_temperature": 32.0
+              },
+              "main_areas": "阳泉、运城、长治、晋城、晋中等",
+              "data_completeness": "强度记录完整",
+              "max_hourly_precip": "—",
+              "max_hourly_precip_value": null,
+              "max_wind": "—",
+              "max_wind_value": null,
+              "max_temperature": "32 ℃",
+              "max_temperature_value": 32.0
+            }
+          ]
+        }
+      ],
+      "overview_intensity_columns": [
+        {
+          "key": "max_temperature",
+          "label": "最高气温",
+          "metric_names": [
+            "最高气温"
+          ],
+          "prefer_min": false
+        }
+      ],
+      "overview_intensity_table": [
+        {
+          "case_id": "FST2025-5-std-case-004",
+          "case": "5月19-21日",
+          "title": "5月19~21日高温天气",
+          "main_disasters": "高温",
+          "concurrent_disasters": "—",
+          "metrics": {
+            "max_temperature": "32 ℃"
+          },
+          "metric_values": {
+            "max_temperature": 32.0
+          },
+          "main_areas": "阳泉、运城、长治、晋城、晋中等",
+          "data_completeness": "强度记录完整",
+          "max_hourly_precip": "—",
+          "max_hourly_precip_value": null,
+          "max_wind": "—",
+          "max_wind_value": null,
+          "max_temperature": "32 ℃",
+          "max_temperature_value": 32.0
+        }
+      ],
+      "intensity_extremes": "强度特征表现为：最高气温达 32℃（5月19-21日）。",
+      "query_strength_assessments": [],
+      "recommendations": [
+        "建议探索建立短临触发信号联合识别流程，把雷达回波增强、站点雨强跃增和大风站数扩展与预警发布时间对应起来，优先在太原、晋中盆地和北部山区检验提前量与命中效果。",
+        "建议在吕梁山、五台山和太行山迎风坡试点建立分区模式偏差档案，按天气形势分别检验降水、风速和温度误差，通过滚动复盘筛选稳定的本地订正因子。",
+        "建议探索多灾种叠加风险研判清单，围绕大风与沙尘低能见度、雨雪降温与道路结冰、强降水与城市内涝等场景，明确风险升级条件、重点区域和服务对象。",
+        "建议统一个例库的过程边界、灾种标签、影响区域和强度指标口径，并关联预报结论、预警发布、站点实况和服务反馈，形成可追溯、可检验的复盘记录。"
+      ],
+      "conclusion": "综合研判，本次命中材料反映的核心特征不是高温单独出现，而是主导天气与其他伴随灾种在不同区域、不同阶段相互叠加。山西山地与盆地相间的地形使降水、风速、温度和能见度的局地差异明显，同一过程内的风险重点也会随天气系统演变而转换。\n\n现有复盘对过程实况的描述相对充分，但强对流触发、短时强降水落区偏差、冷空气动量下传及雨雪相态转换等关键环节的诊断深度仍不均衡。部分个例尚未把雷达回波、站点极值、模式预报与预警发布时间串联起来，因而难以准确判断预警提前量、落区偏差来源和服务响应效果。\n\n这些材料能够支撑对主要天气过程和重点影响区域的判断，也表明吕梁山、五台山、太行山迎风坡、晋中盆地及城市敏感区是业务误差容易被放大的场景。当前最突出的业务短板，是局地突发性风险的识别证据尚未形成统一、可量化、可连续复盘的闭环。",
+      "limitations": [
+        "空间分析使用影响区域回退，尚未形成统一的地市级标准标签。",
+        "未解析到可展示的原始图片，图像证据部分为空。",
+        "统计和共现关系仅代表当前检索命中样本，不代表完整气候统计口径。"
+      ],
+      "json_overview": "本次检索围绕高温获得 1 个有效个例，并对其中 1 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与其他伴随灾种共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+      "report_llm_status": "invalid_json",
+      "chart_llm_status": "llm_generated"
+    },
+    "results": [
+      {
+        "case": {
+          "case_id": "FST2025-5-std-case-004",
+          "title": "5月19~21日高温天气",
+          "date_range": "2025年5月19-21日",
+          "disaster_types": [
+            "高温"
+          ],
+          "affected_areas": [
+            "太原",
+            "大同",
+            "朔州",
+            "忻州",
+            "阳泉",
+            "晋中",
+            "吕梁",
+            "长治",
+            "晋城",
+            "临汾",
+            "运城",
+            "晋北",
+            "山西北部",
+            "山西中部",
+            "晋南",
+            "山西南部"
+          ],
+          "source_pdf": "FST2025-5.pdf",
+          "source_chunk_ids": [
+            "FST2025-5-chunk-017",
+            "FST2025-5-chunk-018",
+            "FST2025-5-chunk-019",
+            "FST2025-5-chunk-020"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-5-page-010-snapshot",
+            "FST2025-5-page-011-image-001",
+            "FST2025-5-page-011-image-002",
+            "FST2025-5-page-011-snapshot",
+            "FST2025-5-page-012-image-001",
+            "FST2025-5-page-012-image-002",
+            "FST2025-5-page-012-snapshot"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "高温"
+          ],
+          "matched_disaster": "高温",
+          "analysis_focus_disaster": "高温"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date",
+          "disaster"
+        ],
+        "analysis": "2025年5月19-21日，太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部发生以高温为主的天气过程。已核验的强度事实包括最高气温32℃（太原）。5月19至21日，山西多地出现持续高温。实况显示，阳泉矿区最高达41.7℃，太原32℃。晋北、中部及南部广泛出现35℃以上高温，其中阳泉、运城全域及多地大部超35℃，局部突破40℃，呈现范围广、强度大特征。\n\n中高纬高压脊控制下，冷涡偏北，河套至华北盛行下沉气流。850hPa暖中心东移西摆，山西受暖脊影响，高度场偏高2σ。地面低压控制且等压线稀疏，风力微弱，加之温度露点差大，呈显著暖干特征，抑制热量交换，加速增温。高温伴随显著暖干环境，对电力负荷构成压力。农业方面，持续高温可能加剧土壤水分蒸发，影响作物生长。人体健康面临热射病风险，需关注户外作业安全及易感人群防护，特别是午后高温峰值时段。\n\n模式对高压脊稳定及大于40℃区域预报具参考性。未来应对类似过程，应重点关注环流稳定性及暖中心位置演变。当高度场距平偏高且地面风力微弱时，需提前预警极端高温，强化防暑降温措施及能源调度准备。",
+        "intensity_metrics": [
+          {
+            "metric_name": "最高气温",
+            "value": 32.0,
+            "unit": "℃",
+            "location": "太原",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-017",
+            "source_text": "5月20日07 时至 21日07 时，我省各地最高气温介于 32.0℃（神池）～41.7℃（阳泉矿区）之间，太原、阳泉和运城的全域，长治、晋城、晋中、临汾和吕梁的大部，大同、朔州和忻州的部分共 97 个县（市、区）出现 35℃以上高",
+            "confidence": 0.8
+          }
+        ],
+        "evidence_images": []
+      }
+    ],
+    "aggregations": {
+      "case_count": 1,
+      "month_counts": {
+        "5": 1
+      },
+      "disaster_counts": {
+        "高温": 1
+      },
+      "disaster_cooccurrence": {
+        "labels": [
+          "高温"
+        ],
+        "matrix": []
+      },
+      "city_counts": {
+        "太原": 1,
+        "大同": 1,
+        "朔州": 1,
+        "忻州": 1,
+        "阳泉": 1,
+        "晋中": 1,
+        "吕梁": 1,
+        "长治": 1,
+        "晋城": 1,
+        "临汾": 1,
+        "运城": 1,
+        "晋北": 1,
+        "山西北部": 1,
+        "山西中部": 1,
+        "晋南": 1,
+        "山西南部": 1
+      },
+      "intensity_values": {
+        "最高气温": [
+          32.0
+        ]
+      },
+      "intensity_case_values": {
+        "最高气温": [
+          {
+            "case_id": "FST2025-5-std-case-004",
+            "title": "5月19~21日高温天气",
+            "value": 32.0,
+            "unit": "℃",
+            "location": "太原"
+          }
+        ]
+      }
+    },
+    "charts": [
+      {
+        "chart_key": "disaster_frequency",
+        "chart_type": "horizontal_bar",
+        "title": "灾种频次分布",
+        "x_label": "出现频次",
+        "y_label": "",
+        "labels": [
+          "高温"
+        ],
+        "values": [
+          1.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 1,
+        "missing_count": 0,
+        "interpretation": "该图确认高温为唯一检索灾种，提示业务复盘需聚焦单一主导风险。监测时应优先核查最高气温实况与持续时长，避免将未验证的伴随灾害纳入研判，确保证据链完整且指向明确。"
+      },
+      {
+        "chart_key": "spatial",
+        "chart_type": "horizontal_bar",
+        "title": "主要影响区域命中个例数",
+        "x_label": "命中个例数",
+        "y_label": "影响区域",
+        "labels": [
+          "临汾",
+          "吕梁",
+          "大同",
+          "太原",
+          "山西中部",
+          "山西北部",
+          "山西南部",
+          "忻州"
+        ],
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 1,
+        "missing_count": 0,
+        "interpretation": "业务启示：临汾可作为空间复核的优先区域，后续应结合地形、站点密度和灾情记录判断集中原因。"
+      }
+    ],
+    "warnings": [
+      "报告级大模型综合失败，已保留规则统计分析结果。"
+    ],
+    "audit": {
+      "structured_candidates": 1,
+      "json_statistics_case_count": 1,
+      "fused_results": 1,
+      "analysis_case_count": 1,
+      "displayed_results": 1,
+      "resolved_images": 0,
+      "all_case_ids": [
+        "FST2025-5-std-case-004"
+      ],
+      "displayed_case_ids": [
+        "FST2025-5-std-case-004"
+      ],
+      "report_include_all_cases": true,
+      "chunk_loading_mode": "shared_parallel_prefetch_pipeline",
+      "case_chunk_limit": 6,
+      "case_context_char_limit": 6000,
+      "case_analysis_concurrency": 4,
+      "llm_thinking_enabled": false,
+      "case_analysis_llm_calls_per_case": 1,
+      "metric_llm_batch_size": 6,
+      "metric_fact_batches_total": 1,
+      "metric_llm_calls_per_case_upper_bound": 1,
+      "case_max_output_tokens": 1536,
+      "case_max_output_tokens_requested": 1536,
+      "selected_chunk_count_total": 4,
+      "selected_chunk_count_max": 4,
+      "case_llm_requested": true,
+      "case_llm_available": true,
+      "case_llm_calls": 1,
+      "case_llm_attempts": 1,
+      "case_llm_cache_hits": 0,
+      "case_analysis_statuses": {
+        "llm_generated": 1
+      },
+      "metric_fact_audit_by_case": {
+        "FST2025-5-std-case-004": {
+          "batch_size": 6,
+          "batch_count": 1,
+          "confirmed_metric_count": 1,
+          "rule_metric_count": 1,
+          "llm_metric_count": 0,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "not_present_after_all_chunks_scanned",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "not_present_after_all_chunks_scanned",
+            "最高气温": "confirmed",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "not_present_after_all_chunks_scanned",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "not_present_after_all_chunks_scanned",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        }
+      },
+      "case_prepare_seconds_total": 0.36,
+      "case_analysis_seconds_total": 3.812,
+      "report_pipeline_seconds": 17.406,
+      "pipeline_wall_seconds": 21.594,
+      "report_llm_status": "invalid_json",
+      "report_llm_used": false
+    }
+  },
+  "can_export_pdf": true,
+  "warnings": [
+    "报告级大模型综合失败，已保留规则统计分析结果。"
+  ],
+  "audit": {
+    "structured_candidates": 1,
+    "json_statistics_case_count": 1,
+    "fused_results": 1,
+    "analysis_case_count": 1,
+    "displayed_results": 1,
+    "resolved_images": 0,
+    "all_case_ids": [
+      "FST2025-5-std-case-004"
+    ],
+    "displayed_case_ids": [
+      "FST2025-5-std-case-004"
+    ],
+    "report_include_all_cases": true,
+    "chunk_loading_mode": "shared_parallel_prefetch_pipeline",
+    "case_chunk_limit": 6,
+    "case_context_char_limit": 6000,
+    "case_analysis_concurrency": 4,
+    "llm_thinking_enabled": false,
+    "case_analysis_llm_calls_per_case": 1,
+    "metric_llm_batch_size": 6,
+    "metric_fact_batches_total": 1,
+    "metric_llm_calls_per_case_upper_bound": 1,
+    "case_max_output_tokens": 1536,
+    "case_max_output_tokens_requested": 1536,
+    "selected_chunk_count_total": 4,
+    "selected_chunk_count_max": 4,
+    "case_llm_requested": true,
+    "case_llm_available": true,
+    "case_llm_calls": 1,
+    "case_llm_attempts": 1,
+    "case_llm_cache_hits": 0,
+    "case_analysis_statuses": {
+      "llm_generated": 1
+    },
+    "metric_fact_audit_by_case": {
+      "FST2025-5-std-case-004": {
+        "batch_size": 6,
+        "batch_count": 1,
+        "confirmed_metric_count": 1,
+        "rule_metric_count": 1,
+        "llm_metric_count": 0,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "not_present_after_all_chunks_scanned",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "not_present_after_all_chunks_scanned",
+          "最高气温": "confirmed",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "not_present_after_all_chunks_scanned",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "not_present_after_all_chunks_scanned",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      }
+    },
+    "case_prepare_seconds_total": 0.36,
+    "case_analysis_seconds_total": 3.812,
+    "report_pipeline_seconds": 17.406,
+    "pipeline_wall_seconds": 21.594,
+    "report_llm_status": "invalid_json",
+    "report_llm_used": false,
+    "answer_id": "case_answer_4345f29d0ab54f40936b3f5742b1bc3b",
+    "image_count": 0,
+    "chart_count": 2,
+    "cache_path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\answers\\case_answer_4345f29d0ab54f40936b3f5742b1bc3b.json"
+  }
+}

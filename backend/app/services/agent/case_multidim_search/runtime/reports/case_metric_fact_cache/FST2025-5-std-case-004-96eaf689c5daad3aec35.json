@@ -1,0 +1,33 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "最高气温",
+      "value": 32.0,
+      "unit": "℃",
+      "location": "太原",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-017",
+      "source_text": "5月20日07 时至 21日07 时，我省各地最高气温介于 32.0℃（神池）～41.7℃（阳泉矿区）之间，太原、阳泉和运城的全域，长治、晋城、晋中、临汾和吕梁的大部，大同、朔州和忻州的部分共 97 个县（市、区）出现 35℃以上高",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "confirmed",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "not_present_after_all_chunks_scanned",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 1,
+  "rule_metric_count": 1,
+  "llm_metric_count": 0
+}

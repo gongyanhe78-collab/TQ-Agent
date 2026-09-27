@@ -1,0 +1,53 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "阵风风力",
+      "value": 8.0,
+      "unit": "级",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-007",
+      "source_text": "1月11日08 时至 12日08 时，太谷、乡宁出现大风，最大值出现在太谷，达到 8 级",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 3.2,
+      "unit": "mm",
+      "location": "大同",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-006",
+      "source_text": "1月11日08 时至 12日08 时，大同、朔州、忻州和吕梁的部分，阳泉、长治、晋中和临汾的局部共 30 个县（市、区）出现降水，降水量介于 0.1～3.2 毫米之间，前 3 位分别为：交口（3.2）、岢岚（2.6）、神池（2.1）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -24.3,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-006",
+      "source_text": "1月11日08 时至 12日08 时，全省各地最低气温介于-24.3℃（新荣）～-3.2℃（平陆）之间。",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "confirmed",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 2,
+  "rule_metric_count": 3,
+  "llm_metric_count": 0
+}

@@ -1,0 +1,133 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "阵风风力",
+      "value": 13.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-003",
+      "source_text": "此次过程风力较大，国家站最大阵风风速达 39 m/s（13 级），出现在五台山国家基本气象站[53588]，发生于 2025年4月13日07:41；国家站中，最大阵风达 8～9 级的有 86 站（占 78 %），10～11 级有 21 站（占 19 %），12～13 级有 1站；区域站最大阵风风速达 39.7 m/s （13 级），出现在神池义井[B5511]，发生于 2025年4月11日17:05；区域站中，最大阵风达 8～9 级的有 1331 站（占 52 %），10～1",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "极大风速",
+      "value": 39.0,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-003",
+      "source_text": "此次过程风力较大，国家站最大阵风风速达 39 m/s（13 级），出现在五台山国家基本气象站[53588]，发生于 2025年4月13日07:41；国家站中，最大阵风达 8～9 级的有 86 站（占 78 %），10～11 级有 21 站（占 19 %），12～13 级有 1站；区域站最大阵风风速达 39.7 m/s （13 级），出现在神池义井[B5511]，发生于 2025年4月11日17:05；区域站中，最大阵风达 8～9 级的有 1331 站（占 52 %），10～1",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 39.0,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-003",
+      "source_text": "此次过程风力较大，国家站最大阵风风速达 39 m/s（13 级），出现在五台山国家基本气象站[53588]，发生于 2025年4月13日07:41；国家站中，最大阵风达 8～9 级的有 86 站（占 78 %），10～11 级有 21 站（占 19 %），12～13 级有 1站；区域站最大阵风风速达 39.7 m/s （13 级），出现在神池义井[B5511]，发生于 2025年4月11日17:05；区域站中，最大阵风达 8～9 级的有 1331 站（占 52 %），10～1",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 9.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-003",
+      "source_text": "此次过程风力较大，国家站最大阵风风速达 39 m/s（13 级），出现在五台山国家基本气象站[53588]，发生于 2025年4月13日07:41；国家站中，最大阵风达 8～9 级的有 86 站（占 78 %），10～11 级有 21 站（占 19 %），12～13 级有 1站；区域站最大阵风风速达 39.7 m/s （13 级），出现在神池义井[B5511]，发生于 2025年4月11日17:05；区域站中，最大阵风达 8～9 级的有 1331 站（占 52 %），10～1",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "极大风速",
+      "value": 39.7,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-003",
+      "source_text": "此次过程风力较大，国家站最大阵风风速达 39 m/s（13 级），出现在五台山国家基本气象站[53588]，发生于 2025年4月13日07:41；国家站中，最大阵风达 8～9 级的有 86 站（占 78 %），10～11 级有 21 站（占 19 %），12～13 级有 1站；区域站最大阵风风速达 39.7 m/s （13 级），出现在神池义井[B5511]，发生于 2025年4月11日17:05；区域站中，最大阵风达 8～9 级的有 1331 站（占 52 %），10～1",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 39.7,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-003",
+      "source_text": "此次过程风力较大，国家站最大阵风风速达 39 m/s（13 级），出现在五台山国家基本气象站[53588]，发生于 2025年4月13日07:41；国家站中，最大阵风达 8～9 级的有 86 站（占 78 %），10～11 级有 21 站（占 19 %），12～13 级有 1站；区域站最大阵风风速达 39.7 m/s （13 级），出现在神池义井[B5511]，发生于 2025年4月11日17:05；区域站中，最大阵风达 8～9 级的有 1331 站（占 52 %），10～1",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 20.1,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-004",
+      "source_text": "4月11日白天-12日白天，全省最低气温下降 1.2～20.1℃（局部最高气温上升 0.1-9.0℃）；11-13日夜间均出现霜冻。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 15.4,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-4-chunk-004",
+      "source_text": "另外，4月11日夜间到 13日白天，北部部分和中南部局部地区出现降水，国家站最大出现在五台山，15.4 mm，区域站最大在平陆槐下，22.1 mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 21.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-013",
+      "source_text": "寒潮成因分析此次过程降温主要发生在 4月11日白天到 12日白天，12日08 时，过去 24h降温幅度可达 21℃。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 11.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-4-chunk-017",
+      "source_text": "EC 模式在 4月7日20 时起报的 24h 间隔阵风风速产品中，已报出 4月11日20 时到 12日20 时山西北部 11 级以上大风；CMA 全球模式也在 4月8日20 时起报的阵风风速产品中，报出了 11日20 时到 12日20 时的山西北部 11 级以上阵风，并在随后的起报时次中，将 11 级以上阵风范围由北部扩展到晋东南等地。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 0.3,
+      "unit": "mm",
+      "location": "大同站",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-4-chunk-019",
+      "source_text": "根据实况，大同站在 4月13日08-09 时、09-10 时分别降水 0.3mm、0.1mm。",
+      "confidence": 0.9
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "confirmed",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "confirmed",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 4,
+  "rule_metric_count": 10,
+  "llm_metric_count": 2
+}

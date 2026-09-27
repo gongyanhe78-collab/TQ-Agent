@@ -1,0 +1,40 @@
+{
+  "visibleVersionGroups": 1,
+  "initialVersionLabel": "2 / 2",
+  "followUpCount": 0,
+  "followUpPromptCount": 0,
+  "feedbackActiveColor": "rgb(41, 41, 39)",
+  "regeneratedVersionLabel": "3 / 3",
+  "pdfStatusRightGap": 24,
+  "pdfStatusBottomGap": 24,
+  "downloadFilename": "message-answer.pdf",
+  "downloadHref": "http://127.0.0.1:8001/api/case-multidim/reports/message-answer.pdf",
+  "reportCardsAfter": 1,
+  "mobileOverflow": 0,
+  "feedbackPayloads": [
+    {
+      "rating": "needs_improvement",
+      "client_id": "web-9f65083f-c147-4166-ab2b-deb2c2477b70",
+      "reason": "遗漏关键信息：缺少关键证据来源"
+    },
+    {
+      "rating": "none",
+      "client_id": "web-9f65083f-c147-4166-ab2b-deb2c2477b70",
+      "reason": ""
+    },
+    {
+      "rating": "needs_improvement",
+      "client_id": "web-9f65083f-c147-4166-ab2b-deb2c2477b70",
+      "reason": "遗漏关键信息：补充观测站与时间证据"
+    }
+  ],
+  "regenerationPayload": {
+    "question": "重新生成原回答",
+    "top_k": 5,
+    "top_n": 3,
+    "session_id": "ui-20260920",
+    "regenerate_from_message_id": 3,
+    "regeneration_instruction": "遗漏关键信息：补充观测站与时间证据"
+  },
+  "exportCalls": 1
+}

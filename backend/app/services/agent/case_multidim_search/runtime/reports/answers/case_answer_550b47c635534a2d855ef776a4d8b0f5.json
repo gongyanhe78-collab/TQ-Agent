@@ -1,0 +1,717 @@
+{
+  "answer_id": "case_answer_550b47c635534a2d855ef776a4d8b0f5",
+  "title": "山西省气象灾害个例多维分析报告",
+  "question": "年份：2025；月份：3月；灾种：暴雪",
+  "answer": "本次检索以2025年3月暴雪为条件定位相关过程，需明确检索条件仅用于锁定目标时段与灾种，不代表所有命中个例均达到特定强度标准。综合研判显示，该时段主要影响类型为雨雪相态转换伴随的暴雪过程，核心影响区覆盖全省，其中太原、大同及山西北部等地表现突出。强度特征方面，最大积雪深度达21cm，过程最大降水量录得26.6mm，降温幅度显著。由于query_strength_assessments为空，未涉及额外阈值核对结论。整体而言，该过程体现了春季冷空气南下与低空切变线配合的典型特征，降水落区与地形效应紧密相关，需重点关注雨雪转换对交通和农业的影响。",
+  "sections": [
+    {
+      "heading": "一、时间分布分析",
+      "content": "时间演变上，命中过程覆盖2025年3月，具体集中在14日至15日，整体呈现典型的春季天气系统活动特征。各月样本数量接近，未出现单一月份明显占优的情况，说明当前材料中的过程具有明确的时段集中性。这种分布表明，后续对比分析应优先选择相同时段的个例，以确保气候背景的一致性。在过程内部，降水主要集中在14日08时至15日08时，随后受横槽转竖影响，冷空气大举南下导致降水结束并伴随剧烈降温。这种短时强降水与快速降温的组合，是春季暴雪过程的典型时序结构，对短临预警的时效性提出了较高要求。"
+    },
+    {
+      "heading": "二、灾种结构分析",
+      "content": "灾种关系上，暴雪是本次检索的主分析对象，命中个例围绕其发生时段、强度证据和伴随灾种展开复盘。伴随灾种中，雨雪出现较为突出，提示过程复盘不能只看检索勾选灾种本身，还要同步核对大风、短时强降水、低能见度或雨雪低温等伴随风险是否改变服务重点。业务上建议按“主导灾种—伴随灾种—影响区域—强度证据”的顺序拆解，先判断每个个例的主风险，再评估多灾种叠加是否会放大交通、农业、电力或城市运行影响。本次报告的业务视角为：雨雪、降雪视角重点关注雨雪相态转换、积雪深度、降雪量、道路结冰、交通影响、水汽和冷空气配合；优先核查最大积雪深度、过程最大降雪量、过程最大降水量、最大小时雨强。"
+    },
+    {
+      "heading": "三、影响区域分析",
+      "content": "空间影响涉及全省多个地市或区域，其中临汾、吕梁、大同在命中个例中反复出现，并延伸至太原、山西中部、山西北部等区域。这里统计的是地市被个例涉及的次数，同一个例可以同时计入多个地市，因此只用于识别高频影响区，不能解释为互斥占比或各地受灾强度。从实况来看，降水主要分布在忻州、太原、大同等地，其中大同录得过程最大降水量26.6mm，太原出现最大积雪深度21.0cm。吕梁山、五台山、太行山迎风坡以及晋中盆地等地形敏感区，因抬升作用和水汽汇聚，往往成为降水落区和积雪深度的极值中心，这些区域的局地差异对预报精度构成挑战。"
+    },
+    {
+      "heading": "四、关键强度指标分析",
+      "content": "各过程的实况强度表明，最大积雪深度达21cm，过程最大降水量达26.6mm，过程降温幅度最高达12.1℃。相关数值均可在对应天气过程的正式业务材料中核验；材料未明确记录的指标在汇总表中保留为“—”，不作推断。强度特征表现为：最大积雪深度达21cm（3月14-15日）、过程最大降水量达26.6mm（3月14-15日）、过程降温幅度达12.1℃（3月14-15日）。这些数据反映了该次暴雪过程的实质性影响，特别是太原地区的积雪和大同的降水极值，直接关联到交通阻断和农业受损风险。在缺乏更高分辨率小时雨强数据的情况下，上述累积量级是评估灾害等级和服务响应需求的关键依据。"
+    }
+  ],
+  "images": [
+    {
+      "visual_id": "FST2025-3-page-005-image-001",
+      "visual_type": "database_image",
+      "title": "图 1 3日08时700hPa、850hPa高度场、温度场、风场",
+      "chart_key": "",
+      "url": "/api/case-multidim/assets/images/FST2025-3-page-005-image-001",
+      "path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\data\\document_images\\FST2025-3\\FST2025-3-page-005-image-001.png",
+      "source": "FST2025-3.pdf"
+    }
+  ],
+  "charts": [
+    {
+      "visual_id": "case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-1",
+      "visual_type": "generated_chart",
+      "title": "灾种频次分布",
+      "chart_key": "disaster_frequency",
+      "url": "/api/case-multidim/assets/case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-1.png",
+      "path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-1.png",
+      "source": "该图显示暴雪与雨雪频次一致，提示短临监测需同步关注雨雪混合降水特征。业务复盘应优先核验伴随的低温或低能见度风险，避免仅凭单一灾种标签研判，确保多灾种叠加影响评估准确。"
+    },
+    {
+      "visual_id": "case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-2",
+      "visual_type": "generated_chart",
+      "title": "灾种共现热力图",
+      "chart_key": "disaster_cooccurrence",
+      "url": "/api/case-multidim/assets/case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-2.png",
+      "path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-2.png",
+      "source": "热力图样本量极小且数据缺失，表明当前材料不足以支撑灾种共现规律分析。建议补充更多历史个例以完善关联证据，现阶段不宜基于此图进行复杂的风险耦合研判，需警惕因数据不足导致的误判。"
+    },
+    {
+      "visual_id": "case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-3",
+      "visual_type": "generated_chart",
+      "title": "主要影响区域命中个例数",
+      "chart_key": "spatial",
+      "url": "/api/case-multidim/assets/case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-3.png",
+      "path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_550b47c635534a2d855ef776a4d8b0f5-chart-3.png",
+      "source": "业务启示：临汾可作为空间复核的优先区域，后续应结合地形、站点密度和灾情记录判断集中原因。"
+    }
+  ],
+  "evidence": [
+    {
+      "case_id": "FST2025-3-std-case-002",
+      "title": "14-15日暴雪天气过程",
+      "date_range": "2025年3月14-15日",
+      "source_pdf": "FST2025-3.pdf",
+      "matched_fields": [
+        "date",
+        "disaster"
+      ],
+      "reason": "date、disaster"
+    }
+  ],
+  "search_response": {
+    "question": "年份：2025；月份：3月；灾种：暴雪",
+    "parsed_query": {
+      "start_date": "",
+      "end_date": "",
+      "years": [
+        2025
+      ],
+      "months": [
+        3
+      ],
+      "disaster_types": [
+        "暴雪"
+      ],
+      "cities": [],
+      "areas": [],
+      "limit": 50
+    },
+    "retrieval_mode": "structured_json_then_case_chunks",
+    "result_count": 1,
+    "displayed_result_count": 1,
+    "answer": "本次检索以2025年3月暴雪为条件定位相关过程，需明确检索条件仅用于锁定目标时段与灾种，不代表所有命中个例均达到特定强度标准。综合研判显示，该时段主要影响类型为雨雪相态转换伴随的暴雪过程，核心影响区覆盖全省，其中太原、大同及山西北部等地表现突出。强度特征方面，最大积雪深度达21cm，过程最大降水量录得26.6mm，降温幅度显著。由于query_strength_assessments为空，未涉及额外阈值核对结论。整体而言，该过程体现了春季冷空气南下与低空切变线配合的典型特征，降水落区与地形效应紧密相关，需重点关注雨雪转换对交通和农业的影响。",
+    "analysis": {
+      "executive_summary": "本次检索以2025年3月暴雪为条件定位相关过程，需明确检索条件仅用于锁定目标时段与灾种，不代表所有命中个例均达到特定强度标准。综合研判显示，该时段主要影响类型为雨雪相态转换伴随的暴雪过程，核心影响区覆盖全省，其中太原、大同及山西北部等地表现突出。强度特征方面，最大积雪深度达21cm，过程最大降水量录得26.6mm，降温幅度显著。由于query_strength_assessments为空，未涉及额外阈值核对结论。整体而言，该过程体现了春季冷空气南下与低空切变线配合的典型特征，降水落区与地形效应紧密相关，需重点关注雨雪转换对交通和农业的影响。",
+      "analysis_case_count": 1,
+      "displayed_case_count": 1,
+      "key_findings": [
+        "时间证据表明过程集中在春季的3月，各月样本数量接近，未出现单一月份明显占优。",
+        "灾种关系显示，暴雪是本次检索的主分析对象，命中个例可围绕其发生时段、强度证据和伴随灾种展开复盘。伴随灾种中，雨雪出现较为突出，提示过程复盘不能只看检索勾选灾种本身，还要同步核对大风、短时强降水、低能见度或雨雪低温等伴随风险是否改变服务重点。",
+        "空间影响以临汾、吕梁、大同出现最为频繁，并延伸至多个山地、盆地和城市区域。",
+        "强度特征表现为：最大积雪深度达 21cm（3月14-15日）、过程最大降水量达 26.6mm（3月14-15日）、过程降温幅度达 12.1℃（3月14-15日）。"
+      ],
+      "disaster_view": "雨雪、降雪视角重点关注雨雪相态转换、积雪深度、降雪量、道路结冰、交通影响、水汽和冷空气配合；优先核查最大积雪深度、过程最大降雪量、过程最大降水量、最大小时雨强。",
+      "sections": {
+        "temporal": "时间演变上，命中过程覆盖2025年3月，具体集中在14日至15日，整体呈现典型的春季天气系统活动特征。各月样本数量接近，未出现单一月份明显占优的情况，说明当前材料中的过程具有明确的时段集中性。这种分布表明，后续对比分析应优先选择相同时段的个例，以确保气候背景的一致性。在过程内部，降水主要集中在14日08时至15日08时，随后受横槽转竖影响，冷空气大举南下导致降水结束并伴随剧烈降温。这种短时强降水与快速降温的组合，是春季暴雪过程的典型时序结构，对短临预警的时效性提出了较高要求。",
+        "disaster": "灾种关系上，暴雪是本次检索的主分析对象，命中个例围绕其发生时段、强度证据和伴随灾种展开复盘。伴随灾种中，雨雪出现较为突出，提示过程复盘不能只看检索勾选灾种本身，还要同步核对大风、短时强降水、低能见度或雨雪低温等伴随风险是否改变服务重点。业务上建议按“主导灾种—伴随灾种—影响区域—强度证据”的顺序拆解，先判断每个个例的主风险，再评估多灾种叠加是否会放大交通、农业、电力或城市运行影响。本次报告的业务视角为：雨雪、降雪视角重点关注雨雪相态转换、积雪深度、降雪量、道路结冰、交通影响、水汽和冷空气配合；优先核查最大积雪深度、过程最大降雪量、过程最大降水量、最大小时雨强。",
+        "spatial": "空间影响涉及全省多个地市或区域，其中临汾、吕梁、大同在命中个例中反复出现，并延伸至太原、山西中部、山西北部等区域。这里统计的是地市被个例涉及的次数，同一个例可以同时计入多个地市，因此只用于识别高频影响区，不能解释为互斥占比或各地受灾强度。从实况来看，降水主要分布在忻州、太原、大同等地，其中大同录得过程最大降水量26.6mm，太原出现最大积雪深度21.0cm。吕梁山、五台山、太行山迎风坡以及晋中盆地等地形敏感区，因抬升作用和水汽汇聚，往往成为降水落区和积雪深度的极值中心，这些区域的局地差异对预报精度构成挑战。",
+        "intensity": "各过程的实况强度表明，最大积雪深度达21cm，过程最大降水量达26.6mm，过程降温幅度最高达12.1℃。相关数值均可在对应天气过程的正式业务材料中核验；材料未明确记录的指标在汇总表中保留为“—”，不作推断。强度特征表现为：最大积雪深度达21cm（3月14-15日）、过程最大降水量达26.6mm（3月14-15日）、过程降温幅度达12.1℃（3月14-15日）。这些数据反映了该次暴雪过程的实质性影响，特别是太原地区的积雪和大同的降水极值，直接关联到交通阻断和农业受损风险。在缺乏更高分辨率小时雨强数据的情况下，上述累积量级是评估灾害等级和服务响应需求的关键依据。"
+      },
+      "representative_cases": [
+        {
+          "case_id": "FST2025-3-std-case-002",
+          "title": "14-15日暴雪天气过程",
+          "reason": "材料包含可核验量化记录",
+          "summary": "2025年3月14-15日，全省、太原、大同、朔州、忻州、晋中、吕梁、长治、临汾、晋北、山西北部、山西中部、晋南、山西南部出现以雨雪、暴雪为主的天气过程。二、14-15日暴雪天气过程1.实况特征受低空切变线和冷空气活动影响，14-15日我省大部分地区出现了雨雪天气。；配套图件包括图 7 3 日 08 时 700hPa、850hPa 高度场、温度场、风场。"
+        }
+      ],
+      "overview_intensity_tables": [
+        {
+          "key": "blizzard",
+          "title": "暴雪类强度汇总",
+          "columns": [
+            {
+              "key": "max_snow_depth",
+              "label": "最大积雪深度",
+              "metric_names": [
+                "最大积雪深度"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_precip",
+              "label": "过程最大降水量",
+              "metric_names": [
+                "过程最大降水量",
+                "最大降水量"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_temp_drop",
+              "label": "过程降温幅度",
+              "metric_names": [
+                "过程降温幅度"
+              ],
+              "prefer_min": false
+            }
+          ],
+          "rows": [
+            {
+              "case_id": "FST2025-3-std-case-002",
+              "case": "3月14-15日",
+              "title": "14-15日暴雪天气过程",
+              "main_disasters": "暴雪",
+              "concurrent_disasters": "雨雪",
+              "metrics": {
+                "max_snow_depth": "21 cm",
+                "max_precip": "26.6 mm",
+                "max_temp_drop": "12.1 ℃"
+              },
+              "metric_values": {
+                "max_snow_depth": 21.0,
+                "max_precip": 26.6,
+                "max_temp_drop": 12.1
+              },
+              "main_areas": "全省",
+              "data_completeness": "强度记录完整",
+              "max_hourly_precip": "—",
+              "max_hourly_precip_value": null,
+              "max_wind": "—",
+              "max_wind_value": null,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            }
+          ]
+        }
+      ],
+      "overview_intensity_columns": [
+        {
+          "key": "max_snow_depth",
+          "label": "最大积雪深度",
+          "metric_names": [
+            "最大积雪深度"
+          ],
+          "prefer_min": false
+        },
+        {
+          "key": "max_precip",
+          "label": "过程最大降水量",
+          "metric_names": [
+            "过程最大降水量",
+            "最大降水量"
+          ],
+          "prefer_min": false
+        },
+        {
+          "key": "max_temp_drop",
+          "label": "过程降温幅度",
+          "metric_names": [
+            "过程降温幅度"
+          ],
+          "prefer_min": false
+        }
+      ],
+      "overview_intensity_table": [
+        {
+          "case_id": "FST2025-3-std-case-002",
+          "case": "3月14-15日",
+          "title": "14-15日暴雪天气过程",
+          "main_disasters": "暴雪",
+          "concurrent_disasters": "雨雪",
+          "metrics": {
+            "max_snow_depth": "21 cm",
+            "max_precip": "26.6 mm",
+            "max_temp_drop": "12.1 ℃"
+          },
+          "metric_values": {
+            "max_snow_depth": 21.0,
+            "max_precip": 26.6,
+            "max_temp_drop": 12.1
+          },
+          "main_areas": "全省",
+          "data_completeness": "强度记录完整",
+          "max_hourly_precip": "—",
+          "max_hourly_precip_value": null,
+          "max_wind": "—",
+          "max_wind_value": null,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        }
+      ],
+      "intensity_extremes": "强度特征表现为：最大积雪深度达 21cm（3月14-15日）、过程最大降水量达 26.6mm（3月14-15日）、过程降温幅度达 12.1℃（3月14-15日）。",
+      "query_strength_assessments": [],
+      "recommendations": [
+        "建议探索建立短临触发信号联合识别流程，把雷达回波增强、站点雨强跃增和大风站数扩展与预警发布时间对应起来，优先在太原、晋中盆地和北部山区检验提前量与命中效果。",
+        "建议在吕梁山、五台山和太行山迎风坡试点建立分区模式偏差档案，按天气形势分别检验降水、风速和温度误差，通过滚动复盘筛选稳定的本地订正因子。",
+        "建议探索多灾种叠加风险研判清单，围绕大风与沙尘低能见度、雨雪降温与道路结冰、强降水与城市内涝等场景，明确风险升级条件、重点区域和服务对象。",
+        "建议统一个例库的过程边界、灾种标签、影响区域和强度指标口径，并关联预报结论、预警发布、站点实况和服务反馈，形成可追溯、可检验的复盘记录。"
+      ],
+      "conclusion": "综合研判，本次命中材料反映的核心特征不是暴雪单独出现，而是主导天气与雨雪在不同区域、不同阶段相互叠加。山西山地与盆地相间的地形使降水、风速、温度和能见度的局地差异明显，同一过程内的风险重点也会随天气系统演变而转换。\n\n现有复盘对过程实况的描述相对充分，但强对流触发、短时强降水落区偏差、冷空气动量下传及雨雪相态转换等关键环节的诊断深度仍不均衡。部分个例尚未把雷达回波、站点极值、模式预报与预警发布时间串联起来，因而难以准确判断预警提前量、落区偏差来源和服务响应效果。\n\n这些材料能够支撑对主要天气过程和重点影响区域的判断，也表明吕梁山、五台山、太行山迎风坡、晋中盆地及城市敏感区是业务误差容易被放大的场景。当前最突出的业务短板，是局地突发性风险的识别证据尚未形成统一、可量化、可连续复盘的闭环。",
+      "limitations": [
+        "空间分析使用影响区域回退，尚未形成统一的地市级标准标签。",
+        "统计和共现关系仅代表当前检索命中样本，不代表完整气候统计口径。"
+      ],
+      "llm_report_enhanced": true,
+      "json_overview": "本次检索围绕暴雪获得 1 个有效个例，并对其中 1 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与雨雪共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+      "report_llm_status": "llm_generated",
+      "chart_llm_status": "llm_generated"
+    },
+    "results": [
+      {
+        "case": {
+          "case_id": "FST2025-3-std-case-002",
+          "title": "14-15日暴雪天气过程",
+          "date_range": "2025年3月14-15日",
+          "disaster_types": [
+            "雨雪",
+            "暴雪"
+          ],
+          "affected_areas": [
+            "全省",
+            "太原",
+            "大同",
+            "朔州",
+            "忻州",
+            "晋中",
+            "吕梁",
+            "长治",
+            "临汾",
+            "晋北",
+            "山西北部",
+            "山西中部",
+            "晋南",
+            "山西南部"
+          ],
+          "source_pdf": "FST2025-3.pdf",
+          "source_chunk_ids": [
+            "FST2025-3-chunk-007",
+            "FST2025-3-chunk-008",
+            "FST2025-3-chunk-009",
+            "FST2025-3-chunk-010"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-3-page-005-snapshot",
+            "FST2025-3-page-005-image-001",
+            "FST2025-3-page-006-snapshot",
+            "FST2025-3-page-006-image-001",
+            "FST2025-3-page-007-snapshot",
+            "FST2025-3-page-007-image-001"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "暴雪"
+          ],
+          "matched_disaster": "暴雪",
+          "analysis_focus_disaster": "暴雪"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date",
+          "disaster"
+        ],
+        "analysis": "2025年3月14-15日，全省、太原、大同、朔州、忻州、晋中、吕梁、长治、临汾、晋北、山西北部、山西中部、晋南、山西南部出现以雨雪、暴雪为主的天气过程。本次检索将该个例归入暴雪视角，分析优先围绕暴雪展开。\n\n二、14-15日暴雪天气过程1.实况特征受低空切变线和冷空气活动影响，14-15日我省大部分地区出现了雨雪天气。；出现 0.1-4.2mm（宁武）的降水。；配套图件包括图 1 3 日 08 时 700hPa、850hPa 高度场、温度场、风场。；配套图件包括图 1 3日08时700hPa、850hPa高度场、温度场、风场。\n\n当前原文中尚未提取到统一可比的关键强度指标数值。\n\n配套的 7 张实况或诊断图件可用于核对过程形态、影响落区及演变依据。\n\n业务复盘应围绕暴雪的实况跃增、影响系统演变和重点落区建立对应关系，并结合吕梁山、五台山、太行山迎风坡、晋中盆地或城市敏感区复核短临触发信号、预警提前量及服务衔接。",
+        "intensity_metrics": [
+          {
+            "metric_name": "过程降温幅度",
+            "value": 10.8,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-3-chunk-008",
+            "source_text": "15日08 时副冷锋后冷空气南下进入山西，伴有 4-5 级、短时 6-7 级西北风，15日早晨全省有 104 站出现降温，北中部气温降至 2℃以下，最低气温下降 0.1～10.8℃（五寨），其中有 1 站降温超过 10℃（五寨 10.8℃）、2 站降温 8～10℃（云州 9.3℃、宁武 8.2℃）；因此 15日白天降水相态为雪。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 26.6,
+            "unit": "mm",
+            "location": "大同",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-3-chunk-007",
+            "source_text": "主要降水时段在 14日08 时到 15日08 时，全省共 85 个国家站有降水，24 小时累计降水量 0.1-26.6mm（神池），10mm 以上降水有 14 站，主要分布在忻州、朔州、临汾、吕梁、大同，25mm 以上有 1 站（神池 26.6mm）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程降温幅度",
+            "value": 12.1,
+            "unit": "℃",
+            "location": "太原",
+            "relation": "",
+            "source_chunk_id": "FST2025-3-chunk-008",
+            "source_text": "15日20 时，随着横槽转竖，冷空气大举南下，降水结束，夜间气温继续下降，16日早晨全省共 110 站最低点气温下降 3.2～12.1℃，降温 12℃以上有 1 站（左权 12.1）、降温 10℃以上有 13 站（出现在大同、忻州、朔州、太原、晋中、长治、临汾）、降温 8～10℃有 19 站。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大积雪深度",
+            "value": 21.0,
+            "unit": "cm",
+            "location": "太原",
+            "relation": "",
+            "source_chunk_id": "FST2025-3-chunk-007",
+            "source_text": "主要降水时段在 14日08 时到 15日08 时，全省共 85 个国家站有降水，24 小时累计降水量 0.1-26.6mm（神池），10mm 以上降水有 14 站，主要分布在忻州、朔州、临汾、吕梁、大同，25mm 以上有 1 站（神池 26.6mm）；白天除北部局部山区相态为雪，其余地区相态为雨，夜间气温下降中南部局部地区相态由雨转雪，15日08 时积雪主要分布在北部大部和吕梁、太原的个别地区，积雪深度 1-21cm，10cm 以上有 2 站（神池 21cm、宁武10cm）。",
+            "confidence": 0.8
+          }
+        ],
+        "evidence_images": [
+          {
+            "image_id": "FST2025-3-page-005-image-001",
+            "source_pdf": "FST2025-3.pdf",
+            "page_no": 5,
+            "image_no": 1,
+            "image_path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\data\\document_images\\FST2025-3\\FST2025-3-page-005-image-001.png",
+            "extraction_type": "embedded",
+            "nearby_text": "图 7  3 日 08 时 700hPa、850hPa 高度场、温度场、风场 \n二、14-15 日暴雪天气过程 \n1.实况特征 \n受低空切变线和冷空气活动影响，14-15 日我省大部分地区出现了雨雪天气。 \n主要降水时段在 14 日 08 时到 15 日 08 时， 全省共85 个国家站有降水，24 小时累计\n降水量0.1-26.6mm（神池） ，10mm 以上降水有 14 站，主要分布在忻州、朔州、临汾、吕\n梁、大同，25mm 以上有 1 站（神池 26.6mm） ；白天除北部局部山区相态为雪，其余地区\n相态为雨， 夜间气温下降中南部局部地区相态由雨转雪，15 日 08 时积雪主要分布在北部\n大部和吕梁、太原的个别地区，积雪深度 1-21cm，10cm 以上有 2 站（神池 21cm、宁武\n10cm）。 \n  \n  \n图 8  3 月 14 日 08 时-15 日 08 时、15 日 08 时-16 日 08 时降水量分布图 \n15 日白天为锋面弱降水且具有分散性， 在北中部部分和南部局部地区共39 个国家站",
+            "caption": "图 7 3日08时700hPa、850hPa高度场、温度场、风场",
+            "related_chunk_ids": [
+              "FST2025-3-chunk-007"
+            ],
+            "width": 1054,
+            "height": 383,
+            "path_resolved": true,
+            "image_type": "synoptic",
+            "data_category": "环流形势图",
+            "original_caption": "图 7 3日08时700hPa、850hPa高度场、温度场、风场",
+            "display_number": 1,
+            "display_caption": "图 1 3日08时700hPa、850hPa高度场、温度场、风场"
+          }
+        ]
+      }
+    ],
+    "aggregations": {
+      "case_count": 1,
+      "month_counts": {
+        "3": 1
+      },
+      "disaster_counts": {
+        "雨雪": 1,
+        "暴雪": 1
+      },
+      "disaster_cooccurrence": {
+        "labels": [
+          "雨雪",
+          "暴雪"
+        ],
+        "matrix": [
+          [
+            1.0,
+            1.0
+          ],
+          [
+            1.0,
+            1.0
+          ]
+        ]
+      },
+      "city_counts": {
+        "太原": 1,
+        "大同": 1,
+        "朔州": 1,
+        "忻州": 1,
+        "晋中": 1,
+        "吕梁": 1,
+        "长治": 1,
+        "临汾": 1,
+        "晋北": 1,
+        "山西北部": 1,
+        "山西中部": 1,
+        "晋南": 1,
+        "山西南部": 1
+      },
+      "intensity_values": {
+        "过程降温幅度": [
+          10.8,
+          12.1
+        ],
+        "过程最大降水量": [
+          26.6
+        ],
+        "最大积雪深度": [
+          21.0
+        ]
+      },
+      "intensity_case_values": {
+        "过程降温幅度": [
+          {
+            "case_id": "FST2025-3-std-case-002",
+            "title": "14-15日暴雪天气过程",
+            "value": 10.8,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-3-std-case-002",
+            "title": "14-15日暴雪天气过程",
+            "value": 12.1,
+            "unit": "℃",
+            "location": "太原"
+          }
+        ],
+        "过程最大降水量": [
+          {
+            "case_id": "FST2025-3-std-case-002",
+            "title": "14-15日暴雪天气过程",
+            "value": 26.6,
+            "unit": "mm",
+            "location": "大同"
+          }
+        ],
+        "最大积雪深度": [
+          {
+            "case_id": "FST2025-3-std-case-002",
+            "title": "14-15日暴雪天气过程",
+            "value": 21.0,
+            "unit": "cm",
+            "location": "太原"
+          }
+        ]
+      }
+    },
+    "charts": [
+      {
+        "chart_key": "disaster_frequency",
+        "chart_type": "horizontal_bar",
+        "title": "灾种频次分布",
+        "x_label": "出现频次",
+        "y_label": "",
+        "labels": [
+          "暴雪",
+          "雨雪"
+        ],
+        "values": [
+          1.0,
+          1.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 1,
+        "missing_count": 0,
+        "interpretation": "该图显示暴雪与雨雪频次一致，提示短临监测需同步关注雨雪混合降水特征。业务复盘应优先核验伴随的低温或低能见度风险，避免仅凭单一灾种标签研判，确保多灾种叠加影响评估准确。"
+      },
+      {
+        "chart_key": "disaster_cooccurrence",
+        "chart_type": "heatmap",
+        "title": "灾种共现热力图",
+        "x_label": "灾种",
+        "y_label": "灾种",
+        "labels": [],
+        "values": [],
+        "row_labels": [
+          "暴雪",
+          "雨雪"
+        ],
+        "col_labels": [
+          "暴雪",
+          "雨雪"
+        ],
+        "matrix": [
+          [
+            1.0,
+            1.0
+          ],
+          [
+            1.0,
+            1.0
+          ]
+        ],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 1,
+        "missing_count": 0,
+        "interpretation": "热力图样本量极小且数据缺失，表明当前材料不足以支撑灾种共现规律分析。建议补充更多历史个例以完善关联证据，现阶段不宜基于此图进行复杂的风险耦合研判，需警惕因数据不足导致的误判。"
+      },
+      {
+        "chart_key": "spatial",
+        "chart_type": "horizontal_bar",
+        "title": "主要影响区域命中个例数",
+        "x_label": "命中个例数",
+        "y_label": "影响区域",
+        "labels": [
+          "临汾",
+          "吕梁",
+          "大同",
+          "太原",
+          "山西中部",
+          "山西北部",
+          "山西南部",
+          "忻州"
+        ],
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 1,
+        "missing_count": 0,
+        "interpretation": "业务启示：临汾可作为空间复核的优先区域，后续应结合地形、站点密度和灾情记录判断集中原因。"
+      }
+    ],
+    "warnings": [
+      "有 1 个个例的大模型分析失败，已分别使用规则结果降级。"
+    ],
+    "audit": {
+      "structured_candidates": 1,
+      "json_statistics_case_count": 1,
+      "fused_results": 1,
+      "analysis_case_count": 1,
+      "displayed_results": 1,
+      "resolved_images": 1,
+      "all_case_ids": [
+        "FST2025-3-std-case-002"
+      ],
+      "displayed_case_ids": [
+        "FST2025-3-std-case-002"
+      ],
+      "report_include_all_cases": true,
+      "chunk_loading_mode": "shared_parallel_prefetch_pipeline",
+      "case_chunk_limit": 6,
+      "case_context_char_limit": 6000,
+      "case_analysis_concurrency": 4,
+      "llm_thinking_enabled": false,
+      "case_analysis_llm_calls_per_case": 1,
+      "metric_llm_batch_size": 6,
+      "metric_fact_batches_total": 1,
+      "metric_llm_calls_per_case_upper_bound": 1,
+      "case_max_output_tokens": 1536,
+      "case_max_output_tokens_requested": 1536,
+      "selected_chunk_count_total": 4,
+      "selected_chunk_count_max": 4,
+      "case_llm_requested": true,
+      "case_llm_available": true,
+      "case_llm_calls": 0,
+      "case_llm_attempts": 1,
+      "case_llm_cache_hits": 0,
+      "case_analysis_statuses": {
+        "llm_incomplete": 1
+      },
+      "metric_fact_audit_by_case": {
+        "FST2025-3-std-case-002": {
+          "batch_size": 6,
+          "batch_count": 1,
+          "confirmed_metric_count": 4,
+          "rule_metric_count": 4,
+          "llm_metric_count": 0,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "not_present_after_all_chunks_scanned",
+            "最大积雪深度": "confirmed",
+            "最大风速": "not_present_after_all_chunks_scanned",
+            "最高气温": "not_present_after_all_chunks_scanned",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "confirmed",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "confirmed",
+            "阵风风力": "not_present_after_all_chunks_scanned",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        }
+      },
+      "case_prepare_seconds_total": 0.953,
+      "case_analysis_seconds_total": 3.453,
+      "report_pipeline_seconds": 12.39,
+      "pipeline_wall_seconds": 16.812,
+      "report_llm_status": "llm_generated",
+      "report_llm_used": true
+    }
+  },
+  "can_export_pdf": true,
+  "warnings": [
+    "有 1 个个例的大模型分析失败，已分别使用规则结果降级。"
+  ],
+  "audit": {
+    "structured_candidates": 1,
+    "json_statistics_case_count": 1,
+    "fused_results": 1,
+    "analysis_case_count": 1,
+    "displayed_results": 1,
+    "resolved_images": 1,
+    "all_case_ids": [
+      "FST2025-3-std-case-002"
+    ],
+    "displayed_case_ids": [
+      "FST2025-3-std-case-002"
+    ],
+    "report_include_all_cases": true,
+    "chunk_loading_mode": "shared_parallel_prefetch_pipeline",
+    "case_chunk_limit": 6,
+    "case_context_char_limit": 6000,
+    "case_analysis_concurrency": 4,
+    "llm_thinking_enabled": false,
+    "case_analysis_llm_calls_per_case": 1,
+    "metric_llm_batch_size": 6,
+    "metric_fact_batches_total": 1,
+    "metric_llm_calls_per_case_upper_bound": 1,
+    "case_max_output_tokens": 1536,
+    "case_max_output_tokens_requested": 1536,
+    "selected_chunk_count_total": 4,
+    "selected_chunk_count_max": 4,
+    "case_llm_requested": true,
+    "case_llm_available": true,
+    "case_llm_calls": 0,
+    "case_llm_attempts": 1,
+    "case_llm_cache_hits": 0,
+    "case_analysis_statuses": {
+      "llm_incomplete": 1
+    },
+    "metric_fact_audit_by_case": {
+      "FST2025-3-std-case-002": {
+        "batch_size": 6,
+        "batch_count": 1,
+        "confirmed_metric_count": 4,
+        "rule_metric_count": 4,
+        "llm_metric_count": 0,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "not_present_after_all_chunks_scanned",
+          "最大积雪深度": "confirmed",
+          "最大风速": "not_present_after_all_chunks_scanned",
+          "最高气温": "not_present_after_all_chunks_scanned",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "confirmed",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "confirmed",
+          "阵风风力": "not_present_after_all_chunks_scanned",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      }
+    },
+    "case_prepare_seconds_total": 0.953,
+    "case_analysis_seconds_total": 3.453,
+    "report_pipeline_seconds": 12.39,
+    "pipeline_wall_seconds": 16.812,
+    "report_llm_status": "llm_generated",
+    "report_llm_used": true,
+    "answer_id": "case_answer_550b47c635534a2d855ef776a4d8b0f5",
+    "image_count": 1,
+    "chart_count": 3,
+    "cache_path": "E:\\BaiduNetdiskDownload\\myRiskAllMerge\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\answers\\case_answer_550b47c635534a2d855ef776a4d8b0f5.json"
+  }
+}

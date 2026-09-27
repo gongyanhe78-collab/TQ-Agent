@@ -1,0 +1,116 @@
+/* 聊天正文和消息级 PDF 共用的视觉规范；后端导出器会读取同一文件。 */
+.markdown-body {
+  color: #292927;
+  font-family: Inter, "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  font-size: 15px;
+  line-height: 1.72;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.markdown-body p { margin: 0 0 13px; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  color: #1f1f1d;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin: 24px 0 10px;
+  break-after: avoid;
+}
+.markdown-body h1 { font-size: 22px; }
+.markdown-body h2 { font-size: 19px; }
+.markdown-body h3 { font-size: 17px; }
+.markdown-body h4 { font-size: 15px; }
+.markdown-body ul,
+.markdown-body ol {
+  margin: 8px 0 14px;
+  padding-left: 24px;
+}
+.markdown-body li {
+  margin: 4px 0;
+  padding-left: 2px;
+}
+.markdown-body blockquote {
+  border-left: 3px solid #b8b8b2;
+  color: #656560;
+  margin: 16px 0;
+  padding: 2px 0 2px 14px;
+}
+.markdown-body code {
+  background: #eeeeeb;
+  border-radius: 4px;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.9em;
+  padding: 2px 5px;
+}
+.markdown-body pre {
+  background: #f0f0ed;
+  border: 1px solid #e2e2de;
+  border-radius: 7px;
+  margin: 15px 0;
+  overflow-x: auto;
+  padding: 13px 15px;
+  white-space: pre-wrap;
+}
+.markdown-body pre code {
+  background: transparent;
+  padding: 0;
+}
+.markdown-body a {
+  color: #176b55;
+  text-decoration-color: #9cbeb4;
+  text-underline-offset: 3px;
+}
+.markdown-body table {
+  border: 1px solid #d8d8d3;
+  border-collapse: separate;
+  border-radius: 7px;
+  border-spacing: 0;
+  font-size: 13px;
+  margin: 16px 0 20px;
+  max-width: 100%;
+  overflow: hidden;
+  width: auto;
+}
+.markdown-body thead {
+  background: #343432;
+  color: #ffffff;
+}
+.markdown-body th,
+.markdown-body td {
+  border-bottom: 1px solid #e2e2de;
+  line-height: 1.45;
+  min-width: 92px;
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+}
+.markdown-body th {
+  color: #ffffff;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.markdown-body tbody tr:nth-child(even) { background: #f3f3f0; }
+.markdown-body tbody tr:last-child td { border-bottom: 0; }
+
+@media print {
+  .markdown-body {
+    font-size: 10.5pt;
+    line-height: 1.7;
+  }
+  .markdown-body table {
+    break-inside: avoid;
+    width: 100%;
+  }
+  .markdown-body tr,
+  .markdown-body li,
+  .markdown-body blockquote {
+    break-inside: avoid;
+  }
+}

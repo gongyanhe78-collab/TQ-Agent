@@ -1,0 +1,75 @@
+<h2>报告版式方向</h2>
+<p class="subtitle">左侧是你提供的参考报告，右侧是当前报告。下面三种方案都取消卡片和装饰色块。</p>
+
+<div class="split" style="margin-bottom:28px">
+  <div class="mockup">
+    <div class="mockup-header">参考：FST2025-6.pdf</div>
+    <div class="mockup-body" style="text-align:center;background:#eee;padding:12px">
+      <img src="reference-page-2.png" alt="参考报告正文页" style="max-width:100%;height:430px;object-fit:contain;background:white;box-shadow:0 2px 8px #999">
+    </div>
+  </div>
+  <div class="mockup">
+    <div class="mockup-header">当前：postman-smoke-report.pdf</div>
+    <div class="mockup-body" style="text-align:center;background:#eee;padding:12px">
+      <img src="current-page-2.png" alt="当前报告重点发现页" style="max-width:100%;height:430px;object-fit:contain;background:white;box-shadow:0 2px 8px #999">
+    </div>
+  </div>
+</div>
+
+<h3>请选择正文与图表的组织方式</h3>
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f0f0f0;padding:14px">
+      <div style="width:185px;height:255px;margin:auto;background:#fff;padding:18px;color:#222;font-family:serif;box-shadow:0 1px 5px #aaa">
+        <div style="text-align:center;font-size:14px;font-weight:bold;margin:8px 0 14px">山西暴雨个例综合分析报告</div>
+        <div style="font-size:9px;font-weight:bold;margin:8px 0">一、综合分析</div>
+        <div style="font-size:7px;line-height:1.8;text-align:justify">本次检索共命中 5 个暴雨个例。综合时间、区域和强度信息分析，过程主要集中在……</div>
+        <div style="font-size:9px;font-weight:bold;margin:10px 0 5px">1. 时间与空间特征</div>
+        <div style="font-size:7px;line-height:1.8;text-align:justify">命中过程集中于 6 至 7 月，北部与中南部呈现……</div>
+        <div style="height:45px;background:#ddd;margin-top:10px"></div>
+        <div style="font-size:6px;text-align:center;margin-top:3px">图 1 个例时间分布</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 严格参考版式（推荐）</h3>
+      <p>从第一页直接进入摘要和分析；使用“一、1.”章节编号；图表紧跟对应分析段落；原图放在代表个例章节。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f0f0f0;padding:14px">
+      <div style="width:185px;height:255px;margin:auto;background:#fff;padding:18px;color:#222;font-family:serif;box-shadow:0 1px 5px #aaa">
+        <div style="text-align:center;font-size:14px;font-weight:bold;margin:8px 0 4px">山西暴雨个例分析报告</div>
+        <div style="text-align:center;font-size:7px;margin-bottom:14px">检索日期：2026 年 7 月</div>
+        <div style="font-size:9px;font-weight:bold;margin:8px 0">摘要</div>
+        <div style="font-size:7px;line-height:1.8;text-align:justify">结论先行，用 3 至 4 个自然段说明范围、核心发现、风险重点和证据局限。</div>
+        <div style="font-size:9px;font-weight:bold;margin:10px 0 5px">主要结论</div>
+        <div style="font-size:7px;line-height:1.8;text-align:justify">（1）时间集中度……<br>（2）主要灾种……<br>（3）重点影响区域……</div>
+        <div style="font-size:9px;font-weight:bold;margin:10px 0 5px">正文</div>
+        <div style="font-size:7px;line-height:1.8">第二页开始展开分析。</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 摘要先行版</h3>
+      <p>保留一页纯文字摘要，后续正文完全采用参考版式。更方便领导快速阅读，但比参考文件多一个摘要层。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f0f0f0;padding:14px">
+      <div style="width:185px;height:255px;margin:auto;background:#fff;padding:18px;color:#222;font-family:serif;box-shadow:0 1px 5px #aaa">
+        <div style="text-align:center;font-size:14px;font-weight:bold;margin:8px 0 14px">山西暴雨个例分析报告</div>
+        <div style="font-size:9px;font-weight:bold;margin:8px 0">一、分析结论</div>
+        <div style="font-size:7px;line-height:1.8;text-align:justify">正文只保留分析、结论和建议，所有统计图与数据库原图集中到文末附件。</div>
+        <div style="font-size:9px;font-weight:bold;margin:10px 0 5px">二、主要依据</div>
+        <div style="font-size:7px;line-height:1.8;text-align:justify">按个例说明日期、灾种、区域、强度与证据来源。</div>
+        <div style="font-size:9px;font-weight:bold;margin:10px 0 5px">附件：图表与原图</div>
+        <div style="height:65px;background:#ddd;margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 文字正文 + 图件附录</h3>
+      <p>正文最干净，所有图片放附录。阅读连续，但图文证据不能就近对应。</p>
+    </div>
+  </div>
+</div>

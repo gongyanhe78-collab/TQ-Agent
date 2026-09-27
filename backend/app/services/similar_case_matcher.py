@@ -1,3 +1,8 @@
+"""
+相似个例匹配模块
+基于结构化字段（灾种、时间、区域）、图像证据（雷达图、卫星云图等）
+和文本线索综合匹配历史标准化气象灾害个例，多维度加权计算相似度。
+"""
 from __future__ import annotations
 
 import re
@@ -8,6 +13,7 @@ from backend.app.models import StandardCase
 from backend.app.services.image_extraction import ImageEvidence, ImageEvidenceStore
 
 
+# 区域别名映射（用于泛化区域匹配
 AREA_ALIASES = {
     "山西北部": ("大同", "朔州", "忻州", "北部", "山西北部"),
     "北部": ("大同", "朔州", "忻州", "北部", "山西北部"),
@@ -18,6 +24,7 @@ AREA_ALIASES = {
 }
 
 
+# 灾害类型关键词（用于文本匹配
 DISASTER_TERMS = (
     "雷暴大风",
     "强对流",
@@ -39,6 +46,7 @@ DISASTER_TERMS = (
 )
 
 
+# 图片类型关键词映射（用于识别查询中的图片需求
 IMAGE_KEYWORDS = {
     "radar": ("雷达", "回波", "组合反射率", "风雷"),
     "satellite": ("卫星", "云图", "红外", "可见光"),
@@ -53,7 +61,19 @@ IMAGE_KEYWORDS = {
 
 @dataclass
 class SimilarCaseQuery:
-    """相似个例匹配输入。"""
+    """
+    相似个例匹配查询参数
+
+    Attributes:
+        q: 原始查询文本
+        date: 查询时间（如 "5月", "5月10日"
+        disaster_type: 灾害类型（如 "暴雨", "雷暴大风"
+        area: 影响区域（如 "山西北部"
+        image_type: 图片类型（如 "radar", "satellite"
+        data_category: 数据类别（如 "图片"
+        source_pdf: 来源 PDF 文件名
+        top_n: 返回结果数量
+    """
 
     q: str = ""
     date: str = ""
@@ -67,7 +87,17 @@ class SimilarCaseQuery:
 
 @dataclass
 class SimilarCaseMatch:
-    """单条相似个例匹配结果。"""
+    """
+    相似个例匹配结果
+
+    Attributes:
+        case: 匹配到的标准化个例
+        score: 综合相似度得分（0-1
+        score_breakdown: 各维度得分详情（灾种、时间、区域、图片、文本、来源
+        reasons: 匹配原因说明列表
+        forecast_tips: 预报服务提示要点列表
+        evidence_images: 关联的图片证据列表
+    """
 
     case: StandardCase
     score: float
@@ -78,7 +108,11 @@ class SimilarCaseMatch:
 
 
 class SimilarCaseMatcher:
-    """按结构化字段、图像证据和文本线索综合匹配历史标准个例。"""
+    """
+    相似个例匹配器
+    按结构化字段（灾种、时间、区域、图像证据和文本线索多维度加权综合匹配历史标准化个例，
+    返回相似度最高的历史个例及匹配原因。
+    """
 
     def __init__(
         self,

@@ -1,0 +1,73 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "过程最大降水量",
+      "value": 150.4,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-005",
+      "source_text": "7月2-3日，受高空槽和副热带高压影响，我省出现一次分散性暴雨天气过程，2日20 时-3日20 时，全省共 2186 站出现降水，累计降水量为 0.1～150.4 毫米，最大值出现在榆次小张义，其中有 92 站暴雨和 9 站大暴雨",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 67.8,
+      "unit": "mm/h",
+      "location": "长治",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-005",
+      "source_text": "期间共 195 站出现短时强降水，最大出现在高平釜山灌区 67.8mm/h（3日16 时），晋城、 长治出现了雷暴大风天气，泽州鲁村气象观测站出现 29.9m/s（11 级）的瞬时大风",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 67.8,
+      "unit": "mm",
+      "location": "长治",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-005",
+      "source_text": "期间共 195 站出现短时强降水，最大出现在高平釜山灌区 67.8mm/h（3日16 时），晋城、 长治出现了雷暴大风天气，泽州鲁村气象观测站出现 29.9m/s（11 级）的瞬时大风",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 29.9,
+      "unit": "m/s",
+      "location": "长治",
+      "relation": "",
+      "source_chunk_id": "FST2025-7-chunk-005",
+      "source_text": "期间共 195 站出现短时强降水，最大出现在高平釜山灌区 67.8mm/h（3日16 时），晋城、 长治出现了雷暴大风天气，泽州鲁村气象观测站出现 29.9m/s（11 级）的瞬时大风。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "极大风速",
+      "value": 29.9,
+      "unit": "m/s",
+      "location": "泽州鲁村气象观测站",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-7-chunk-005",
+      "source_text": "期间共 195 站出现短时强降水，最大出现在高平釜山灌区 67.8mm/h（3日16 时），晋城、 长治出现了雷暴大风天气，泽州鲁村气象观测站出现 29.9m/s（11 级）的瞬时大风。",
+      "confidence": 0.9
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "confirmed",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 2,
+  "rule_metric_count": 4,
+  "llm_metric_count": 3
+}

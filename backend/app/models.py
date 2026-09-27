@@ -4,7 +4,7 @@
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
 from typing import Any
 
 
@@ -92,6 +92,15 @@ class StandardCase:
     weather_facts: str = ""
     forecast_focus: str = ""
     evidence_image_ids: list[str] = field(default_factory=list)
+    year: int | None = None
+    months: list[int] = field(default_factory=list)
+    start_date: str = ""
+    end_date: str = ""
+    city_tags: list[str] = field(default_factory=list)
+    image_types: list[str] = field(default_factory=list)
+    has_radar: bool = False
+    has_satellite: bool = False
+    has_precipitation_map: bool = False
     confidence: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
@@ -110,10 +119,21 @@ class StandardCase:
             "weather_facts": "",
             "forecast_focus": "",
             "evidence_image_ids": [],
+            "year": None,
+            "months": [],
+            "start_date": "",
+            "end_date": "",
+            "city_tags": [],
+            "image_types": [],
+            "has_radar": False,
+            "has_satellite": False,
+            "has_precipitation_map": False,
             "confidence": 0.0,
         }
         normalized = {**defaults, **data}
-        return cls(**normalized)
+        # 标准化个例 JSON 允许扩展字段；这里仅保留 dataclass 已定义字段，避免新增字段导致反序列化失败。
+        allowed_fields = {item.name for item in fields(cls)}
+        return cls(**{key: value for key, value in normalized.items() if key in allowed_fields})
 
 
 @dataclass

@@ -1,0 +1,193 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "过程最大降水量",
+      "value": 85.2,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-021",
+      "source_text": "暴雨，最大沁水吉家 85.2mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 28.1,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-021",
+      "source_text": "77 站出现 8 级以上大风，最大出现在潞城老顶山28.1m/s。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 50.7,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-5-chunk-020",
+      "source_text": "共 1351 站出现降水，降水量介于 0.1～50.7mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 40.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-5-chunk-022",
+      "source_text": "雨强介于 20～40mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 27.2,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-022",
+      "source_text": "国家站最大襄汾 27.2mm/h",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 38.7,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-022",
+      "source_text": "区域站最大盐湖凤凰谷38.7mm/h",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 30.7,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-020",
+      "source_text": "140 站出现 8级以上大风，最大出现在岚县上明 30.7m/s。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 59.7,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-020",
+      "source_text": "国家站 5站暴雨（天镇、襄汾、浮山、阳高、曲沃），最大天镇 59.7mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "雷达回波强度",
+      "value": 35.0,
+      "unit": "dBZ",
+      "location": "上党",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-5-chunk-030",
+      "source_text": "上党回波具有对流性质，其初始回波高度发展高度高，降水开始出现低质心，并有间歇性，最大回波强度超过 35dBZ。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 15.1,
+      "unit": "mm",
+      "location": "襄汾",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-5-chunk-034",
+      "source_text": "图 33 22日8:44、8:55 临汾雷达组合反射率及剖面图、9:35-9:46 组合反射率、06:05 组合反射率及剖面图襄汾 22日8:41-8:50 10 分钟降水量 15.1mm；对流有组织化，回波倾斜，低层弱回波区、中高层悬垂回波，强回波移动过程中呈弓形，深厚 MARC，后侧风暴顶辐散，超级单体；中气旋从 8:50 持续到 9:07。",
+      "confidence": 0.95
+    },
+    {
+      "metric_name": "雷达回波强度",
+      "value": 60.0,
+      "unit": "dBZ",
+      "location": "襄汾附近",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-5-chunk-034",
+      "source_text": "22日7:13 从临汾雷达组合反射率图看，襄汾附近强回波超过 60dBZ,并且有明显的旁瓣回波。",
+      "confidence": 0.95
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 7.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-040",
+      "source_text": "6 级，或者阵风 7 级以上。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 37.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-042",
+      "source_text": "预计 24 小时预警区域最高气温将升至 37℃以上。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 35.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-042",
+      "source_text": "此外，上述地区的其余部分县市未来 24 小时最高气温也将达35℃或以上。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 40.0,
+      "unit": "℃",
+      "location": "临汾",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-042",
+      "source_text": "预计 24 小时预警区域最高气温将升至 37℃以上，其中运城、临汾等地的局部地区最高气温将升至 40℃以上。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 30.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-5-chunk-043",
+      "source_text": "过去 6 小时预警区域内部分地区已经出现雨强 20 毫米/小时以上的短时强降水，预计未来 6 小时预警区域内部分地区还会有雨强 30 毫米/小时以上的短时强降水。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 7.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-044",
+      "source_text": "气，阵风风力达 7 级以上并有较强雷电，部分地区伴有短时强降水或冰雹。",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "confirmed",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "confirmed"
+  },
+  "batch_count": 5,
+  "rule_metric_count": 13,
+  "llm_metric_count": 5
+}

@@ -1,3 +1,8 @@
+﻿"""
+图片证据提取和管理模块
+从 PDF 中双轨提取嵌入图片和整页快照，生成可追溯的图片元数据，
+支持按图片类型、关联 chunk 和标准化个例检索图片证据。
+"""
 from __future__ import annotations
 
 import json
@@ -7,6 +12,7 @@ from pathlib import Path
 from typing import Callable, Iterable, TypedDict
 
 
+# 浏览器支持的图片扩展名集合
 BROWSER_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 IMAGE_TYPE_KEYWORDS = (
     ("sounding", "探空图", ("探空", "TlnP", "TInP", "温湿廓线")),
@@ -31,7 +37,22 @@ class ImagePayload(TypedDict, total=False):
 
 @dataclass
 class ImageEvidence:
-    """PDF 图片证据元数据。"""
+    """
+    PDF 图片证据元数据模型
+
+    Attributes:
+        image_id: 图片唯一标识符
+        source_pdf: 来源 PDF 文件名
+        page_no: 所在页码
+        image_no: 页面内的图片序号
+        image_path: 图片保存路径
+        extraction_type: 提取类型（embedded/page_snapshot）
+        nearby_text: 图片附近的上下文文本
+        caption: 图片标题/图注
+        related_chunk_ids: 关联的文档 chunk ID 列表
+        width: 图片宽度（像素）
+        height: 图片高度（像素）
+    """
 
     image_id: str
     source_pdf: str
@@ -50,7 +71,11 @@ class ImageEvidence:
 
 
 class PdfImageEvidenceExtractor:
-    """从 PDF 中双轨提取嵌入图片和整页快照，并生成可追溯元数据。"""
+    """
+    PDF 图片证据提取器
+    双轨提取策略：1) 提取 PDF 内嵌图片 2) 渲染整页快照
+    生成包含位置、上下文、关联 chunk 等元数据的可追溯图片证据。
+    """
 
     def __init__(
         self,
@@ -214,7 +239,11 @@ class PdfImageEvidenceExtractor:
 
 
 class ImageEvidenceStore:
-    """读取图片证据元数据，并按 chunk 或 image_id 查询。"""
+    """
+    图片证据检索器
+    读取图片证据元数据，支持按 chunk ID、image ID 和图片类型查询，
+    并对结果进行去重和排序。
+    """
 
     def __init__(self, metadata_path: Path):
         self.metadata_path = Path(metadata_path)
@@ -256,6 +285,28 @@ class ImageEvidenceStore:
             if record.image_id in wanted and self._is_browser_displayable(record)
         }
         return [records[image_id] for image_id in image_ids if image_id in records]
+
+    def metadata_available(self) -> bool:
+        """判断本地图片索引是否存在且至少包含一条有效记录。"""
+        return bool(self._load_records())
+
+    def resolve_image_path(self, record: ImageEvidence) -> Path | None:
+        """把历史绝对路径重新定位到主 data/document_images 目录。"""
+        raw_path = Path(str(record.image_path or ""))
+        if raw_path.is_file():
+            return raw_path
+        filename = raw_path.name
+        image_root = self.metadata_path.parent / "document_images"
+        source_stem = Path(str(record.source_pdf or "")).stem
+        if filename and source_stem:
+            candidate = image_root / source_stem / filename
+            if candidate.is_file():
+                return candidate
+        if filename and image_root.is_dir():
+            matches = list(image_root.rglob(filename))
+            if matches:
+                return matches[0]
+        return None
 
     def _load_records(self) -> list[ImageEvidence]:
         if not self.metadata_path.exists():

@@ -1,0 +1,63 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "过程降温幅度",
+      "value": 10.8,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-008",
+      "source_text": "15日08 时副冷锋后冷空气南下进入山西，伴有 4-5 级、短时 6-7 级西北风，15日早晨全省有 104 站出现降温，北中部气温降至 2℃以下，最低气温下降 0.1～10.8℃（五寨），其中有 1 站降温超过 10℃（五寨 10.8℃）、2 站降温 8～10℃（云州 9.3℃、宁武 8.2℃）；因此 15日白天降水相态为雪。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 26.6,
+      "unit": "mm",
+      "location": "大同",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-3-chunk-007",
+      "source_text": "主要降水时段在 14日08 时到 15日08 时，全省共 85 个国家站有降水，24 小时累计降水量 0.1-26.6mm（神池），10mm 以上降水有 14 站，主要分布在忻州、朔州、临汾、吕梁、大同，25mm 以上有 1 站（神池 26.6mm）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.1,
+      "unit": "℃",
+      "location": "太原",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-008",
+      "source_text": "15日20 时，随着横槽转竖，冷空气大举南下，降水结束，夜间气温继续下降，16日早晨全省共 110 站最低点气温下降 3.2～12.1℃，降温 12℃以上有 1 站（左权 12.1）、降温 10℃以上有 13 站（出现在大同、忻州、朔州、太原、晋中、长治、临汾）、降温 8～10℃有 19 站。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 21.0,
+      "unit": "cm",
+      "location": "太原",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-007",
+      "source_text": "主要降水时段在 14日08 时到 15日08 时，全省共 85 个国家站有降水，24 小时累计降水量 0.1-26.6mm（神池），10mm 以上降水有 14 站，主要分布在忻州、朔州、临汾、吕梁、大同，25mm 以上有 1 站（神池 26.6mm）；白天除北部局部山区相态为雪，其余地区相态为雨，夜间气温下降中南部局部地区相态由雨转雪，15日08 时积雪主要分布在北部大部和吕梁、太原的个别地区，积雪深度 1-21cm，10cm 以上有 2 站（神池 21cm、宁武10cm）。",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "confirmed",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "confirmed",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 1,
+  "rule_metric_count": 4,
+  "llm_metric_count": 0
+}

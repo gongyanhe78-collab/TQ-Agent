@@ -1,16 +1,21 @@
 <template>
-  <aside class="session-panel">
+  <aside class="session-panel" :class="{ collapsed }">
     <header class="session-header">
-      <div>
-        <p class="eyebrow">Sessions</p>
-        <h2>聊天记录</h2>
-      </div>
-      <el-button type="primary" :icon="Plus" :loading="loading" @click="$emit('new-session')">
+      <h2 v-if="!collapsed">聊天记录</h2>
+      <el-button
+        class="collapse-button"
+        text
+        :icon="collapsed ? Expand : Fold"
+        :aria-label="collapsed ? '展开聊天记录' : '收起聊天记录'"
+        :title="collapsed ? '展开聊天记录' : '收起聊天记录'"
+        @click="$emit('toggle-collapse')"
+      />
+      <el-button v-if="!collapsed" class="new-session-button" :icon="Plus" :loading="loading" @click="$emit('new-session')">
         新建
       </el-button>
     </header>
 
-    <el-scrollbar class="session-scroll">
+    <el-scrollbar v-if="!collapsed" class="session-scroll">
       <button
         v-for="session in sessions"
         :key="session.session_id"
@@ -27,7 +32,7 @@
 </template>
 
 <script setup>
-import { Plus } from "@element-plus/icons-vue";
+import { Expand, Fold, Plus } from "@element-plus/icons-vue";
 
 defineProps({
   sessions: {
@@ -42,11 +47,15 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-defineEmits(["new-session", "select-session"]);
+defineEmits(["new-session", "select-session", "toggle-collapse"]);
 
-// Render a compact timestamp so the session list stays readable in a narrow column.
+// 使用紧凑时间格式，保证窄栏中的聊天记录易于浏览。
 const formatTime = (value) => {
   if (!value) return "";
   const date = new Date(value);
@@ -62,14 +71,30 @@ const formatTime = (value) => {
 
 <style scoped>
 .session-panel {
-  background: #fbfcfd;
-  border-right: 1px solid #dce1e7;
+  background: #f3f3f1;
+  border-right: 1px solid #e4e4e0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  box-sizing: border-box;
+  height: 100%;
   min-height: 0;
   overflow: hidden;
-  padding: 18px 14px;
+  padding: 15px 12px;
+}
+
+.session-panel.collapsed {
+  align-items: center;
+  padding: 12px 6px;
+  width: 56px;
+}
+
+@media (max-width: 760px) {
+  .session-panel.collapsed {
+    border-bottom: 1px solid #dce1e7;
+    border-right: 0;
+    height: 56px;
+    width: 100%;
+  }
 }
 
 .session-header {
@@ -79,17 +104,22 @@ const formatTime = (value) => {
   justify-content: space-between;
 }
 
-.eyebrow {
-  color: #607083;
-  font-size: 12px;
-  margin: 0 0 4px;
-  text-transform: uppercase;
+.session-panel.collapsed .session-header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.collapse-button {
+  color: #5f5f5a;
+  flex: 0 0 auto;
 }
 
 h2 {
-  color: #17202a;
-  font-size: 20px;
-  font-weight: 650;
+  color: #30302e;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 1.2;
   margin: 0;
 }
@@ -104,24 +134,24 @@ h2 {
 .session-item {
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 8px;
-  color: #243242;
+  border-radius: 7px;
+  color: #343431;
   cursor: pointer;
   display: grid;
-  gap: 6px;
-  margin-bottom: 8px;
-  padding: 11px 10px;
+  gap: 4px;
+  margin-bottom: 4px;
+  padding: 9px 10px;
   text-align: left;
   width: 100%;
 }
 
 .session-item:hover {
-  background: #f1f4f7;
+  background: #e9e9e6;
 }
 
 .session-item.active {
-  background: #eaf2ff;
-  border-color: #9ec5fe;
+  background: #e4e4e0;
+  border-color: #d9d9d4;
 }
 
 .session-title {
@@ -133,7 +163,20 @@ h2 {
 }
 
 .session-time {
-  color: #718096;
+  color: #85857f;
   font-size: 12px;
+}
+
+.new-session-button {
+  background: #ffffff;
+  border-color: #d9d9d4;
+  color: #343431;
+}
+
+.new-session-button:hover,
+.new-session-button:focus {
+  background: #e9e9e6;
+  border-color: #c8c8c2;
+  color: #20201e;
 }
 </style>

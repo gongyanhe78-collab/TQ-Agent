@@ -1,0 +1,83 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "过程最大降水量",
+      "value": 4.8,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-029",
+      "source_text": "的局部,共 20 站出现降水，降水量介于 0.1-4.8mm 之间，最大值出现在五台山",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 4.0,
+      "unit": "cm",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-029",
+      "source_text": "积雪深度在 0.1-4cm 之间，最大出现在左权。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 6.2,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-027",
+      "source_text": "受高空横槽、冷暖空气影响，02月19日08 时至 02月22日08 时，全省大部出现降水,北部的局部,中南部的大部,共 75 站出现降水，降水量介于0.1-6.2mm 之间，最大值出现在五台山",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 5.4,
+      "unit": "mm",
+      "location": "朔州",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-028",
+      "source_text": "图 25 山西省 2025年2月19日08 时至 2月22日08 时过程累计降水量图 26 朔州（上）、闻喜（下）2025年2月19日08 时至 2月22日08 时地面单站三线图02月19日08 时至 02月20日08 时，全省部分出现降水,中部的部分,北部的局部,南部的大部,共 57 站出现降水，降水量介于 0.1-5.4mm 之间，最大值出现在石楼，运城部分地区伴有雨雪转换，积雪深度在 0.1-5cm 之间，最大出现在陵川",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 5.0,
+      "unit": "cm",
+      "location": "朔州",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-028",
+      "source_text": "图 25 山西省 2025年2月19日08 时至 2月22日08 时过程累计降水量图 26 朔州（上）、闻喜（下）2025年2月19日08 时至 2月22日08 时地面单站三线图02月19日08 时至 02月20日08 时，全省部分出现降水,中部的部分,北部的局部,南部的大部,共 57 站出现降水，降水量介于 0.1-5.4mm 之间，最大值出现在石楼，运城部分地区伴有雨雪转换，积雪深度在 0.1-5cm 之间，最大出现在陵川。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 2.4,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-028",
+      "source_text": "02月20日08 时至 02月21日08 时，全省局部出现降水,中部的局部,南部的部分,共 22 站出现降水，降水量介于 0.1-2.4mm 之间，最大值出现在芮城，并伴有雨雪转换",
+      "confidence": 0.86
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "confirmed",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 4,
+  "rule_metric_count": 6,
+  "llm_metric_count": 0
+}

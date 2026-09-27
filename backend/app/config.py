@@ -27,59 +27,66 @@ class Settings:
     resource_dir: Path = project_root / "resource"
     # 数据根目录
     data_dir: Path = project_root / "data"
-    # 提取出的案例 txt 文件存放目录
-    extracted_dir: Path = data_dir / "extracted_cases"
-    # 样本案例存放目录（用于训练/评估）
-    samples_dir: Path = data_dir / "extracted_samples"
-    # 向量索引存放目录
-    index_dir: Path = data_dir / "index"
-    # PDF 文档化后按 chunk 入库的新向量索引目录，独立于原个例库
+    # 三个业务 Agent 共用主项目数据目录，保留该名称兼容新替换的 Agent。
+    smart_case_data_dir: Path = data_dir
+    # PDF 文档化后按自然段 chunk 入库的唯一向量索引目录
     document_index_dir: Path = data_dir / "document_index"
     # PDF 图片证据保存目录
     document_images_dir: Path = data_dir / "document_images"
+    # Numba 缓存目录，供 Unstructured PDF 文档化依赖使用，避免卡在系统临时目录
+    numba_cache_dir: Path = data_dir / "numba_cache"
     # PDF 图片证据元数据文件
     image_metadata_path: Path = data_dir / "image_metadata.json"
     # 标准化个例 JSON 存储文件
-    standard_cases_path: Path = data_dir / "standard_cases.json"
-    # JSON 格式的案例备份文件路径
-    json_store_path: Path = index_dir / "cases.json"
-    # 记录知识库构建状态
-    build_status_path: Path = index_dir / "build_status.json"
-    # 记录已完成抽取入库的 PDF 文件指纹
-    processed_files_path: Path = index_dir / "processed_files.json"
+    standard_cases_path: Path = data_dir / "standard_cases1.json"
     # 会话管理数据库
     session_db_path: Path = data_dir / "sessions.sqlite3"
-    # ChromaDB 向量集合名称
-    collection_name: str = "weather_cases"
-    # PDF 文档 chunk 使用的 ChromaDB 集合名称
+    # 唯一的 PDF 自然段 chunk ChromaDB 集合名称
     document_collection_name: str = "weather_document_chunks"
-    # 阿里云通义千问 API 密钥，用于嵌入、重排和 DashScope 回退聊天
-    dashscope_api_key: str = os.getenv("ALIYUN_API_KEY") or os.getenv("ALiYunAPI", "")
-    # DashScope API 兼容模式的基础 URL，用于嵌入、重排和 DashScope 回退聊天
+
+    # ========== 云端模型配置 ==========
+    # DashScope 千问 API Key，兼容历史 ALIYUN_API_KEY / ALiYunAPI 写法
+    dashscope_api_key: str = (
+        os.getenv("DASHSCOPE_API_KEY")
+        or os.getenv("ALIYUN_API_KEY")
+        or os.getenv("ALiYunAPI", "")
+    )
+    # DashScope OpenAI 兼容接口地址和聊天模型名称
     dashscope_base_url: str = os.getenv(
         "DASHSCOPE_BASE_URL",
         "https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
-    # DMXAPI OpenAI 兼容聊天接口配置，用于问答和案例提取
-    dmx_api_key: str = os.getenv("DMXAPI", "")
-    dmx_base_url: str = os.getenv("DMXAPI_BASE_URL", "https://www.dmxapi.cn/v1")
-    # 聊天模型单独配置：默认优先使用 DMXAPI 的 gpt-5.4-nano，缺少 DMXAPI 时回退 DashScope
-    chat_api_key: str = os.getenv("CHAT_API_KEY") or dmx_api_key or dashscope_api_key
-    chat_base_url: str = os.getenv("CHAT_BASE_URL") or (dmx_base_url if dmx_api_key else dashscope_base_url)
-    chat_model: str = (
-        os.getenv("CHAT_MODEL")
-        or os.getenv("DMXAPI_CHAT_MODEL")
-        or ("gpt-5.4-nano" if dmx_api_key else os.getenv("DASHSCOPE_CHAT_MODEL", "qwen3.6-max-preview"))
+    dashscope_chat_model: str = os.getenv("DASHSCOPE_CHAT_MODEL", "qwen-plus")
+    # 意图模型允许单独配置；未配置时复用已经验证可调用的聊天模型，避免默认模型无配额后静默退回规则。
+    dashscope_intent_model: str = (
+        os.getenv("DASHSCOPE_INTENT_MODEL")
+        or os.getenv("DASHSCOPE_CHAT_MODEL", "qwen-plus")
     )
-    # 兼容旧代码字段：默认仍指向 DashScope，避免 embedding/rerank 被 DMXAPI 误切走
-    api_key: str = dashscope_api_key
-    base_url: str = dashscope_base_url
-    # 向量嵌入模型名称（用于文本向量化）
-    embedding_model: str = os.getenv("DASHSCOPE_EMBEDDING_MODEL", "text-embedding-v4")
-    # 重排序模型名称（用于向量召回后的二次排序）
-    rerank_model: str = os.getenv("DASHSCOPE_RERANK_MODEL", "qwen3-rerank")
-    # DashScope 重排序接口地址，可通过环境变量覆盖
-    rerank_endpoint: str = os.getenv("DASHSCOPE_RERANK_ENDPOINT", "")
+    # 后续问题属于非关键后处理，默认复用轻量意图模型，也允许部署环境独立指定更快模型。
+    dashscope_followup_model: str = (
+        os.getenv("DASHSCOPE_FOLLOWUP_MODEL")
+        or os.getenv("DASHSCOPE_INTENT_MODEL")
+        or os.getenv("DASHSCOPE_CHAT_MODEL", "qwen-plus")
+    )
+    # Chat、Embedding、Rerank 均固定走云端 API，不再保留本地模型分支。
+    dashscope_embedding_model: str = os.getenv("DASHSCOPE_EMBEDDING_MODEL", "text-embedding-v4")
+    dashscope_rerank_model: str = os.getenv("DASHSCOPE_RERANK_MODEL", "qwen3-rerank")
+    dashscope_rerank_endpoint: str = os.getenv("DASHSCOPE_RERANK_ENDPOINT", "")
+
+    # 兼容系统状态页的展示字段，值始终来自云端模型配置。
+    chat_model: str = ""
+    embedding_model: str = ""
+    rerank_model: str = ""
+    api_key: str = ""
+    base_url: str = ""
+
+    def __post_init__(self) -> None:
+        """回填状态接口需要的统一云端模型字段。"""
+        self.chat_model = self.dashscope_chat_model
+        self.embedding_model = self.dashscope_embedding_model
+        self.rerank_model = self.dashscope_rerank_model
+        self.api_key = self.dashscope_api_key
+        self.base_url = self.dashscope_base_url
 
     def ensure_directories(self) -> None:
         """
@@ -87,14 +94,14 @@ class Settings:
         如果目录不存在则自动创建，父目录也会一并创建
         """
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        self.extracted_dir.mkdir(parents=True, exist_ok=True)
-        self.samples_dir.mkdir(parents=True, exist_ok=True)
-        self.index_dir.mkdir(parents=True, exist_ok=True)
         self.document_index_dir.mkdir(parents=True, exist_ok=True)
         self.document_images_dir.mkdir(parents=True, exist_ok=True)
+        self.numba_cache_dir.mkdir(parents=True, exist_ok=True)
 
 
 # 创建全局配置实例，项目其他地方直接导入使用
 settings = Settings()
 # 初始化时确保所有目录都已创建
 settings.ensure_directories()
+# 指定 Numba 缓存目录，保证 PDF 文档化依赖在 Windows 环境下稳定导入
+os.environ.setdefault("NUMBA_CACHE_DIR", str(settings.numba_cache_dir))

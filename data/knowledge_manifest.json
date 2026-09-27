@@ -1,0 +1,52 @@
+{
+  "build_id": "smart-main-20260907T034600Z",
+  "built_at": "2026-09-07T03:46:00.502936+00:00",
+  "source": "Smart_Case_Match natural-paragraph index",
+  "collection_name": "weather_document_chunks",
+  "embedding_model": "text-embedding-v4",
+  "embedding_dimension": 1024,
+  "chunk_count": 317,
+  "standard_case_count": 24,
+  "image_count": 387,
+  "linked_image_count": 387,
+  "standard_case_fields": [
+    "case_id",
+    "title",
+    "date_range",
+    "disaster_types",
+    "affected_areas",
+    "source_pdf",
+    "source_chunk_ids",
+    "evidence_image_ids"
+  ],
+  "pdfs": [
+    {
+      "name": "FST2025-3.pdf",
+      "sha256": "65b89c472ef7fe6ecd00655888072301c0f76563f561187fa54a34a9a604e1e7"
+    },
+    {
+      "name": "FST2025-4.pdf",
+      "sha256": "ef383e338962a03761cac8cbda6942e16320b38d3d22b6178ed142b29fa7a37a"
+    },
+    {
+      "name": "FST2025-5.pdf",
+      "sha256": "49f6e5836965cfbac598974ecda9bd40e225353bbefa52f9f0f1c33e8b2a8c89"
+    },
+    {
+      "name": "FST2025-6.pdf",
+      "sha256": "24aac74d69c28758f2449e160a22d4e3d7abb97daebfcfdc17ccd0e2e8209f38"
+    },
+    {
+      "name": "FST2025-7.pdf",
+      "sha256": "eec9dec4b2e11d0cb3baee5c78698bb20be3d5ed83c30418850795bb8478803e"
+    },
+    {
+      "name": "山西省2025年1月天气过程总结.pdf",
+      "sha256": "297d627756bdef56626bb81032872bc0be1e634f16915473fa06ed909260f3a4"
+    },
+    {
+      "name": "山西省2025年2月天气过程总结.pdf",
+      "sha256": "3289687cbfe3551bb8acf13bfaef07d6a3456085bde638989d0b8c9eabe4947e"
+    }
+  ]
+}

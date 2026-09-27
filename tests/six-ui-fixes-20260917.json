@@ -1,0 +1,12 @@
+{
+  "unrequestedImageBlocks": 0,
+  "reportCards": 1,
+  "reportThumbnailSrc": "http://127.0.0.1:8000/api/case-multidim/report-thumbnails/report.thumbnail.png",
+  "reportThumbnailLoaded": true,
+  "smartTitle": "分析2025年台风“白海豚”残余涡旋与副高共同影响晋东南的强降水过程，并作出预警",
+  "referenceBackground": "rgba(0, 0, 0, 0)",
+  "coreSummary": "核心结论摘要\n\n判断当前过程与两个历史个例在环流配置上高度相似。\n\n关键依据副热带高压边缘暖湿气流共同作用\n\n关键依据短时强降水特征明显\n\n最大风险山洪和中小河流洪水风险\n\n摘要置信度 85% · 支持个例 case-1、case-2",
+  "forecastTipCount": 1,
+  "reportPdfRequestsAfterClick": 1,
+  "reportThumbnailLoadedAfterReopen": true
+}

@@ -1,0 +1,93 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "最高气温",
+      "value": 42.3,
+      "unit": "℃",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-045",
+      "source_text": "13日08 时-14日08 时，大于 35℃的最高气温范围扩大，主要集中在山西中南部地区，共 712 站出现高温天气，最高气温介于 35-42.3℃之间，最大值出现在襄汾邓庄",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 40.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-7-chunk-044",
+      "source_text": "12日08 时-13日08 时，高温主要集中在中南部盆地，共 330 站出现大于 35℃ 高温天气，最高气温大于 40℃的有：襄汾邓庄、盂县梁家寨、永济雪花山，共计 3 站,最大值出现在永济雪花山为 40.8℃。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 45.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-046",
+      "source_text": "14日08 时-15日08 时，山西中南部地区大于 35℃的高温范围进一步扩大， 共 779 站出现高温天气，最高气温介于 35-45℃之间，最大值出现在永济雪花山",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 46.1,
+      "unit": "℃",
+      "location": "太原",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-048",
+      "source_text": "市、晋城市、吕梁市、太原市的大部,晋中市、阳泉市、长治市的部分,忻州市、 大同市、朔州市的局部,共 1410 站出现高温天气，最高气温介于 35-46.1℃之间， 最大值出现在永济雪花山",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 43.0,
+      "unit": "℃",
+      "location": "太原",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-049",
+      "source_text": "临汾市、运城市的大部,吕梁市、太原市的部分,长治市、阳泉市、晋城市、晋中市、 大同市、忻州市的局部,共 835 站出现高温天气，最高气温介于 35-43℃之间，最大值出现在襄汾邓庄",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 40.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-7-chunk-049",
+      "source_text": "最高气温大于 40℃的有 47 站，最高气温在在 37-40℃之间的有 341 站，最高气温在在 35-37℃之间的有 447 站。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最高气温",
+      "value": 43.2,
+      "unit": "℃",
+      "location": "太原",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-050",
+      "source_text": "临汾市、吕梁市、晋城市、阳泉市、太原市的部分,运城市的大部,晋中市、大同市、忻州市、长治市、朔州市的局部,共 909 站出现高温天气，最高气温介于 35-43.2℃之间，最大值出现在襄汾邓庄",
+      "confidence": 0.86
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "confirmed",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "not_present_after_all_chunks_scanned",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 3,
+  "rule_metric_count": 7,
+  "llm_metric_count": 2
+}

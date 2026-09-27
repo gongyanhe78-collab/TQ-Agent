@@ -1,52 +1,44 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
+// 默认连接标准后端端口；开发调试可用环境变量或浏览器本地配置临时切换。
+const browserApiOrigin = typeof window !== "undefined" ? window.localStorage.getItem("risk-api-origin") : "";
+export const API_ORIGIN = import.meta.env.VITE_API_ORIGIN || browserApiOrigin || "http://127.0.0.1:8000";
+const API_BASE_URL = `${API_ORIGIN}/api`;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 60000,
 });
 
-export const fetchHealth = async () => (await api.get("/health")).data;
-export const fetchCases = async () => (await api.get("/cases")).data;
-export const fetchVectorKeys = async () => (await api.get("/vectors/keys")).data;
-export const fetchCaseDetail = async (caseId) => (await api.get(`/cases/${caseId}`)).data;
-export const fetchDocumentKeys = async () => (await api.get("/documents/keys")).data;
-export const fetchDocumentChunk = async (chunkId) => (await api.get(`/documents/chunks/${chunkId}`)).data;
-export const fetchStandardCases = async (params = {}) => (await api.get("/standard-cases", { params })).data;
-export const fetchSimilarCases = async (params = {}) => (await api.get("/standard-cases/similar", { params })).data;
-export const fetchEvalQuestions = async () => (await api.get("/eval/questions")).data;
-export const runQuery = async (payload) => (await api.post("/query", payload)).data;
-export const runExtraction = async () => (await api.post("/extract")).data;
-export const runIndexing = async () => (await api.post("/index")).data;
-export const refreshLibrary = async () => (await api.post("/refresh", null, { timeout: 600000 })).data;
-
-export const uploadMaterial = async (file) =>
-  (
-    await api.post("/materials", file, {
-      headers: {
-        "Content-Type": "application/pdf",
-        "X-Filename": encodeURIComponent(file.name),
-      },
-      timeout: 600000,
-    })
-  ).data;
-
-// Upload multiple PDFs through FastAPI's standard UploadFile multipart endpoint.
-export const uploadMaterialsBatch = async (files) => {
-  const formData = new FormData();
-  Array.from(files).forEach((file) => formData.append("files", file));
-  return (await api.post("/materials/batch", formData, { timeout: 600000 })).data;
-};
-
 export const fetchSessions = async () => (await api.get("/sessions")).data;
 export const createSession = async (title) => (await api.post("/sessions", { title })).data;
 export const updateSessionTitle = async (sessionId, title) =>
   (await api.patch(`/sessions/${sessionId}`, { title })).data;
+export const getFeedbackClientId = () => {
+  const key = "risk-feedback-client-id";
+  let value = window.localStorage.getItem(key);
+  if (!value) {
+    value = `web-${crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`}`;
+    window.localStorage.setItem(key, value);
+  }
+  return value;
+};
 export const fetchSessionMessages = async (sessionId) =>
-  (await api.get(`/sessions/${sessionId}/messages`)).data;
+  (await api.get(`/sessions/${sessionId}/messages`, { params: { client_id: getFeedbackClientId() } })).data;
+export const fetchSessionMessage = async (sessionId, messageId) =>
+  (await api.get(`/sessions/${sessionId}/messages/${messageId}`)).data;
 export const deleteSession = async (sessionId) => (await api.delete(`/sessions/${sessionId}`)).data;
 
+export const exportMessagePdf = async (sessionId, messageId) =>
+  (await api.post(`/sessions/${sessionId}/messages/${messageId}/export-pdf`)).data;
+export const saveMessageFeedback = async (sessionId, messageId, payload) =>
+  (await api.post(`/sessions/${sessionId}/messages/${messageId}/feedback`, payload)).data;
+export const reportMessageIssue = async (sessionId, messageId, payload) =>
+  (await api.post(`/sessions/${sessionId}/messages/${messageId}/report`, payload)).data;
+export const shareMessage = async (sessionId, messageId) =>
+  (await api.post(`/sessions/${sessionId}/messages/${messageId}/share`)).data;
+
+// 统一解析后端的 metadata/delta/done 事件，并将 Agent 差异屏蔽在聊天协议之后。
 export const streamQuery = async (payload, handlers) => {
   const response = await fetch(`${API_BASE_URL}/query/stream`, {
     method: "POST",
@@ -75,7 +67,11 @@ export const streamQuery = async (payload, handlers) => {
       if (!line) continue;
       const data = JSON.parse(line.slice(6));
       if (data.type === "metadata") handlers.onMetadata?.(data);
-      if (data.type === "delta") handlers.onDelta?.(data.text || "");
+      if (data.type === "delta") {
+        handlers.onDelta?.(data.text || "");
+        // 主动让出一个浏览器渲染帧，避免连续 SSE 小块都在同一轮微任务中合并显示。
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
       if (data.type === "done") handlers.onDone?.(data);
       if (data.type === "error") throw new Error(data.message);
     }

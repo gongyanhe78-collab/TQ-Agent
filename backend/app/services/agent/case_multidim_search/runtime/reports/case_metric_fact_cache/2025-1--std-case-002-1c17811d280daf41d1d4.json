@@ -1,0 +1,73 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "最低气温",
+      "value": -25.6,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-016",
+      "source_text": "1月14日08 时至 15日08 时，全省各地最低气温介于-25.6℃（新荣）～-2.7℃（永济）之间。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 17.0,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-019",
+      "source_text": "6 级以上大风天气，41 县市出现 7 级以上大风天气，最大值出现在天镇,风速达到 17 m/s。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -2.7,
+      "unit": "℃",
+      "location": "永济",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-016",
+      "source_text": "1月14日08 时至 15日08 时，全省各地最低气温介于-25.6℃（新荣）～-2.7℃（永济）之间。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.7,
+      "unit": "℃",
+      "location": "汾阳",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-016",
+      "source_text": "其中，汾阳降温 12.7℃，新荣、浑源、娄烦、平城、榆次、广灵、安泽、静乐、朔城、平遥、古交、平顺、孝义、岢岚、万柏林、壶关、杏花岭、石楼、上党、陵川、寿阳共 21 个县（市、区）降温在 8～12℃之间，祁县、和顺、云州、榆社、霍州、侯马等 7 3 个县（市、区）降温在 4～8℃之间，定襄、应县、神池、河津等 19 个县（市、区）降温",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "极大风速",
+      "value": 17.0,
+      "unit": "m/s",
+      "location": "天镇",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-019",
+      "source_text": "6 级以上大风天气，41 县市出现 7 级以上大风天气，最大值出现在天镇,风速达到 17 m/s。",
+      "confidence": 0.9
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "confirmed",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "confirmed",
+    "过程最大降水量": "not_present_after_all_chunks_scanned",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "confirmed",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 2,
+  "rule_metric_count": 2,
+  "llm_metric_count": 4
+}

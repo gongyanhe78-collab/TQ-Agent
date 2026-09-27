@@ -1,0 +1,377 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>相似个例智能匹配</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      color: #20262d;
+      background: #eef1f3;
+      --line: #d7dde2;
+      --muted: #65717c;
+      --primary: #176b87;
+      --primary-dark: #105368;
+      --accent: #b8572a;
+      --surface: #ffffff;
+      --soft: #f5f7f8;
+      --warn: #8d4b14;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: #eef1f3; }
+    button, input, textarea, select { font: inherit; letter-spacing: 0; }
+    button { cursor: pointer; }
+    .app-header {
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; color: #fff; background: #24343e; border-bottom: 4px solid var(--accent);
+    }
+    .app-header h1 { margin: 0; font-size: 20px; font-weight: 650; }
+    .health { font-size: 13px; color: #d8e2e7; }
+    .workspace { display: grid; grid-template-columns: minmax(320px, 390px) minmax(0, 1fr); min-height: calc(100vh - 64px); }
+    .query-panel { padding: 18px; background: var(--surface); border-right: 1px solid var(--line); overflow: auto; }
+    .result-panel { min-width: 0; padding: 20px 24px 36px; overflow: auto; }
+    .section-title { margin: 0 0 14px; font-size: 15px; color: #2d3941; }
+    .field { margin-bottom: 14px; }
+    .field label, .field-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #394650; }
+    input, textarea, select {
+      width: 100%; border: 1px solid #bac4cb; border-radius: 4px; background: #fff; color: #20262d;
+      padding: 9px 10px; outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(23,107,135,.12); }
+    textarea { min-height: 88px; resize: vertical; line-height: 1.55; }
+    .date-grid, .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .checks { display: flex; flex-wrap: wrap; gap: 7px; }
+    .check { display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; background: var(--soft); }
+    .check input { width: 14px; height: 14px; margin: 0; accent-color: var(--primary); }
+    .actions { position: sticky; bottom: 0; padding-top: 12px; background: #fff; }
+    .primary-btn { width: 100%; border: 0; border-radius: 4px; padding: 11px 16px; color: #fff; background: var(--primary); font-weight: 650; }
+    .primary-btn:hover { background: var(--primary-dark); }
+    .primary-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .status-bar { margin-bottom: 16px; padding: 12px 14px; border: 1px solid var(--line); background: var(--surface); }
+    .status-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+    .progress-track { height: 5px; margin-top: 9px; background: #e7ebee; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; background: var(--primary); transition: width .25s ease; }
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #bfc9cf; margin-bottom: 18px; }
+    .tab { border: 0; border-bottom: 3px solid transparent; padding: 10px 16px; background: transparent; color: var(--muted); }
+    .tab.active { color: var(--primary-dark); border-bottom-color: var(--primary); font-weight: 650; }
+    .view[hidden] { display: none; }
+    .empty { padding: 90px 20px; text-align: center; color: var(--muted); border: 1px dashed #c5cdd2; background: rgba(255,255,255,.65); }
+    .summary-band { padding: 14px 16px; margin-bottom: 18px; background: #e9f2f4; border-left: 4px solid var(--primary); }
+    .summary-band p { margin: 4px 0; font-size: 13px; line-height: 1.55; }
+    .core-summary { margin-bottom: 18px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface); }
+    .core-summary h3 { margin: 0 0 8px; font-size: 15px; }
+    .core-summary p { margin: 6px 0; font-size: 13px; line-height: 1.65; }
+    .summary-label { display: inline-block; min-width: 64px; color: var(--primary-dark); font-weight: 700; }
+    .core-summary .risk { color: #8d3e19; }
+    .warning { padding: 9px 12px; margin-bottom: 8px; color: var(--warn); background: #fff5e9; border-left: 3px solid #d48a43; font-size: 13px; }
+    .tips { margin: 0; padding: 0; list-style: none; }
+    .tip { display: grid; grid-template-columns: 36px minmax(0,1fr); gap: 10px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .tip-no { width: 30px; height: 30px; display: grid; place-items: center; background: var(--accent); color: #fff; font-weight: 700; }
+    .tip p { margin: 0 0 6px; line-height: 1.65; }
+    .tip-lines { margin: 0 0 7px; display: grid; gap: 4px; }
+    .tip-line { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; font-size: 13px; line-height: 1.55; }
+    .tip-label { color: var(--primary-dark); font-weight: 650; }
+    .supplementary-tips { margin-top: 14px; border-top: 1px solid var(--line); }
+    .supplementary-tips summary { padding: 11px 0 3px; color: var(--muted); font-size: 12px; cursor: pointer; }
+    .meta { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .case-card { margin-bottom: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+    .case-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .case-head h3 { margin: 0; font-size: 16px; line-height: 1.45; }
+    .score { color: var(--primary-dark); font-size: 19px; font-weight: 700; white-space: nowrap; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .tag { padding: 3px 7px; border: 1px solid #cbd4d9; color: #48555e; background: var(--soft); font-size: 12px; }
+    .score-grid { display: grid; grid-template-columns: repeat(5, minmax(80px,1fr)); gap: 8px; margin: 12px 0; }
+    .score-item { padding: 7px; background: #f0f3f4; font-size: 12px; text-align: center; }
+    .case-card h4 { margin: 15px 0 7px; font-size: 13px; }
+    .compact-list { margin: 0; padding-left: 20px; line-height: 1.7; font-size: 13px; }
+    .evidence { color: var(--muted); font-size: 11px; }
+    .evidence-button { border: 0; padding: 0; background: transparent; color: var(--primary-dark); font-size: inherit; text-decoration: underline; }
+    .evidence-button:hover { color: var(--accent); }
+    .image-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 10px; }
+    .image-link { width: 100%; padding: 0; display: block; color: inherit; text-align: left; border: 1px solid var(--line); background: #fff; }
+    .image-link img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #e9edef; }
+    .image-link span { display: block; padding: 7px; font-size: 11px; line-height: 1.4; }
+    .supplemental { margin-top: 12px; border-top: 1px solid var(--line); }
+    .supplemental summary { padding: 10px 0 2px; color: var(--muted); font-size: 12px; cursor: pointer; }
+    .evidence-dialog { width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: 0; border: 1px solid #aeb9c0; background: var(--surface); color: #20262d; }
+    .evidence-dialog::backdrop { background: rgba(24, 32, 38, .58); }
+    .dialog-head { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 16px; border-bottom: 1px solid var(--line); }
+    .dialog-head h3 { margin: 0; min-width: 0; font-size: 15px; overflow-wrap: anywhere; }
+    .dialog-close { width: 34px; height: 34px; border: 0; background: transparent; color: #3d4952; font-size: 25px; line-height: 1; }
+    .dialog-close:hover { background: var(--soft); }
+    .dialog-body { padding: 16px; overflow: auto; }
+    .dialog-image { display: block; max-width: 100%; max-height: 64vh; margin: 0 auto; object-fit: contain; }
+    .dialog-caption { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.6; }
+    .chunk-content { margin-top: 12px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.75; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px; border: 1px solid var(--line); background: #fff; font-size: 12px; line-height: 1.5; }
+    @media (max-width: 860px) {
+      .workspace { grid-template-columns: 1fr; }
+      .query-panel { border-right: 0; border-bottom: 1px solid var(--line); }
+      .result-panel { padding: 16px; }
+      .score-grid { grid-template-columns: repeat(2, minmax(90px,1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <h1>相似个例智能匹配</h1>
+    <span id="health" class="health">本地资料检查中</span>
+  </header>
+  <main class="workspace">
+    <form id="queryForm" class="query-panel">
+      <h2 class="section-title">新灾害过程</h2>
+      <div class="field">
+        <label for="processName">过程名称</label>
+        <input id="processName" maxlength="120" placeholder="例如：晋南持续性强降水过程" />
+      </div>
+      <div class="field date-grid">
+        <div><label for="startDate">开始日期</label><input id="startDate" type="date" /></div>
+        <div><label for="endDate">结束日期</label><input id="endDate" type="date" /></div>
+      </div>
+      <div class="field">
+        <span class="field-label">灾害类型</span>
+        <div id="disasters" class="checks"></div>
+      </div>
+      <div class="field">
+        <span class="field-label">影响区域</span>
+        <div id="areas" class="checks"></div>
+      </div>
+      <div class="field"><label for="observation">实况描述</label><textarea id="observation" placeholder="降水、风速、温度、相态和落区演变"></textarea></div>
+      <div class="field"><label for="circulation">环流形势</label><textarea id="circulation" placeholder="高低空系统、水汽输送、切变、急流和冷空气路径"></textarea></div>
+      <div class="field"><label for="intensity">强度与时效</label><textarea id="intensity" placeholder="累计量级、最大小时强度、持续时间等"></textarea></div>
+      <div class="field"><label for="rawQuery">补充描述</label><textarea id="rawQuery" placeholder="其他需要参与匹配的业务信息"></textarea></div>
+      <div class="field option-grid">
+        <div><label for="topN">结果数量</label><select id="topN"><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div><label for="diversity">多样性</label><select id="diversity"><option value="moderate" selected>适度</option><option value="off">关闭</option></select></div>
+      </div>
+      <label class="check"><input id="includeImages" type="checkbox" checked />返回证据图片</label>
+      <div class="actions"><button id="submitBtn" class="primary-btn" type="submit">开始匹配</button></div>
+    </form>
+
+    <section class="result-panel">
+      <div id="statusBar" class="status-bar" hidden>
+        <div class="status-row"><span id="statusMessage">正在准备匹配</span><span id="statusPercent">0%</span></div>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+      </div>
+      <nav class="tabs" aria-label="结果视图">
+        <button class="tab active" data-view="overview" type="button">综合研判</button>
+        <button class="tab" data-view="cases" type="button">匹配个例</button>
+        <button class="tab" data-view="audit" type="button">运行详情</button>
+      </nav>
+      <div id="overview" class="view"><div class="empty">填写左侧过程信息后开始匹配</div></div>
+      <div id="cases" class="view" hidden></div>
+      <div id="audit" class="view" hidden></div>
+    </section>
+  </main>
+  <dialog id="evidenceDialog" class="evidence-dialog" aria-labelledby="evidenceDialogTitle">
+    <div class="dialog-head"><h3 id="evidenceDialogTitle">证据详情</h3><button id="evidenceDialogClose" class="dialog-close" type="button" title="关闭" aria-label="关闭">×</button></div>
+    <div id="evidenceDialogBody" class="dialog-body" aria-live="polite"></div>
+  </dialog>
+
+  <script>
+    const disasterOptions = ["强对流","暴雨","大暴雨","强降水","短时强降水","雷暴大风","大风","冰雹","雨雪","降雪","暴雪","寒潮","低温","高温","沙尘","霜冻","雾"];
+    const areaOptions = ["全省","晋北","山西中部","晋南","太原","大同","朔州","忻州","阳泉","晋中","吕梁","长治","晋城","临汾","运城"];
+    const apiBase = "/api/smart-case-match";
+    let pollTimer = null;
+    let evidenceImageMap = new Map();
+
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[char]));
+    const checks = (id, values) => document.getElementById(id).innerHTML = values.map(value => `<label class="check"><input type="checkbox" value="${escapeHtml(value)}" />${escapeHtml(value)}</label>`).join("");
+    checks("disasters", disasterOptions); checks("areas", areaOptions);
+
+    document.querySelectorAll(".tab").forEach(button => button.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(item => item.classList.toggle("active", item === button));
+      document.querySelectorAll(".view").forEach(view => view.hidden = view.id !== button.dataset.view);
+    }));
+
+    const selected = id => [...document.querySelectorAll(`#${id} input:checked`)].map(item => item.value);
+    const setProgress = (message, percent) => {
+      document.getElementById("statusBar").hidden = false;
+      document.getElementById("statusMessage").textContent = message;
+      document.getElementById("statusPercent").textContent = `${percent}%`;
+      document.getElementById("progressFill").style.width = `${percent}%`;
+    };
+    const pollProgress = id => {
+      clearInterval(pollTimer);
+      pollTimer = setInterval(async () => {
+        try {
+          const response = await fetch(`${apiBase}/progress/${encodeURIComponent(id)}`);
+          if (!response.ok) return;
+          const state = await response.json();
+          setProgress(state.message, state.percent);
+          if (state.status !== "running") clearInterval(pollTimer);
+        } catch (_) {}
+      }, 700);
+    };
+
+    document.getElementById("queryForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const progressId = `smart_case_${crypto.randomUUID().replaceAll("-", "")}`;
+      const payload = {
+        process_name: document.getElementById("processName").value.trim(),
+        start_date: document.getElementById("startDate").value,
+        end_date: document.getElementById("endDate").value,
+        disaster_types: selected("disasters"), affected_areas: selected("areas"),
+        observation_description: document.getElementById("observation").value.trim(),
+        circulation_description: document.getElementById("circulation").value.trim(),
+        intensity_description: document.getElementById("intensity").value.trim(),
+        raw_query: document.getElementById("rawQuery").value.trim(),
+        top_n: Number(document.getElementById("topN").value),
+        diversity_mode: document.getElementById("diversity").value,
+        include_images: document.getElementById("includeImages").checked,
+        progress_id: progressId
+      };
+      const button = document.getElementById("submitBtn");
+      button.disabled = true; button.textContent = "匹配中"; setProgress("正在提交过程信息", 2); pollProgress(progressId);
+      try {
+        const response = await fetch(`${apiBase}/search`, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || "匹配请求失败");
+        setProgress("相似个例匹配完成", 100); renderResult(data);
+      } catch (error) {
+        setProgress(error.message, 100);
+        document.getElementById("overview").innerHTML = `<div class="warning">${escapeHtml(error.message)}</div>`;
+      } finally {
+        clearInterval(pollTimer); button.disabled = false; button.textContent = "开始匹配";
+      }
+    });
+
+    const list = values => values?.length ? `<ul class="compact-list">${values.map(value => {
+      const text = typeof value === "string" ? value : value.text || "";
+      const chunkIds = typeof value === "object" ? value.evidence_chunk_ids || [] : [];
+      const imageRefsValue = typeof value === "object" ? value.evidence_image_refs || [] : [];
+      const chunks = chunkIds.length ? `<div class="evidence">文字证据：${chunkIds.map(chunkId => `<button class="evidence-button" type="button" data-chunk-id="${escapeHtml(chunkId)}">${escapeHtml(chunkId)}</button>`).join("、")}</div>` : "";
+      const imageRefs = imageRefsValue.length ? `<div class="evidence">可核验图片：${imageRefsValue.map(ref => `<button class="evidence-button" type="button" data-image-id="${escapeHtml(ref.image_id)}">${escapeHtml(ref.label)}</button>`).join("、")}</div>` : "";
+      return `<li>${escapeHtml(text)}${chunks}${imageRefs}</li>`;
+    }).join("")}</ul>` : `<div class="meta">暂无</div>`;
+    function renderResult(data) {
+      // 弹窗按 image_id 查找主证据或补充图片，保证文字引用与图片详情使用同一对象。
+      evidenceImageMap = new Map();
+      (data.matched_cases || []).forEach(item => {
+        [...(item.evidence_images || []), ...(item.supplemental_images || [])].forEach(image => evidenceImageMap.set(String(image.image_id), image));
+      });
+      const q = data.query_summary || {};
+      const warnings = (data.warnings || []).map(value => `<div class="warning">${escapeHtml(value)}</div>`).join("");
+      const allTips = data.forecast_tips || [];
+      const coreTips = allTips.filter(tip => tip.display_level !== "supplementary");
+      const supplementaryTips = allTips.filter(tip => tip.display_level === "supplementary");
+      const tips = coreTips.map(renderForecastTip).join("");
+      const supplementary = supplementaryTips.length
+        ? `<details class="supplementary-tips"><summary>低置信度补充提示（${supplementaryTips.length}）</summary><ol class="tips">${supplementaryTips.map(renderForecastTip).join("")}</ol></details>`
+        : "";
+      const summary = renderCoreSummary(data.forecast_summary || {});
+      document.getElementById("overview").innerHTML = `<div class="summary-band"><p><strong>${escapeHtml(q.process_name || "未命名过程")}</strong></p><p>${escapeHtml((q.disaster_types || []).join("、") || "灾种未指定")} · ${escapeHtml((q.affected_areas || []).join("、") || "区域未指定")} · ${escapeHtml(q.date_text || "日期未指定")}</p></div>${warnings}${summary}<h2 class="section-title">综合预报提示</h2>${tips ? `<ol class="tips">${tips}</ol>${supplementary}` : `<div class="empty">当前没有足够证据生成综合提示</div>${supplementary}`}`;
+      document.getElementById("cases").innerHTML = (data.matched_cases || []).map(renderCase).join("") || `<div class="empty">没有达到质量门槛的历史个例</div>`;
+      document.getElementById("audit").innerHTML = `<pre>${escapeHtml(JSON.stringify(data.audit || {}, null, 2))}</pre>`;
+    }
+    function renderForecastTip(tip, index) {
+      // 优先按三个业务问题分行展示，兼容旧结果仅返回 text 的情况。
+      const details = [
+        ["关注", tip.focus_object],
+        ["偏差", tip.possible_bias],
+        ["建议", tip.suggested_action]
+      ].filter(([, value]) => String(value || "").trim());
+      const body = details.length
+        ? `<div class="tip-lines">${details.map(([label, value]) => `<div class="tip-line"><span class="tip-label">${label}</span><span>${escapeHtml(value)}</span></div>`).join("")}</div>`
+        : `<p>${escapeHtml(tip.text)}</p>`;
+      return `<li class="tip"><span class="tip-no">${index + 1}</span><div>${body}<div class="meta">${escapeHtml(tip.consensus_level)} · 置信度 ${Math.round((tip.confidence || 0) * 100)}% · 支持个例 ${escapeHtml((tip.support_case_ids || []).join("、"))} · 证据 ${escapeHtml((tip.evidence_chunk_ids || []).join("、"))}</div></div></li>`;
+    }
+    function renderCoreSummary(summary) {
+      if (!summary || (!summary.similarity_assessment && !summary.main_risk && !(summary.core_features || []).length)) return "";
+      const features = (summary.core_features || []).map(item => `<p><span class="summary-label">关键依据</span>${escapeHtml(item)}</p>`).join("");
+      const confidence = summary.confidence !== undefined ? `<p class="meta">摘要置信度 ${Math.round((summary.confidence || 0) * 100)}% · 支持个例 ${escapeHtml((summary.support_case_ids || []).join("、"))}</p>` : "";
+      return `<section class="core-summary"><h3>核心结论摘要</h3>${summary.similarity_assessment ? `<p><span class="summary-label">判断</span>${escapeHtml(summary.similarity_assessment)}</p>` : ""}${features}${summary.main_risk ? `<p class="risk"><span class="summary-label">最大风险</span>${escapeHtml(summary.main_risk)}</p>` : ""}${confidence}</section>`;
+    }
+    function renderEvidenceImage(image, supplemental = false) {
+      const fallbackCaption = image.caption || `第${image.page_no}页图片`;
+      const visibleCaption = supplemental ? fallbackCaption : `${image.display_no}：${fallbackCaption}`;
+      return `<button id="${escapeHtml(image.image_id)}" class="image-link" type="button" data-image-id="${escapeHtml(image.image_id)}"><img src="${escapeHtml(image.url)}" alt="${escapeHtml(fallbackCaption)}" /><span>${escapeHtml(visibleCaption)}</span></button>`;
+    }
+
+    function renderCase(item) {
+      const score = item.score_breakdown || {};
+      const scores = [["综合",item.retrieval_score],["落区",score.area],["灾种",score.disaster],["季节",score.temporal],["语义",score.semantic]];
+      if (item.candidate_assessment_available) {
+        // 页面根据本次灾种配置展示实际参与排序的指标，不再固定显示雨雪专属的两项分数。
+        const labels = Object.fromEntries((item.dimension_profile?.dimensions || []).map(d => [d.key, d.label]));
+        Object.entries(item.dimension_scores || {}).forEach(([key, value]) => {
+          if (!scores.some(([name]) => name === (labels[key] || key))) scores.push([labels[key] || key, value]);
+        });
+        // 细分指标单独显示，避免复合灾害共用 intensity/evolution 键时丢失专业比较结果。
+        Object.entries(item.metric_scores || {}).forEach(([key, value]) => scores.push([`指标·${key}`, value]));
+        if (!Object.keys(item.dimension_scores || {}).length) {
+          scores.push(["机制", item.mechanism_score], ["强度", item.intensity_score]);
+        }
+      }
+      // 未评估指标继续保留在后端审计日志中，业务页面只展示已有明确比较结果的指标。
+      const images = (item.evidence_images || []).map(image => renderEvidenceImage(image)).join("");
+      const supplemental = (item.supplemental_images || []).map(image => renderEvidenceImage(image, true)).join("");
+      const evidenceSection = images
+        ? `<h4>证据图片</h4><div class="image-strip">${images}</div>`
+        : supplemental ? `<h4>证据图片</h4><div class="meta">暂无与参考经验直接关联的图片</div>` : "";
+      const supplementalSection = supplemental
+        ? `<details class="supplemental"><summary>补充资料图片（${(item.supplemental_images || []).length}）</summary><div class="image-strip">${supplemental}</div></details>`
+        : "";
+      return `<article class="case-card"><div class="case-head"><h3>${item.rank}. ${escapeHtml(item.title)}</h3><span class="score">${Math.round((item.retrieval_score || 0) * 100)}%</span></div><div class="meta">${escapeHtml(item.date_range)} · ${escapeHtml(item.source_pdf)}</div><div class="tags">${[...(item.disaster_types || []), ...(item.affected_areas || [])].map(value => `<span class="tag">${escapeHtml(value)}</span>`).join("")}</div><div class="score-grid">${scores.map(([name,value]) => `<div class="score-item">${name} ${Math.round((value || 0) * 100)}%</div>`).join("")}</div><h4>匹配理由</h4>${list(item.match_reasons)}<h4>参考经验</h4>${list(item.key_references)}<h4>关键差异</h4>${list(item.key_differences)}${item.historical_warnings?.length ? `<h4>过程前历史预警</h4>${list(item.historical_warnings)}` : ""}${evidenceSection}${supplementalSection}</article>`;
+    }
+
+    const evidenceDialog = document.getElementById("evidenceDialog");
+    const evidenceDialogTitle = document.getElementById("evidenceDialogTitle");
+    const evidenceDialogBody = document.getElementById("evidenceDialogBody");
+
+    function showEvidenceDialog(title, content) {
+      evidenceDialogTitle.textContent = title;
+      evidenceDialogBody.innerHTML = content;
+      if (!evidenceDialog.open) evidenceDialog.showModal();
+    }
+
+    function openEvidenceImage(imageId) {
+      const image = evidenceImageMap.get(String(imageId));
+      if (!image) return;
+      const label = image.display_no || "补充资料图片";
+      const caption = image.caption || `第${image.page_no}页图片`;
+      showEvidenceDialog(
+        label,
+        `<img class="dialog-image" src="${escapeHtml(image.url)}" alt="${escapeHtml(caption)}" /><p class="dialog-caption"><strong>${escapeHtml(label)}：</strong>${escapeHtml(caption)}</p>`
+      );
+    }
+
+    async function openChunkEvidence(chunkId) {
+      showEvidenceDialog(`文字证据：${chunkId}`, `<div class="meta">正在读取正文</div>`);
+      try {
+        const response = await fetch(`${apiBase}/assets/chunks/${encodeURIComponent(chunkId)}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || "文字证据读取失败");
+        evidenceDialogTitle.textContent = `文字证据：${data.chunk_id}`;
+        evidenceDialogBody.innerHTML = `<div class="meta">${escapeHtml(data.source_pdf || "来源文件未知")} · chunk ${escapeHtml(data.chunk_no)}</div><div class="chunk-content">${escapeHtml(data.content || "暂无正文")}</div>`;
+      } catch (error) {
+        evidenceDialogBody.innerHTML = `<div class="warning">${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    document.addEventListener("click", event => {
+      const chunkButton = event.target.closest("[data-chunk-id]");
+      if (chunkButton) {
+        openChunkEvidence(chunkButton.dataset.chunkId);
+        return;
+      }
+      const imageButton = event.target.closest("[data-image-id]");
+      if (imageButton) openEvidenceImage(imageButton.dataset.imageId);
+    });
+    document.getElementById("evidenceDialogClose").addEventListener("click", () => evidenceDialog.close());
+    evidenceDialog.addEventListener("click", event => {
+      if (event.target === evidenceDialog) evidenceDialog.close();
+    });
+
+    fetch(`${apiBase}/health`).then(response => response.json()).then(data => {
+      const modelNames = ["embedding", "rerank", "llm"].map(key => data.models?.[key]?.model).filter(Boolean);
+      const modelsReady = data.embedding_available && data.rerank_available && data.llm_available;
+      const health = document.getElementById("health");
+      health.textContent = `本地个例 ${data.case_count || 0} · 文档片段 ${data.chunk_count || 0} · 模型${modelsReady ? "已就绪" : "存在降级"}`;
+      health.title = modelNames.join(" · ");
+    }).catch(() => document.getElementById("health").textContent = "本地资料状态不可用");
+  </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+{
+  "started_at": "2026-09-20T11:54:57.553+08:00",
+  "base_url": "http://127.0.0.1:8001",
+  "session_id": "68470a2a-3ff2-4c53-881e-0de04a610fa4",
+  "question": "2025年1月至7月最大降水量是多少，发生在什么时间和地点，并分析对应过程",
+  "event_count": 7,
+  "metadata_count": 3,
+  "delta_count": 3,
+  "delta_chars": 96,
+  "first_metadata_ms": 558.57,
+  "first_delta_ms": 11425.91,
+  "delta_intervals_ms": [
+    0.04,
+    0.09
+  ],
+  "response_read_ms": 10869.19,
+  "total_client_ms": 11426.31,
+  "done_performance": {
+    "session_memory_read_ms": 9.73,
+    "intent_ms": 10809.7,
+    "multidim_parse_ms": 14.73,
+    "persist_ms": 18.99,
+    "total_ms": 10868.41
+  },
+  "done_event": {
+    "type": "done",
+    "status": "awaiting_confirmation",
+    "agent_type": "case_multidim_search",
+    "run_id": "proposal_d965d1cb392144e4a684bd8c4c85d89a",
+    "llm_used": false,
+    "reports": [],
+    "message_id": 1220,
+    "follow_up_suggestions": [],
+    "follow_up_status": "none",
+    "regenerated_from_message_id": null,
+    "regeneration_instruction": "",
+    "source_user_message_id": 1219,
+    "version_group_id": "user-1219",
+    "version": 1,
+    "performance": {
+      "session_memory_read_ms": 9.73,
+      "intent_ms": 10809.7,
+      "multidim_parse_ms": 14.73,
+      "persist_ms": 18.99,
+      "total_ms": 10868.41
+    }
+  },
+  "diagnosis_hints": [
+    "首个 delta 很晚但随后 delta 连续：优先检查云端模型 TTFT。",
+    "delta_count 为 1 且内容很长：云端 API 可能实际一次返回大块，或后端未收到增量。",
+    "本脚本逐行读取仍集中收到多个事件：检查代理、压缩中间件或旧后端进程。",
+    "脚本收到多个 delta 而页面一次显示：检查浏览器 Network、前端构建版本和 onDelta 调用。"
+  ],
+  "events": [
+    {
+      "elapsed_ms": 558.57,
+      "event": {
+        "type": "metadata",
+        "agent_type": "query_intent",
+        "run_id": "",
+        "status": "running",
+        "progress": {
+          "stage": "understanding",
+          "percent": 2,
+          "message": "正在理解问题"
+        },
+        "performance": {
+          "total_ms": 0.93
+        }
+      }
+    },
+    {
+      "elapsed_ms": 11391.52,
+      "event": {
+        "type": "metadata",
+        "agent_type": "multidim_search",
+        "run_id": "",
+        "status": "running",
+        "progress": {
+          "stage": "routed",
+          "percent": 6,
+          "message": "正在准备多维检索与报告"
+        },
+        "performance": {
+          "session_memory_read_ms": 9.73,
+          "intent_ms": 10809.7,
+          "total_ms": 10834.39
+        }
+      }
+    },
+    {
+      "elapsed_ms": 11425.81,
+      "event": {
+        "type": "metadata",
+        "status": "awaiting_confirmation",
+        "agent_type": "case_multidim_search",
+        "run_id": "proposal_d965d1cb392144e4a684bd8c4c85d89a",
+        "question": "2025年1月至7月最大降水量是多少，发生在什么时间和地点，并分析对应过程",
+        "retrieval_mode": "agent:case_multidim_confirmation",
+        "hit_count": 0,
+        "hits": [],
+        "evidence_cases": [],
+        "evidence_chunks": [],
+        "images": [],
+        "visuals": [],
+        "reports": [],
+        "analysis": {},
+        "intent_trace": {
+          "route": "case_multidim_search"
+        },
+        "execution_plan": {
+          "agent": "case_multidim_search",
+          "flow_preserved": true
+        },
+        "audit": {},
+        "llm_used": false,
+        "llm_status": "not_applicable",
+        "query_conditions": {
+          "start_date": "",
+          "end_date": "",
+          "years": [
+            2025
+          ],
+          "months": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "disaster_types": [],
+          "cities": [],
+          "areas": [],
+          "include_images": true,
+          "include_all_images": true,
+          "image_limit_per_case": 20,
+          "display_limit": 50,
+          "report_include_all_cases": true,
+          "use_llm_case_analysis": true,
+          "case_chunk_limit": 6,
+          "case_context_char_limit": 6000,
+          "case_analysis_concurrency": 4,
+          "case_max_output_tokens": 1536,
+          "progress_id": "",
+          "report_title": ""
+        },
+        "proposal_id": "proposal_d965d1cb392144e4a684bd8c4c85d89a",
+        "proposal_operation": "new",
+        "proposal_question": "2025年1月至7月最大降水量是多少，发生在什么时间和地点，并分析对应过程",
+        "warnings": [],
+        "performance": {
+          "session_memory_read_ms": 9.73,
+          "intent_ms": 10809.7,
+          "multidim_parse_ms": 14.73,
+          "persist_ms": 18.99,
+          "total_ms": 10868.41
+        },
+        "source_user_message_id": 1219,
+        "version_group_id": "user-1219",
+        "message_id": 1220
+      }
+    },
+    {
+      "elapsed_ms": 11425.91,
+      "event": {
+        "type": "delta",
+        "text": "已解析出以下检索条件：\n- 时间：2025年；1月、2月、3月、4月、5月、6月、7月\n"
+      }
+    },
+    {
+      "elapsed_ms": 11425.95,
+      "event": {
+        "type": "delta",
+        "text": "- 灾种：不限\n- 地市：不限\n- 区域：不限\n\n请回复“确认”开始检索分析；"
+      }
+    },
+    {
+      "elapsed_ms": 11426.04,
+      "event": {
+        "type": "delta",
+        "text": "也可以直接补充或修改条件。"
+      }
+    },
+    {
+      "elapsed_ms": 11426.13,
+      "event": {
+        "type": "done",
+        "status": "awaiting_confirmation",
+        "agent_type": "case_multidim_search",
+        "run_id": "proposal_d965d1cb392144e4a684bd8c4c85d89a",
+        "llm_used": false,
+        "reports": [],
+        "message_id": 1220,
+        "follow_up_suggestions": [],
+        "follow_up_status": "none",
+        "regenerated_from_message_id": null,
+        "regeneration_instruction": "",
+        "source_user_message_id": 1219,
+        "version_group_id": "user-1219",
+        "version": 1,
+        "performance": {
+          "session_memory_read_ms": 9.73,
+          "intent_ms": 10809.7,
+          "multidim_parse_ms": 14.73,
+          "persist_ms": 18.99,
+          "total_ms": 10868.41
+        }
+      }
+    }
+  ],
+  "raw_sse_blocks": [
+    "data: {\"type\": \"metadata\", \"agent_type\": \"query_intent\", \"run_id\": \"\", \"status\": \"running\", \"progress\": {\"stage\": \"understanding\", \"percent\": 2, \"message\": \"正在理解问题\"}, \"performance\": {\"total_ms\": 0.93}}",
+    "data: {\"type\": \"metadata\", \"agent_type\": \"multidim_search\", \"run_id\": \"\", \"status\": \"running\", \"progress\": {\"stage\": \"routed\", \"percent\": 6, \"message\": \"正在准备多维检索与报告\"}, \"performance\": {\"session_memory_read_ms\": 9.73, \"intent_ms\": 10809.7, \"total_ms\": 10834.39}}",
+    "data: {\"type\": \"metadata\", \"status\": \"awaiting_confirmation\", \"agent_type\": \"case_multidim_search\", \"run_id\": \"proposal_d965d1cb392144e4a684bd8c4c85d89a\", \"question\": \"2025年1月至7月最大降水量是多少，发生在什么时间和地点，并分析对应过程\", \"retrieval_mode\": \"agent:case_multidim_confirmation\", \"hit_count\": 0, \"hits\": [], \"evidence_cases\": [], \"evidence_chunks\": [], \"images\": [], \"visuals\": [], \"reports\": [], \"analysis\": {}, \"intent_trace\": {\"route\": \"case_multidim_search\"}, \"execution_plan\": {\"agent\": \"case_multidim_search\", \"flow_preserved\": true}, \"audit\": {}, \"llm_used\": false, \"llm_status\": \"not_applicable\", \"query_conditions\": {\"start_date\": \"\", \"end_date\": \"\", \"years\": [2025], \"months\": [1, 2, 3, 4, 5, 6, 7], \"disaster_types\": [], \"cities\": [], \"areas\": [], \"include_images\": true, \"include_all_images\": true, \"image_limit_per_case\": 20, \"display_limit\": 50, \"report_include_all_cases\": true, \"use_llm_case_analysis\": true, \"case_chunk_limit\": 6, \"case_context_char_limit\": 6000, \"case_analysis_concurrency\": 4, \"case_max_output_tokens\": 1536, \"progress_id\": \"\", \"report_title\": \"\"}, \"proposal_id\": \"proposal_d965d1cb392144e4a684bd8c4c85d89a\", \"proposal_operation\": \"new\", \"proposal_question\": \"2025年1月至7月最大降水量是多少，发生在什么时间和地点，并分析对应过程\", \"warnings\": [], \"performance\": {\"session_memory_read_ms\": 9.73, \"intent_ms\": 10809.7, \"multidim_parse_ms\": 14.73, \"persist_ms\": 18.99, \"total_ms\": 10868.41}, \"source_user_message_id\": 1219, \"version_group_id\": \"user-1219\", \"message_id\": 1220}",
+    "data: {\"type\": \"delta\", \"text\": \"已解析出以下检索条件：\\n- 时间：2025年；1月、2月、3月、4月、5月、6月、7月\\n\"}",
+    "data: {\"type\": \"delta\", \"text\": \"- 灾种：不限\\n- 地市：不限\\n- 区域：不限\\n\\n请回复“确认”开始检索分析；\"}",
+    "data: {\"type\": \"delta\", \"text\": \"也可以直接补充或修改条件。\"}",
+    "data: {\"type\": \"done\", \"status\": \"awaiting_confirmation\", \"agent_type\": \"case_multidim_search\", \"run_id\": \"proposal_d965d1cb392144e4a684bd8c4c85d89a\", \"llm_used\": false, \"reports\": [], \"message_id\": 1220, \"follow_up_suggestions\": [], \"follow_up_status\": \"none\", \"regenerated_from_message_id\": null, \"regeneration_instruction\": \"\", \"source_user_message_id\": 1219, \"version_group_id\": \"user-1219\", \"version\": 1, \"performance\": {\"session_memory_read_ms\": 9.73, \"intent_ms\": 10809.7, \"multidim_parse_ms\": 14.73, \"persist_ms\": 18.99, \"total_ms\": 10868.41}}"
+  ]
+}

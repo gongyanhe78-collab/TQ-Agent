@@ -1,0 +1,11 @@
+{
+  "regenerationPayload": {
+    "question": "重新生成原回答",
+    "top_k": 5,
+    "top_n": 3,
+    "session_id": "ui-20260920",
+    "regenerate_from_message_id": 3,
+    "regeneration_instruction": "遗漏关键信息：补充观测站与时间证据"
+  },
+  "bodyText": "聊天记录\n新建\n七项优化验收\n气象灾害个例问答助手\n请分析2025年1月至7月最大降水，并给出对应过程\n\n版本二：最大降水为359.3毫米，发生于7月2日至3日，地点为阳高。\n\n接下来你可以继续了解：\n\n继续分析成因\n2 / 3\n生成正式多维报告\n\n正式多维报告已生成。\n\nPDF\n正式多维分析报告\nformal.pdf\n查看完整报告\n发送\n\n反馈已保存\n\n反馈已保存，正在按原因重新生成"
+}

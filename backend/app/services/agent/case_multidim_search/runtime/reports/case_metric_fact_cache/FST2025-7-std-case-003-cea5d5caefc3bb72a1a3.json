@@ -1,0 +1,133 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "最大小时雨强",
+      "value": 69.9,
+      "unit": "mm/h",
+      "location": "阳泉",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-021",
+      "source_text": "此次降水过程中，伴随出现以短时强降水为主的强对流天气，共出现 412 站次的短时强降水，其中 20-40mm/h 的短时强降水出现 373 站次，占全部短时强降水的 90.5%，14 站次 50mm/h 以上的短时强降水共出现 14 站次，最大小时降水量为 69.9mm，出现在 25日16 时的区域站阳泉郊区曹家掌",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 69.9,
+      "unit": "mm",
+      "location": "阳泉",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-021",
+      "source_text": "此次降水过程中，伴随出现以短时强降水为主的强对流天气，共出现 412 站次的短时强降水，其中 20-40mm/h 的短时强降水出现 373 站次，占全部短时强降水的 90.5%，14 站次 50mm/h 以上的短时强降水共出现 14 站次，最大小时降水量为 69.9mm，出现在 25日16 时的区域站阳泉郊区曹家掌",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 205.5,
+      "unit": "mm",
+      "location": "大同",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-020",
+      "source_text": "三、7月23-26日北部暴雨过程1 天气实况2025年7月23日-26日，受、副热带高压、高空槽和低层切变线以及热带低压“范斯高”共同影响，山西北部出现极端降水过程，过程累计降水量最高达303mm，出现在大同市天镇李二口气象观测站，国家站最大累计降水量为 205.5mm，出现在大同市阳高，超过历史同期极值",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 303.0,
+      "unit": "mm",
+      "location": "大同",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-020",
+      "source_text": "三、7月23-26日北部暴雨过程1 天气实况2025年7月23日-26日，受、副热带高压、高空槽和低层切变线以及热带低压“范斯高”共同影响，山西北部出现极端降水过程，过程累计降水量最高达303mm，出现在大同市天镇李二口气象观测站，国家站最大累计降水量为 205.5mm，出现在大同市阳高，超过历史同期极值",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 10.0,
+      "unit": "级",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-021",
+      "source_text": "26日北中部局地还出现了 8-10 级的雷暴大风",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 177.7,
+      "unit": "mm",
+      "location": "太原",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-020",
+      "source_text": "23日和 24日25 毫米以上量级降水主要出现在大同、朔州的北部，25日和 26日强降水范围扩大到大同、朔州、忻州、吕梁、太原和阳泉北部地区，区域站最大日降水量增强到 177.7mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 55.0,
+      "unit": "mm",
+      "location": "大同",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-031",
+      "source_text": "同时大同、朔州整层大气可降水量为 45-55mm，且大同高于朔州，全球模式预报与实况空间分布基本一致，但可降水量的值略比实况偏小5mm 左右",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 70.0,
+      "unit": "mm",
+      "location": "",
+      "relation": "中心点",
+      "source_chunk_id": "FST2025-7-chunk-036",
+      "source_text": "图 12 全球模式 7月23日20 时起报的位势高度场、风场、温度、CAPE 等预报场由风雷临近降水预报与实况对比分析可知，对 26日对流性降水过程而言， 风雷在 0-2h 预报时效内降水区的空间分布形态、移动趋势和最大降水强度具有较大的参考价值，但容易预报出局地点 70mm/h 以上的极端小时降水，且逐 10 分钟一次的高更新频率，会出现强降水落点和降水强度预报不一致的情况，需结合天气形势、物理量以及降水、回波实况等综合考虑，订正降水落区，一般而言降水中心点对点有 10-3",
+      "confidence": 0.95
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 70.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-036",
+      "source_text": "图 12 全球模式 7月23日20 时起报的位势高度场、风场、温度、CAPE 等预报场由风雷临近降水预报与实况对比分析可知，对 26日对流性降水过程而言， 风雷在 0-2h 预报时效内降水区的空间分布形态、移动趋势和最大降水强度具有较大的参考价值，但容易预报出局地点 70mm/h 以上的极端小时降水，且逐 10 分钟一次的高更新频率，会出现强降水落点和降水强度预报不一致的情况，需结合天气形势、物理量以及降水、回波实况等综合考虑，订正降水落区，一般而言降水中心点对点有 10-3",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 10.0,
+      "unit": "mm",
+      "location": "北部",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-7-chunk-032",
+      "source_text": "模式预报北部整体降水以中雨到大雨量级为主，尤其 24日夜间预报有 0.4-0.6 的对流降水比率，但实况夜间降水以 10mm 以下降水为主，12h 降水实况较15",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 15.0,
+      "unit": "mm",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-7-chunk-032",
+      "source_text": "模式预报北部整体降水以中雨到大雨量级为主，尤其 24日夜间预报有 0.4-0.6 的对流降水比率，但实况夜间降水以 10mm 以下降水为主，12h 降水实况较15",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 3,
+  "rule_metric_count": 10,
+  "llm_metric_count": 2
+}

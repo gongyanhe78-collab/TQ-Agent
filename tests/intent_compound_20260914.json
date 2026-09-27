@@ -1,0 +1,218 @@
+[
+  {
+    "question": "帮我统计2025年3月发生了几次灾害，分别是哪几次，有什么特征",
+    "intent": "rag",
+    "confidence": 1.0,
+    "conditions": {
+      "years": [
+        2025
+      ],
+      "months": [
+        3
+      ],
+      "time_scope_type": "month_set",
+      "requested_outputs": [
+        "count",
+        "case_list",
+        "case_features"
+      ]
+    },
+    "tasks": [
+      {
+        "id": "task_1",
+        "type": "case_identification",
+        "depends_on": [],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_2",
+        "type": "aggregate_statistics",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_3",
+        "type": "case_listing",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_4",
+        "type": "case_analysis",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "case_chunks"
+      }
+    ]
+  },
+  {
+    "question": "分析2025年7月28日灾害实况，并查询此前预警，最后给出影响区域",
+    "intent": "rag",
+    "confidence": 0.92,
+    "conditions": {
+      "start_date": "2025-07-28",
+      "end_date": "2025-07-28"
+    },
+    "tasks": [
+      {
+        "id": "task_1",
+        "type": "case_identification",
+        "depends_on": [],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_2",
+        "type": "case_analysis",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "case_chunks"
+      },
+      {
+        "id": "task_3",
+        "type": "forecast_warning_lookup",
+        "depends_on": [
+          "task_2",
+          "task_1"
+        ],
+        "scope": "same_pdf_related"
+      },
+      {
+        "id": "task_4",
+        "type": "impact_area_lookup",
+        "depends_on": [
+          "task_2",
+          "task_1"
+        ],
+        "scope": "case_chunks"
+      }
+    ]
+  },
+  {
+    "question": "查询2025年5月高温过程数量，列出各过程时间，并比较它们的持续时长",
+    "intent": "rag",
+    "confidence": 0.99,
+    "conditions": {
+      "years": [
+        2025
+      ],
+      "months": [
+        5
+      ],
+      "disaster_types": [
+        "高温"
+      ],
+      "time_scope_type": "month_set",
+      "requested_outputs": [
+        "count",
+        "case_list",
+        "comparison"
+      ]
+    },
+    "tasks": [
+      {
+        "id": "task_1",
+        "type": "case_identification",
+        "depends_on": [],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_2",
+        "type": "case_analysis",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "case_chunks"
+      },
+      {
+        "id": "task_3",
+        "type": "aggregate_statistics",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_4",
+        "type": "comparison",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "multi_case_chunks"
+      },
+      {
+        "id": "task_5",
+        "type": "case_listing",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "structured_cases"
+      }
+    ]
+  },
+  {
+    "question": "统计2025年全年暴雨过程，列出每次过程并概括其影响区域和主要特征",
+    "intent": "rag",
+    "confidence": 1.0,
+    "conditions": {
+      "years": [
+        2025
+      ],
+      "disaster_types": [
+        "暴雨"
+      ],
+      "time_scope_type": "calendar_year",
+      "requested_outputs": [
+        "count",
+        "case_list",
+        "impact_area",
+        "case_features"
+      ]
+    },
+    "tasks": [
+      {
+        "id": "task_1",
+        "type": "case_identification",
+        "depends_on": [],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_2",
+        "type": "aggregate_statistics",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_3",
+        "type": "case_listing",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "structured_cases"
+      },
+      {
+        "id": "task_4",
+        "type": "case_analysis",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "case_chunks"
+      },
+      {
+        "id": "task_5",
+        "type": "impact_area_lookup",
+        "depends_on": [
+          "task_1"
+        ],
+        "scope": "case_chunks"
+      }
+    ]
+  }
+]

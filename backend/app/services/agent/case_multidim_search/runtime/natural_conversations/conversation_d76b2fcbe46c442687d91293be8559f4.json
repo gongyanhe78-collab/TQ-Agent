@@ -1,0 +1,114 @@
+{
+  "conversation_id": "conversation_d76b2fcbe46c442687d91293be8559f4",
+  "version": 2,
+  "committed_query": {
+    "start_date": "",
+    "end_date": "",
+    "years": [
+      2025
+    ],
+    "months": [
+      5,
+      6
+    ],
+    "disaster_types": [],
+    "cities": [],
+    "areas": [],
+    "include_images": true,
+    "include_all_images": true,
+    "image_limit_per_case": 20,
+    "display_limit": 50,
+    "report_include_all_cases": true,
+    "use_llm_case_analysis": true,
+    "case_chunk_limit": 6,
+    "case_context_char_limit": 6000,
+    "case_analysis_concurrency": 4,
+    "case_max_output_tokens": 1536,
+    "progress_id": "",
+    "report_title": ""
+  },
+  "pending": null,
+  "history": [
+    {
+      "role": "user",
+      "content": "2025年3月到7月所有灾害分析报告",
+      "confirmed": false,
+      "created_at": 1788415895.1227167
+    },
+    {
+      "role": "assistant",
+      "content": "用户已确认结构化检索条件并开始检索。",
+      "confirmed": true,
+      "query": {
+        "start_date": "",
+        "end_date": "",
+        "years": [
+          2025
+        ],
+        "months": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "disaster_types": [],
+        "cities": [],
+        "areas": [],
+        "include_images": true,
+        "include_all_images": true,
+        "image_limit_per_case": 20,
+        "display_limit": 50,
+        "report_include_all_cases": true,
+        "use_llm_case_analysis": true,
+        "case_chunk_limit": 6,
+        "case_context_char_limit": 6000,
+        "case_analysis_concurrency": 4,
+        "case_max_output_tokens": 1536,
+        "progress_id": "",
+        "report_title": ""
+      },
+      "created_at": 1788415901.0233972
+    },
+    {
+      "role": "user",
+      "content": "检索2025年5月到6月的灾害情况",
+      "confirmed": false,
+      "created_at": 1788490427.569899
+    },
+    {
+      "role": "assistant",
+      "content": "用户已确认结构化检索条件并开始检索。",
+      "confirmed": true,
+      "query": {
+        "start_date": "",
+        "end_date": "",
+        "years": [
+          2025
+        ],
+        "months": [
+          5,
+          6
+        ],
+        "disaster_types": [],
+        "cities": [],
+        "areas": [],
+        "include_images": true,
+        "include_all_images": true,
+        "image_limit_per_case": 20,
+        "display_limit": 50,
+        "report_include_all_cases": true,
+        "use_llm_case_analysis": true,
+        "case_chunk_limit": 6,
+        "case_context_char_limit": 6000,
+        "case_analysis_concurrency": 4,
+        "case_max_output_tokens": 1536,
+        "progress_id": "",
+        "report_title": ""
+      },
+      "created_at": 1788490428.4394243
+    }
+  ],
+  "created_at": 1788415895.1197193,
+  "updated_at": 1788490428.4394243
+}

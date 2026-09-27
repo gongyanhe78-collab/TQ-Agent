@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>个例多维检索智能体工作台</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #d9e1ec;
+      --primary: #1f6feb;
+      --primary-dark: #174ea6;
+      --soft: #eef5ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .filters {
+      position: sticky;
+      top: 16px;
+    }
+
+    .group {
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #edf1f7;
+    }
+
+    .group:last-child {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .group-title {
+      margin: 0 0 10px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: var(--text);
+      background: #ffffff;
+      font: inherit;
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 5px 7px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfcff;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .check input {
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      min-height: 40px;
+      border: 0;
+      border-radius: 6px;
+      color: #ffffff;
+      background: var(--primary);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--primary-dark); }
+    button:disabled { background: #9ca3af; cursor: not-allowed; }
+    .secondary { background: #334155; }
+    .secondary:hover { background: #1f2937; }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 22px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #edf1f7;
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .section h3 {
+      margin: 12px 0 6px;
+      font-size: 15px;
+    }
+
+    .answer {
+      font-size: 15px;
+      line-height: 1.8;
+      white-space: normal;
+    }
+
+    .answer p {
+      margin: 0 0 0.55em;
+      text-indent: 2em;
+    }
+
+    .case-card {
+      margin-top: 14px;
+      padding: 12px 0;
+      border-top: 1px solid #edf1f7;
+    }
+
+    .case-card:first-of-type {
+      border-top: 0;
+    }
+
+    .case-card h3 {
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: #f8fafc; }
+
+    .overview-table .table-note {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .overview-subtable {
+      margin-top: 14px;
+    }
+
+    .overview-subtable h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .visuals {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .visual {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .visual img {
+      display: block;
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border: 1px solid #edf1f7;
+      background: #fff;
+    }
+
+    .visual--generated-chart img {
+      max-height: none;
+      width: 100%;
+    }
+
+    .visual--generated-chart figcaption {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .visual figcaption {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .chart-insight {
+      margin: 8px 0 0;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.8;
+      text-indent: 2em;
+    }
+
+    .hint {
+      margin: -4px 0 10px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      margin-top: 16px;
+      padding: 28px;
+      border: 1px dashed #b8c7dc;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fbfdff 0%, #f3f7ff 100%);
+      text-align: left;
+    }
+
+    .empty-state h2 {
+      margin: 0 0 10px;
+      color: #173b78;
+      font-size: 20px;
+    }
+
+    .empty-state p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .empty-tips {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .empty-tip {
+      padding: 12px;
+      border: 1px solid #dbe6f5;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .progress-panel {
+      display: none;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #edf1f7;
+    }
+
+    .progress-panel.active { display: block; }
+
+    .progress-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+      font-size: 14px;
+    }
+
+    .progress-head strong { font-size: 15px; }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      overflow: hidden;
+      border-radius: 5px;
+      background: #e5eaf1;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: 5px;
+      background: var(--primary);
+      transition: width 180ms ease;
+    }
+
+    .progress-cases {
+      min-height: 20px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .placeholder {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    @media (max-width: 980px) {
+      .workspace { grid-template-columns: 1fr; }
+      .filters { position: static; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 个例多维检索智能体测试页：结构化检索工作台兼容标记。 -->
+  <main class="page">
+    <header class="header">
+      <h1>个例多维检索智能体工作台</h1>
+      <p>结构化条件直接检索完整个例集合，分析和报告默认覆盖全部命中个例。</p>
+      <p><a href="/api/case-multidim/natural-chat">切换到自然语言聊天检索</a></p>
+    </header>
+
+    <section class="workspace">
+      <aside class="panel filters">
+        <div class="group">
+          <p class="group-title">时间条件</p><p class="hint">优先使用精确日期范围；如未填写日期范围，可用年份和月份做快捷筛选。</p>
+          <div class="row">
+            <div><label for="startDate">开始日期</label><input id="startDate" type="date"></div>
+            <div><label for="endDate">结束日期</label><input id="endDate" type="date"></div>
+          </div>
+          <div style="margin-top:10px;"><label for="years">年份快捷筛选</label><input id="years" placeholder="未填日期范围时生效，例如 2025"></div>
+          <div style="margin-top:10px;"><label>月份快捷筛选</label><div id="months" class="checks"></div></div>
+        </div>
+
+        <div class="group">
+          <p class="group-title">灾种</p>
+          <div id="disasters" class="checks"></div>
+        </div>
+
+        <div class="group">
+          <p class="group-title">影响区域</p>
+          <label>地市</label>
+          <div id="cities" class="checks"></div>
+          <div style="margin-top:10px;"><label>区域</label><div id="areas" class="checks"></div></div>
+        </div>
+
+        <div class="actions">
+          <button id="searchButton" type="button">开始检索</button>
+          <button id="resetButton" class="secondary" type="button">重置</button>
+          <button id="pdfButton" class="secondary" type="button" disabled>导出 PDF</button>
+          <button id="csvButton" class="secondary" type="button" disabled>导出 CSV</button>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div id="progressPanel" class="progress-panel" aria-live="polite">
+          <div class="progress-head">
+            <strong id="progressText">正在准备检索</strong>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <div id="progressCases" class="progress-cases"></div>
+        </div>
+        <div id="result" class="placeholder">请选择条件后点击“开始检索”。</div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const options = {
+      months: Array.from({length: 12}, (_, index) => ({label: `${index + 1}月`, value: index + 1})),
+      disasters: ["强对流", "雷暴大风", "暴雨", "大暴雨", "强降水", "短时强降水", "雷暴", "大风", "冰雹", "高温", "寒潮", "雨雪", "降雪", "暴雪", "低温", "沙尘", "雾", "霜冻"],
+      cities: ["太原", "大同", "朔州", "忻州", "阳泉", "晋中", "吕梁", "长治", "晋城", "临汾", "运城"],
+      areas: ["晋北", "晋中", "晋南", "山西北部", "山西中部", "山西南部", "全省", "山西"],
+    };
+
+    let currentAnswerId = "";
+    let currentPayload = null;
+    let progressTimer = null;
+    let currentTitle = "个例多维检索分析报告";
+
+    /** 根据配置渲染多选条件。 */
+    function renderChecks(id, items) {
+      const container = document.querySelector(`#${id}`);
+      container.innerHTML = "";
+      for (const item of items) {
+        const value = typeof item === "object" ? item.value : item;
+        const label = typeof item === "object" ? item.label : item;
+        const wrap = document.createElement("label");
+        wrap.className = "check";
+        wrap.innerHTML = `<input type="checkbox" value="${value}"><span>${label}</span>`;
+        container.appendChild(wrap);
+      }
+    }
+
+    /** 读取某个多选区域的选中值。 */
+    function checkedValues(id) {
+      return Array.from(document.querySelectorAll(`#${id} input:checked`)).map((item) => item.value);
+    }
+
+    /** 按逗号、顿号或空白拆分用户输入的列表。 */
+    function splitList(id) {
+      return document.querySelector(`#${id}`).value
+        .split(/[，,、\s]+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    /** 读取年份输入框，过滤非法年份。 */
+    function parsedYears() {
+      return splitList("years")
+        .map((item) => Number(item))
+        .filter((item) => Number.isInteger(item) && item >= 1900 && item <= 2100);
+    }
+
+    /** 根据表单状态构造结构化检索请求。 */
+    function buildPayload(progressId) {
+      const startDate = document.querySelector("#startDate").value;
+      const endDate = document.querySelector("#endDate").value;
+      const hasDateRange = Boolean(startDate || endDate);
+      return {
+        progress_id: progressId,
+        start_date: startDate,
+        end_date: endDate,
+        years: hasDateRange ? [] : parsedYears(),
+        months: hasDateRange ? [] : checkedValues("months").map(Number),
+        disaster_types: checkedValues("disasters"),
+        cities: checkedValues("cities"),
+        areas: checkedValues("areas"),
+      };
+    }
+    /** 调用结构化检索接口并展示中间分析结果。 */
+    /** 生成只用于本次进度跟踪的请求编号。 */
+    function createProgressId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+      return "progress-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    }
+
+    /** 更新右侧进度条的阶段、百分比和逐例数量。 */
+    function renderProgress(state) {
+      const panel = document.querySelector("#progressPanel");
+      const percent = Math.max(0, Math.min(100, Number(state.percent || 0)));
+      panel.classList.add("active");
+      document.querySelector("#progressText").textContent = state.message || "正在检索";
+      document.querySelector("#progressPercent").textContent = String(percent) + "%";
+      document.querySelector("#progressBar").style.width = String(percent) + "%";
+      document.querySelector(".progress-track").setAttribute("aria-valuenow", String(percent));
+      const completed = Number(state.completed_cases || 0);
+      const total = Number(state.total_cases || 0);
+      document.querySelector("#progressCases").textContent = total > 0 ? "个例分析：" + completed + "/" + total : "";
+    }
+
+    /** 停止上一次进度轮询。 */
+    function stopProgressPolling() {
+      if (progressTimer !== null) {
+        window.clearTimeout(progressTimer);
+        progressTimer = null;
+      }
+    }
+
+    /** 每 500ms 读取一次后端真实进度，请求结束后自动停止。 */
+    function startProgressPolling(progressId, endpointPrefix = "/api/case-multidim/search/progress/") {
+      stopProgressPolling();
+      const poll = async () => {
+        try {
+          const response = await fetch(endpointPrefix + encodeURIComponent(progressId));
+          if (response.ok) {
+            const state = await response.json();
+            renderProgress(state);
+            if (state.status === "completed" || state.status === "failed") {
+              progressTimer = null;
+              return;
+            }
+          }
+        } catch (error) {
+          // 进度请求失败不中断主流程，下一轮继续尝试。
+        }
+        progressTimer = window.setTimeout(poll, 500);
+      };
+      poll();
+    }
+
+    /** 调用结构化检索接口并展示中间分析结果。 */
+    async function runSearch() {
+      const result = document.querySelector("#result");
+      const button = document.querySelector("#searchButton");
+      const progressId = createProgressId();
+      currentPayload = buildPayload(progressId);
+      currentAnswerId = "";
+      setExportEnabled(false);
+      result.textContent = "检索结果将在分析完成后显示。";
+      renderProgress({percent: 2, message: "正在提交检索请求", completed_cases: 0, total_cases: 0});
+      button.disabled = true;
+      try {
+        const searchPromise = fetch("/api/case-multidim/search", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(currentPayload),
+        });
+        startProgressPolling(progressId);
+        const response = await searchPromise;
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+        const data = await response.json();
+        const completedCases = data.search_response ? data.search_response.displayed_result_count || 0 : 0;
+        renderProgress({percent: 100, message: "检索分析完成", completed_cases: completedCases, total_cases: completedCases});
+        currentAnswerId = data.answer_id;
+        currentTitle = data.title || currentTitle;
+        renderResult(data);
+        setExportEnabled(Boolean(data.can_export_pdf));
+      } catch (error) {
+        renderProgress({percent: 100, message: "检索失败", completed_cases: 0, total_cases: 0});
+        result.textContent = "检索失败：" + error.message;
+      } finally {
+        stopProgressPolling();
+        button.disabled = false;
+      }
+    }
+
+    /** 控制导出按钮是否可用。 */
+    function setExportEnabled(enabled) {
+      document.querySelector("#pdfButton").disabled = !enabled;
+      document.querySelector("#csvButton").disabled = !currentPayload;
+    }
+
+    /** 渲染结构化检索返回的分析、证据、图片和图表。 */
+    function renderResult(data) {
+      const response = data.search_response || {};
+      const analysis = response.analysis || {};
+      const audit = response.audit || {};
+      const result = document.querySelector("#result");
+      result.innerHTML = "";
+      const summary = document.createElement("div");
+      summary.className = "summary";
+      summary.innerHTML = `
+        <div class="stat"><strong>${response.result_count || 0}</strong><span>完整命中个例</span></div>
+        <div class="stat"><strong>${response.displayed_result_count || 0}</strong><span>当前展示个例</span></div>
+        <div class="stat"><strong>${data.images ? data.images.length : 0}</strong><span>可预览图片</span></div>
+        <div class="stat"><strong>${data.charts ? data.charts.length : 0}</strong><span>生成图表</span></div>
+      `;
+      result.appendChild(summary);
+      if (!response.result_count) {
+        appendEmptyState(result, response.question || data.question || "当前检索条件");
+        return;
+      }
+      appendTextSection(result, "总体概况", data.answer || "暂无分析结论。", "answer");
+      appendOverviewTable(result, analysis.overview_intensity_tables || [], analysis.overview_intensity_table || [], analysis.overview_intensity_columns || []);
+      appendSections(result, data.sections || [], data.charts || []);
+      appendCaseAnalyses(result, (response.results || []), audit.all_case_ids || []);
+      appendConclusionSection(result, analysis);
+    }
+
+    /** 渲染无命中时的简洁空状态，避免重复展示一串空章节。 */
+    function appendEmptyState(parent, question) {
+      const section = document.createElement("section");
+      section.className = "empty-state";
+      section.innerHTML = `
+        <h2>未找到符合条件的标准化个例</h2>
+        <p>当前筛选条件为：${escapeHtml(question || "未设置条件")}。系统没有找到同时满足这些条件的个例，因此未生成分维度分析和逐个例报告。</p>
+        <div class="empty-tips">
+          <div class="empty-tip">可以先放宽月份、灾种或地市条件，再逐步收紧筛选范围。</div>
+          <div class="empty-tip">如果标题中有相关天气过程，但灾种标签缺失，需要重新生成标准化个例数据。</div>
+          <div class="empty-tip">可以检查标准化个例中是否已补充对应月份、灾种或地市标签。</div>
+        </div>
+      `;
+      parent.appendChild(section);
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /** 兼容旧缓存中把逐例 JSON 协议直接作为正文返回的情况，只展示自然语言 analysis。 */
+    function normalizeCaseAnalysisText(value) {
+      const text = String(value || "").trim();
+      if (!text.startsWith("{") || !text.includes("analysis")) return text;
+      try {
+        const parsed = JSON.parse(text);
+        return String(parsed.analysis || text).trim();
+      } catch (_error) {
+        const match = text.match(/"analysis"\s*:\s*"([\s\S]*?)"\s*,\s*"cited_image_ids"/);
+        return match ? match[1].replace(/\\n/g, "\n").replace(/\\"/g, '"').trim() : text;
+      }
+    }
+
+    /** 把普通文本拆成自然段，配合 CSS 实现每段首行缩进两格。 */
+    function setAnswerText(element, value) {
+      const text = String(value || "").trim();
+      element.innerHTML = "";
+      const paragraphs = text.split(/\n+/).map(item => item.trim()).filter(Boolean);
+      for (const paragraph of (paragraphs.length ? paragraphs : [text])) {
+        const p = document.createElement("p");
+        p.textContent = paragraph;
+        element.appendChild(p);
+      }
+    }
+
+
+    /** 在总体概况后追加分组强度汇总表，每张表限制为三列基础信息加三列灾种相关指标。 */
+    function appendOverviewTable(parent, tables, legacyRows, legacyColumns) {
+      const groupedTables = Array.isArray(tables) && tables.length
+        ? tables
+        : ((Array.isArray(legacyRows) && legacyRows.length)
+          ? [{ title: "强度汇总", columns: Array.isArray(legacyColumns) ? legacyColumns.slice(0, 3) : [], rows: legacyRows }]
+          : []);
+      if (!groupedTables.length) return;
+      const section = document.createElement("section");
+      section.className = "section overview-table";
+      section.innerHTML = `
+        <h2>重点个例强度汇总</h2>
+        <p class="table-note">按主导灾种拆分展示，每张表仅保留“个例、主导灾种、并发灾害”三列固定信息，另选最多三列与该类灾种最相关的强度指标；“—”表示未提供有效记录。</p>
+      `;
+      for (const tableData of groupedTables) {
+        const rows = Array.isArray(tableData.rows) ? tableData.rows : [];
+        if (!rows.length) continue;
+        const dynamicColumns = Array.isArray(tableData.columns) ? tableData.columns.slice(0, 3) : [];
+        const wrapper = document.createElement("div");
+        wrapper.className = "overview-subtable";
+        const metricHeaders = dynamicColumns.map(column => `<th>${escapeHtml(column.label || column.key || "指标")}</th>`).join("");
+        wrapper.innerHTML = `
+          <h3>${escapeHtml(tableData.title || "强度汇总")}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>个例</th>
+                <th>主导灾种</th>
+                <th>并发灾害</th>
+                ${metricHeaders}
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        `;
+        const tbody = wrapper.querySelector("tbody");
+        for (const row of rows) {
+          const tr = document.createElement("tr");
+          const metrics = row.metrics || {};
+          const metricCells = dynamicColumns.map(column => `<td>${escapeHtml(metrics[column.key] || "—")}</td>`).join("");
+          tr.innerHTML = `
+            <td>${escapeHtml(row.case || row.title || row.case_id || "—")}</td>
+            <td>${escapeHtml(row.main_disasters || "—")}</td>
+            <td>${escapeHtml(row.concurrent_disasters || "—")}</td>
+            ${metricCells}
+          `;
+          tbody.appendChild(tr);
+        }
+        section.appendChild(wrapper);
+      }
+      parent.appendChild(section);
+    }
+    /** 追加综合结论与建议。 */
+    function appendConclusionSection(parent, analysis) {
+      const conclusion = analysis.conclusion || "暂无综合结论。";
+      const recommendations = analysis.recommendations || [];
+      const section = document.createElement("section");
+      section.className = "section";
+      section.innerHTML = "<h2>综合结论与建议</h2>";
+      const conclusionBody = document.createElement("div");
+      conclusionBody.className = "answer";
+      setAnswerText(conclusionBody, conclusion);
+      section.appendChild(conclusionBody);
+      if (recommendations.length) {
+        const title = document.createElement("h3");
+        title.textContent = "业务建议";
+        section.appendChild(title);
+        const list = document.createElement("ol");
+        list.className = "recommendation-list";
+        for (const item of recommendations) {
+          const li = document.createElement("li");
+          li.textContent = item;
+          list.appendChild(li);
+        }
+        section.appendChild(list);
+      }
+      parent.appendChild(section);
+    }
+
+    /** 追加普通文本章节。 */
+    function appendTextSection(parent, title, text, className) {
+      const section = document.createElement("section");
+      section.className = "section";
+      section.innerHTML = `<h2>${title}</h2><div class="${className || ""}"></div>`;
+      setAnswerText(section.querySelector("div"), text);
+      parent.appendChild(section);
+    }
+
+
+    /** 灾种特性图目前统一使用 intensity_ 前缀，后续新增冰雹、能见度等也能自动前置。 */
+    function isFeaturedChart(chart) {
+      const key = (chart && chart.chart_key || "").trim();
+      return key.startsWith("intensity_");
+    }
+    /** 追加分维度分析章节。 */
+    function appendSections(parent, sections, charts) {
+      const section = document.createElement("section");
+      section.className = "section";
+      section.innerHTML = "<h2>分维度分析</h2>";
+      const featuredCharts = (charts || []).filter(isFeaturedChart);
+      for (const item of sections) {
+        const title = document.createElement("h3");
+        title.textContent = item.heading;
+        const body = document.createElement("div");
+        body.className = "answer";
+        setAnswerText(body, item.content);
+        section.appendChild(title);
+        section.appendChild(body);
+        const sectionKey = sectionKeyFromHeading(item.heading);
+        const chartList = chartsForSection(item.heading, charts || []).filter((chart) => !isFeaturedChart(chart));
+        if (chartList.length) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "visuals visuals--charts";
+          for (const chart of chartList) {
+            wrapper.appendChild(visualFigure(chart));
+          }
+          section.appendChild(wrapper);
+        }
+        // 灾种特色图表放在关键强度章节正文后，与 PDF 端顺序保持一致。
+        if (sectionKey === "intensity" && featuredCharts.length) {
+          const featureTitle = document.createElement("h3");
+          featureTitle.textContent = "灾种特色图表";
+          section.appendChild(featureTitle);
+          const hint = document.createElement("p");
+          hint.className = "hint";
+          hint.textContent = "以下图表根据当前检索灾种和有效强度指标自动选择，用于辅助核对代表个例的关键强度差异。";
+          section.appendChild(hint);
+          const wrapper = document.createElement("div");
+          wrapper.className = "visuals visuals--charts";
+          for (const chart of featuredCharts) {
+            wrapper.appendChild(visualFigure(chart));
+          }
+          section.appendChild(wrapper);
+        }
+      }
+      parent.appendChild(section);
+    }
+
+    /** 按个例追加分析正文，并根据本次检索归属灾种分组展示。 */
+    function appendCaseAnalyses(parent, results, allCaseIds) {
+      const section = document.createElement("section");
+      section.className = "section";
+      section.innerHTML = "<h2>逐个例分析</h2>";
+      if (!results.length) {
+        const empty = document.createElement("p");
+        empty.className = "placeholder";
+        empty.textContent = "当前查询未命中可用于展开分析的标准化个例。";
+        section.appendChild(empty);
+        parent.appendChild(section);
+        return;
+      }
+      const scope = document.createElement("p");
+      scope.className = "placeholder";
+      scope.textContent = `报告分析覆盖全部命中集合，共 ${allCaseIds.length || results.length} 个个例；逐例内容按本次勾选灾种的归属视角分组展示。`;
+      section.appendChild(scope);
+
+      let globalIndex = 1;
+      for (const group of groupedCaseAnalyses(results)) {
+        const groupBlock = document.createElement("div");
+        groupBlock.className = "case-group";
+        const groupTitle = document.createElement("h3");
+        groupTitle.className = "case-group-title";
+        groupTitle.textContent = `${group.disaster}相关个例（${group.items.length}个）`;
+        groupBlock.appendChild(groupTitle);
+        for (const hit of group.items) {
+          const caseData = hit.case || {};
+          const card = document.createElement("article");
+          card.className = "case-card";
+          const title = document.createElement("h4");
+          title.textContent = `${globalIndex}. ${caseData.title || "未命名个例"}`;
+          card.appendChild(title);
+          const meta = document.createElement("p");
+          meta.className = "case-meta";
+          const disasters = Array.isArray(caseData.disaster_types) ? caseData.disaster_types.join("、") : "未标注";
+          meta.textContent = `归属灾种：${caseData.matched_disaster || group.disaster}；同时涉及灾种：${disasters}`;
+          card.appendChild(meta);
+          const body = document.createElement("div");
+          body.className = "answer";
+          setAnswerText(body, normalizeCaseAnalysisText(hit.analysis) || "该个例暂无可展开的证据分析。");
+          card.appendChild(body);
+          const images = (hit.evidence_images || []).map(imageToVisual);
+          for (const image of images) {
+            card.appendChild(visualFigure(image));
+          }
+          groupBlock.appendChild(card);
+          globalIndex += 1;
+        }
+        section.appendChild(groupBlock);
+      }
+      parent.appendChild(section);
+    }
+
+    /** 保持后端返回顺序，把命中个例按唯一归属灾种聚合。 */
+    function groupedCaseAnalyses(results) {
+      const groups = [];
+      const indexByName = new Map();
+      for (const hit of results || []) {
+        const caseData = hit.case || {};
+        const disaster = caseData.matched_disaster || caseData.analysis_focus_disaster || "未归属灾种";
+        if (!indexByName.has(disaster)) {
+          indexByName.set(disaster, groups.length);
+          groups.push({disaster, items: []});
+        }
+        groups[indexByName.get(disaster)].items.push(hit);
+      }
+      return groups;
+    }
+    /** 根据章节标题把图表筛成一组，而不是只取第一张。 */
+    function chartsForSection(heading, charts) {
+      const sectionKey = sectionKeyFromHeading(heading);
+      if (!sectionKey) return [];
+      return charts.filter((chart) => chartMatchesSection(chart, sectionKey));
+    }
+
+    /** 把章节标题归一化成固定的图表分组键。 */
+    function sectionKeyFromHeading(heading) {
+      if (!heading) return "";
+      if (heading.includes("时间")) return "temporal";
+      if (heading.includes("灾种")) return "disaster";
+      if (heading.includes("空间") || heading.includes("区域") || heading.includes("地市")) return "spatial";
+      if (heading.includes("强度") || heading.includes("中心点")) return "intensity";
+      if (heading.includes("证据")) return "evidence";
+      return "";
+    }
+
+    /** 判断单张图是否属于某个章节。 */
+    function chartMatchesSection(chart, sectionKey) {
+      return chartSectionKey(chart) === sectionKey;
+    }
+
+    /** 兼容旧 chart_key 和新 chart_key，保证历史数据也能正常展示。 */
+    function chartSectionKey(chart) {
+      const key = (chart.chart_key || "").trim();
+      if (!key) {
+        const title = chart.title || "";
+        if (title.includes("时间")) return "temporal";
+        if (title.includes("灾种")) return "disaster";
+        if (title.includes("区域") || title.includes("地市") || title.includes("空间")) return "spatial";
+        if (title.includes("强度") || title.includes("箱线") || title.includes("分布")) return "intensity";
+        if (title.includes("证据")) return "evidence";
+        return "";
+      }
+      if (key.startsWith("disaster")) return "disaster";
+      if (key.startsWith("intensity_")) return "intensity";
+      if (["temporal", "spatial", "intensity", "evidence"].includes(key)) return key;
+      return key;
+    }
+
+    function imageToVisual(image) {
+      return {
+        visual_id: image.image_id || image.image_path || "database-image",
+        visual_type: "database_image",
+        title: image.display_caption || image.caption || image.image_id || "原始证据图",
+        url: image.image_id ? `/api/case-multidim/assets/images/${encodeURIComponent(image.image_id)}` : "",
+        source: image.nearby_text || "",
+      };
+    }
+
+    /** 创建可嵌入正文的图片或图表。 */
+    function visualFigure(visual) {
+      const figure = document.createElement("figure");
+      const isChart = visual.visual_type === "generated_chart";
+      figure.className = isChart ? "visual visual--generated-chart" : "visual visual--database-image";
+      const title = escapeHtml(visual.title || visual.visual_id);
+      const insight = visual.source && isChart ? `<p class="chart-insight">${escapeHtml(visual.source)}</p>` : "";
+      figure.innerHTML = `<img src="${visual.url}" alt="${title}" loading="lazy"><figcaption><strong>${title}</strong></figcaption>${insight}`;
+      return figure;
+    }
+
+    /** 按 answer_id 导出已确认中间结果的 PDF，并展示后端真实导出进度。 */
+    async function exportPdf() {
+      if (!currentAnswerId) return;
+      const button = document.querySelector("#pdfButton");
+      const filename = `${currentTitle}.pdf`.replace(/[\\/:*?"<>|]/g, "_");
+      const progressId = createProgressId();
+      const previousText = button.textContent;
+      button.disabled = true;
+      button.textContent = "导出中...";
+      renderProgress({percent: 2, message: "正在提交 PDF 导出请求", completed_cases: 0, total_cases: 0});
+      startProgressPolling(progressId, "/api/case-multidim/export-pdf/progress/");
+      try {
+        await downloadFromPost(
+          "/api/case-multidim/export-pdf",
+          {answer_id: currentAnswerId, filename, progress_id: progressId},
+          filename,
+        );
+        renderProgress({percent: 100, message: "PDF 导出完成", completed_cases: 0, total_cases: 0});
+      } catch (error) {
+        renderProgress({percent: 100, message: "PDF 导出失败", completed_cases: 0, total_cases: 0});
+        alert(error.message || "PDF 导出失败");
+      } finally {
+        stopProgressPolling();
+        button.textContent = previousText || "导出 PDF";
+        button.disabled = !currentAnswerId;
+      }
+    }
+
+    /** 按当前结构化条件导出 CSV 表格。 */
+    async function exportTable() {
+      if (!currentPayload) return;
+      await downloadFromPost("/api/case-multidim/search/export/csv", currentPayload, "case-search.csv");
+    }
+
+    /** 发送 POST 请求并把返回文件下载到本地。 */
+    async function downloadFromPost(url, payload, filename) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+      const blob = await response.blob();
+      const href = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(href);
+    }
+
+    /** 重置页面筛选条件和结果区。 */
+    function resetForm() {
+      document.querySelectorAll("input").forEach((item) => {
+        if (item.type === "checkbox") item.checked = false;
+        else item.value = "";
+      });
+      stopProgressPolling();
+      document.querySelector("#progressPanel").classList.remove("active");
+      currentAnswerId = "";
+      currentPayload = null;
+      setExportEnabled(false);
+      document.querySelector("#result").textContent = "请选择条件后点击“开始检索”。";
+    }
+
+    renderChecks("months", options.months);
+    renderChecks("disasters", options.disasters);
+    renderChecks("cities", options.cities);
+    renderChecks("areas", options.areas);
+    document.querySelector("#searchButton").addEventListener("click", runSearch);
+    document.querySelector("#resetButton").addEventListener("click", resetForm);
+    document.querySelector("#pdfButton").addEventListener("click", exportPdf);
+    document.querySelector("#csvButton").addEventListener("click", exportTable);
+  </script>
+</body>
+</html>
+
+
+
+
+

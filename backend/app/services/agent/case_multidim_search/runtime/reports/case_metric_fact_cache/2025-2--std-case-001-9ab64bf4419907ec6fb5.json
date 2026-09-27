@@ -1,0 +1,313 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "最低气温",
+      "value": -29.9,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-007",
+      "source_text": "站（-20.6℃），6-7日最低气温出现在五台山（-29.9℃），7-8日最低气温出现在右玉（-30.4℃）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 9.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "五台、平鲁、原平、神池、蒲县、平定等 6 站风力达 9 级，五台山极大风速为36.3m/s，风力达 12 级。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "极大风速",
+      "value": 36.3,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "五台、平鲁、原平、神池、蒲县、平定等 6 站风力达 9 级，五台山极大风速为36.3m/s，风力达 12 级。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 12.0,
+      "unit": "级",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "五台、平鲁、原平、神池、蒲县、平定等 6 站风力达 9 级，五台山极大风速为36.3m/s，风力达 12 级",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -30.4,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-007",
+      "source_text": "站（-20.6℃），6-7日最低气温出现在五台山（-29.9℃），7-8日最低气温出现在右玉（-30.4℃）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 0.3,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-004",
+      "source_text": "2月5日08 时至 8日08 时，全省共 7 个县（市、区）出现降水，降水量介于 0.1-0.3 毫米（五台山）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 24.9,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "5-6日，五台山、宁武、神池等共 8 站出现 17m/s 及以上大风天气，最大位于五台山（24.9m/s）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 36.3,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "6-7日，全省大部共 65 站出现 17m/s 及以上大风天气，最大位于五台山（36.3m/s）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -30.0,
+      "unit": "℃",
+      "location": "大同",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "降温主要出现在 5日夜间～6日夜间，7日凌晨气温达入冬以来最低值，有 1 站日最低气温达-30℃以下：右玉（-30.4℃），有 4 站日最低气温突破或达到历史同旬最低值：大同（-28.2℃）、云州站（-29.1℃）、神池（-27.2℃）、五寨（-28℃）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 4.0,
+      "unit": "℃",
+      "location": "大同",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "降温主要出现在 5日夜间～6日夜间，7日凌晨气温达入冬以来最低值，有 1 站日最低气温达-30℃以下：右玉（-30.4℃），有 4 站日最低气温突破或达到历史同旬最低值：大同（-28.2℃）、云州站（-29.1℃）、神池（-27.2℃）、五寨（-28℃）",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -28.2,
+      "unit": "℃",
+      "location": "大同",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "降温主要出现在 5日夜间～6日夜间，7日凌晨气温达入冬以来最低值，有 1 站日最低气温达-30℃以下：右玉（-30.4℃），有 4 站日最低气温突破或达到历史同旬最低值：大同（-28.2℃）、云州站（-29.1℃）、神池（-27.2℃）、五寨（-28℃）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.7,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-006",
+      "source_text": "8日最低气温与 5日相比降温幅度为 1.9～12.7℃，降温最大值出现在平城。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -4.9,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "日08 时山西极大风速分布图5日14 时-6日14 时最低气温较前一日：北中部的局部，南部的大部，共 42站最低气温出现降温，最低气温出现降温介于 0.1-4.9℃之间，降温最大值出现在襄垣。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 4.9,
+      "unit": "℃",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "日08 时山西极大风速分布图5日14 时-6日14 时最低气温较前一日：北中部的局部，南部的大部，共 42站最低气温出现降温，最低气温出现降温介于 0.1-4.9℃之间，降温最大值出现在襄垣",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 0.1,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "日08 时山西极大风速分布图5日14 时-6日14 时最低气温较前一日：北中部的局部，南部的大部，共 42站最低气温出现降温，最低气温出现降温介于 0.1-4.9℃之间，降温最大值出现在襄垣",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -13.3,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "6日14 时-7日14 时最低气温较前一日：全省大部，共 110 站最低气温出现降温，最低气温出现降温介于 1.4-13.3℃之间，降温最大值出现在宁武。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 11.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "6日14 时-7日14 时最低气温较前一日：全省大部，共 110 站最低气温出现降温，最低气温出现降温介于 1.4-13.3℃之间，降温最大值出现在宁武",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 13.3,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "最低气温降温大于等于 12℃的有 5 站：宁武 13.3、朔城 13.1、中阳 12.6、神池 12.5、岢岚 12.3",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 1.4,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "6日14 时-7日14 时最低气温较前一日：全省大部，共 110 站最低气温出现降温，最低气温出现降温介于 1.4-13.3℃之间，降温最大值出现在宁武",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 13.1,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "最低气温降温大于等于 12℃的有 5 站：宁武 13.3、朔城 13.1、中阳 12.6、神池 12.5、岢岚 12.3",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.6,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "最低气温降温大于等于 12℃的有 5 站：宁武 13.3、朔城 13.1、中阳 12.6、神池 12.5、岢岚 12.3",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.5,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "最低气温降温大于等于 12℃的有 5 站：宁武 13.3、朔城 13.1、中阳 12.6、神池 12.5、岢岚 12.3",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.3,
+      "unit": "℃",
+      "location": "",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "最低气温降温大于等于 12℃的有 5 站：宁武 13.3、朔城 13.1、中阳 12.6、神池 12.5、岢岚 12.3",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -12.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "最低气温降温大于等于 12℃的有 5 站：宁武 13.3、朔城 13.1、中阳 12.6、神池 12.5、岢岚 12.3；最低气温降温在 8-12℃之间的有 47 站。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -5.5,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "7日14 时-8日14 时最低气温较前一日：北中部的部分，南部的大部，共 69站最低气温出现降温，最低气温出现降温介于 0.1-5.5℃之间，降温最大值出现在闻喜。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 5.5,
+      "unit": "℃",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-009",
+      "source_text": "7日14 时-8日14 时最低气温较前一日：北中部的部分，南部的大部，共 69站最低气温出现降温，最低气温出现降温介于 0.1-5.5℃之间，降温最大值出现在闻喜",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 30.0,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-018",
+      "source_text": "6日08 时，700hPa 有明显大风最大可达 30m/s，具有一定的动量下传。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 22.0,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-015",
+      "source_text": "等温线密集，其后部风速最大达 22m/s 且风向与等温线近于垂直，有较强冷平流。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 10.0,
+      "unit": "℃",
+      "location": "太原",
+      "relation": "",
+      "source_chunk_id": "山西省2025年2月天气过程总结-chunk-020",
+      "source_text": "图 17.1 6日20 时、 7日08 时经向垂直剖面图 18 6日20 时太原站探空曲线图5. 新资料的应用从太原微波辐射计观测发现，6日夜间整层大气有明显的强降温，降温幅度达 6-10℃。",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "confirmed",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "confirmed",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "confirmed",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 4,
+  "rule_metric_count": 29,
+  "llm_metric_count": 1
+}

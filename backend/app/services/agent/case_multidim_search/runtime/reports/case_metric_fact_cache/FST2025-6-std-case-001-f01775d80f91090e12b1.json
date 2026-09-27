@@ -1,0 +1,203 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "最大小时雨强",
+      "value": 48.4,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 68.7,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "一、6月13-14日大范围降水过程1. 过程特征及实况受高空槽、低空切变线和地面冷锋共同影响，2025年6月13-14日，山西出现一次大范围降水天气过程，全省共 2424 站出现降水，过程降水量为 0.1～92.9 毫米，国家站最大降水出现在沁县68.7毫米，区域站最大降水出现在襄垣固村92.9mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 48.4,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 31.4,
+      "unit": "m/s",
+      "location": "忻州",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 11.0,
+      "unit": "级",
+      "location": "忻州",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 92.9,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "一、6月13-14日大范围降水过程1. 过程特征及实况受高空槽、低空切变线和地面冷锋共同影响，2025年6月13-14日，山西出现一次大范围降水天气过程，全省共 2424 站出现降水，过程降水量为 0.1～92.9 毫米，国家站最大降水出现在沁县68.7毫米，区域站最大降水出现在襄垣固村92.9mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 31.5,
+      "unit": "mm/h",
+      "location": "忻州",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14日17-18 时，34.5m/s）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 31.5,
+      "unit": "mm",
+      "location": "忻州",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14日17-18 时，34.5m/s）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 30.4,
+      "unit": "mm",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 30.4,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 63.3,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 63.3,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 63.3,
+      "unit": "mm",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 34.5,
+      "unit": "m/s",
+      "location": "忻州",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "阵风风力",
+      "value": 12.0,
+      "unit": "级",
+      "location": "忻州",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-004",
+      "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 29.4,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-6-chunk-003",
+      "source_text": "降水可分为三个阶段：13日08 时-14日02 时以分散性对流为主，中南部 49站次出现短时强降水天气，最大小时雨强 63.3mm（壶关西堡水库，13日17-18 时），局地伴有雷暴大风和冰雹，最强风力 11 级（沁县，13日13-14 时，29.4m/s）；14",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 14.5,
+      "unit": "mm/h",
+      "location": "太原站",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-6-chunk-012",
+      "source_text": "图 7 2025年6月13日20 时太原站 T-lnP 图及 14日02 时红外增强云图太原站风廓线雷达显示：14日04 时后，4-5km 西南气流开始增大，但低层为偏北风，降水强度弱；06 时起，近地层转为西南风，3km 以下西南气流增大至16~20m/s，强的水汽输送及动力抬升作用导致 07 时小时降水量迅速增大至 14.5mm；此后，3km 以上西南气流持续增大，对应 500hPa 风场上太原附近形成风速辐散，降水中心向东北方向移动，太原单站降水量迅速降低。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 40.0,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-6-chunk-015",
+      "source_text": "对应物理量场中，EC 对山西南部水汽预报偏弱（实况整层可降水量 35-40mm，预报 30-35mm）不及实况，CAPE 弱（实况 750J/kg 以上，预报 200-500J/kg），动力水汽能量均不及实况，综上西南部降水量级不及实况",
+      "confidence": 0.86
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 3,
+  "rule_metric_count": 19,
+  "llm_metric_count": 1
+}

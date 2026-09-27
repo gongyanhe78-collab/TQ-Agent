@@ -1,0 +1,133 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "过程最大降水量",
+      "value": 73.0,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-014",
+      "source_text": "部暴雨，并伴有 152 站短时强降水，最大小时降水量 73mm（古县大南坪 7日00-01 时）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 73.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-014",
+      "source_text": "部暴雨，并伴有 152 站短时强降水，最大小时降水量 73mm（古县大南坪 7日00-01 时）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 174.5,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-015",
+      "source_text": "7月8日20 时-9日20 时，副热带高压西进北抬影响山西，山西大部分地区出现降水天气，累计降水量 0.1-174.5mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 101.6,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-013",
+      "source_text": "二、7月7-9日暴雨过程1.过程特征及实况7月6日20 时-7日20 时，受副热带高压东退、高空槽东移、低层切变线共同影响，山西大部分地区出现降水天气，累计降水量 0.1-101.6mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 134.2,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "FST2025-7-chunk-014",
+      "source_text": "7月7日20 时-8日20 时，又一个高空槽东移影响山西，山西大部分地区出现降水天气，累计降水量 0.1-134.2mm",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 87.0,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-015",
+      "source_text": "本次过程也存在多个暴雨中心，以小到中雨为主，部分地区中到大雨，局部暴雨，并伴有 108 站短时强降水，最大小时降水量 87mm（垣曲东型马 9日05-06 时）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 48.9,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-014",
+      "source_text": "本次过程以阵雨或雷阵雨为主，局部暴雨，并伴有 80 站短时强降水，最大小时降水量 48.9mm（阳城蟒河景区 7日22-23 时）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 87.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-015",
+      "source_text": "本次过程也存在多个暴雨中心，以小到中雨为主，部分地区中到大雨，局部暴雨，并伴有 108 站短时强降水，最大小时降水量 87mm（垣曲东型马 9日05-06 时）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 48.9,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-7-chunk-014",
+      "source_text": "本次过程以阵雨或雷阵雨为主，局部暴雨，并伴有 80 站短时强降水，最大小时降水量 48.9mm（阳城蟒河景区 7日22-23 时）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 174.5,
+      "unit": "mm",
+      "location": "山西大部分地区",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-7-chunk-015",
+      "source_text": "7月8日20 时-9日20 时，副热带高压西进北抬影响山西，山西大部分地区出现降水天气，累计降水量 0.1-174.5mm。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 87.0,
+      "unit": "mm/h",
+      "location": "垣曲东型马",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-7-chunk-015",
+      "source_text": "本次过程也存在多个暴雨中心，以小到中雨为主，部分地区中到大雨，局部暴雨，并伴有 108 站短时强降水，最大小时降水量 87mm（垣曲东型马 9日05-06 时）。",
+      "confidence": 0.9
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "not_present_after_all_chunks_scanned",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 2,
+  "rule_metric_count": 9,
+  "llm_metric_count": 2
+}

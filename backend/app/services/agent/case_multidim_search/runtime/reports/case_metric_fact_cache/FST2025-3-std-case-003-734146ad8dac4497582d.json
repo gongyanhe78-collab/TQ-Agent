@@ -1,0 +1,113 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "阵风风力",
+      "value": 7.0,
+      "unit": "级",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "1.过程特征及实况25-28日大风、沙尘天气持续四天，过程平均风力 4-7 级，最大五台山中台 18.4m/s；极大风 6-8 级，山区 9-10 级，最大五台山 25.7m/s。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 18.4,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "1.过程特征及实况25-28日大风、沙尘天气持续四天，过程平均风力 4-7 级，最大五台山中台 18.4m/s；极大风 6-8 级，山区 9-10 级，最大五台山 25.7m/s。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 25.7,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "1.过程特征及实况25-28日大风、沙尘天气持续四天，过程平均风力 4-7 级，最大五台山中台 18.4m/s；极大风 6-8 级，山区 9-10 级，最大五台山 25.7m/s。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低能见度",
+      "value": 1.3,
+      "unit": "km",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "沙尘以扬沙或浮尘天气为主，最低能见度 25日1.3km，26日0.6km，27日中部最小水平能见度 2.86km，28日南部最小水平能见度为 0.96km。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低能见度",
+      "value": 0.6,
+      "unit": "km",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "沙尘以扬沙或浮尘天气为主，最低能见度 25日1.3km，26日0.6km，27日中部最小水平能见度 2.86km，28日南部最小水平能见度为 0.96km",
+      "confidence": 0.88
+    },
+    {
+      "metric_name": "最低能见度",
+      "value": 2.86,
+      "unit": "km",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "沙尘以扬沙或浮尘天气为主，最低能见度 25日1.3km，26日0.6km，27日中部最小水平能见度 2.86km，28日南部最小水平能见度为 0.96km。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低能见度",
+      "value": 0.96,
+      "unit": "km",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "沙尘以扬沙或浮尘天气为主，最低能见度 25日1.3km，26日0.6km，27日中部最小水平能见度 2.86km，28日南部最小水平能见度为 0.96km。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 16.0,
+      "unit": "℃",
+      "location": "晋中",
+      "relation": "",
+      "source_chunk_id": "FST2025-3-chunk-011",
+      "source_text": "27-29日连续降温三天，27日最低气温下降幅度最大超 16℃，28日降温 14.6℃，29日降温 11.4℃，过程降温幅度在 4-16℃，局部过程降温达 18℃以上（5 站，吕梁交城国家站降温 18.3℃，晋中太谷郭里站降温 18.7℃）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -2.0,
+      "unit": "℃",
+      "location": "山西南部降水站点",
+      "relation": "站点实测",
+      "source_chunk_id": "FST2025-3-chunk-016",
+      "source_text": "从地面温度来看降水时段内山西南部降水站点气温分布为-2 ~ 5℃，降水相态以雪为主，运城盆地内 11 时和 13 时个别站点为雨。",
+      "confidence": 0.9
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "confirmed",
+    "最低能见度": "confirmed",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "not_present_after_all_chunks_scanned",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "not_present_after_all_chunks_scanned",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "confirmed",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 2,
+  "rule_metric_count": 8,
+  "llm_metric_count": 1
+}

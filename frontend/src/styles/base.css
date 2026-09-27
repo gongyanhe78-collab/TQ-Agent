@@ -1,0 +1,29 @@
+/* 页面基础样式统一放在这里，避免浏览器默认边距影响应用全屏布局。 */
+:root {
+  color: #292927;
+  font-family: Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  min-width: 320px;
+}
+
+body {
+  background: #fbfbfa;
+}
+
+button,
+textarea,
+input {
+  font: inherit;
+}

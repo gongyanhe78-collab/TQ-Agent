@@ -1,0 +1,1704 @@
+{
+  "schema_version": "1.1",
+  "run_id": "smart_case_chat_323e4c5051d241ec89902e5af86dd719",
+  "client_progress_id": "",
+  "created_at": "2026-08-28T16:14:19.709095+08:00",
+  "status": "completed",
+  "error": "",
+  "input_mode": "natural_language_stream",
+  "request": {
+    "process_name": "统计2025年2月到4月的所有灾害情况",
+    "start_date": "",
+    "end_date": "",
+    "date": "2025年2月到4月",
+    "disaster_types": [],
+    "affected_areas": [],
+    "observation_description": "",
+    "circulation_description": "",
+    "intensity_description": "",
+    "metric_descriptions": {},
+    "raw_query": "统计2025年2月到4月的所有灾害情况；统计所有灾害情况",
+    "progress_id": "",
+    "top_n": 3,
+    "diversity_mode": "moderate",
+    "include_images": true
+  },
+  "normalized_query": {
+    "process_name": "统计2025年2月到4月的所有灾害情况",
+    "raw_query": "统计2025年2月到4月的所有灾害情况；统计所有灾害情况 统计2025年2月到4月的所有灾害情况 2025年2月到4月",
+    "date_text": "2025年2月到4月",
+    "start_date": "",
+    "end_date": "",
+    "months": [
+      2,
+      4
+    ],
+    "disaster_types": [],
+    "primary_disaster_types": [],
+    "secondary_disaster_types": [],
+    "disaster_importance": {},
+    "affected_areas": [],
+    "observation_description": "",
+    "circulation_description": "",
+    "intensity_description": "",
+    "metric_descriptions": {},
+    "top_n": 3,
+    "diversity_mode": "moderate",
+    "include_images": true
+  },
+  "pipeline_audit": {
+    "data_source": "local",
+    "graph": "langgraph_state_graph",
+    "input_mode": "natural_language_stream",
+    "natural_query_parse_status": "called",
+    "date_resolution": {
+      "source": "rule",
+      "business_timezone": "Asia/Shanghai",
+      "business_date": "2026-08-28",
+      "rule_result": {
+        "start_date": "",
+        "end_date": "",
+        "date": "2月"
+      },
+      "model_result": {
+        "start_date": "",
+        "end_date": "",
+        "date_expression": "2025年2月到4月",
+        "date_evidence": "2025年2月到4月"
+      },
+      "conflict": false
+    },
+    "timings_ms": {
+      "normalize_input": 0.68,
+      "structured_recall": 3.12,
+      "semantic_supplement": 785.94,
+      "rank_and_select": 19451.43,
+      "enrich_cases": 13.59,
+      "extract_case_references": 10871.63,
+      "synthesize_forecast_tips": 11946.14,
+      "assemble_result": 51.31
+    },
+    "node_details": {
+      "normalize_input": {
+        "case_count": 24
+      },
+      "structured_recall": {
+        "candidate_count": 15
+      },
+      "semantic_supplement": {
+        "semantic_case_count": 15,
+        "embedding_status": "called",
+        "semantic_rerank_status": "called"
+      },
+      "rank_and_select": {
+        "fused_count": 15,
+        "selected_count": 3,
+        "llm_rerank_status": "called",
+        "candidate_assessment_count": 15,
+        "dimension_profile": "generic",
+        "active_dimensions": [
+          "hazard_match",
+          "area",
+          "temporal",
+          "mechanism",
+          "intensity"
+        ]
+      },
+      "enrich_cases": {
+        "enriched_count": 3,
+        "chunk_count": 18
+      },
+      "extract_case_references": {
+        "reference_statuses": {
+          "called": 3
+        },
+        "reference_max_workers": 2
+      },
+      "synthesize_forecast_tips": {
+        "synthesis_status": "called",
+        "synthesis_reference_count": 3,
+        "excluded_fallback_reference_count": 0,
+        "tip_count": 3,
+        "summary_available": true
+      },
+      "assemble_result": {
+        "output_case_count": 3
+      }
+    },
+    "case_count": 24,
+    "candidate_count": 15,
+    "semantic_case_count": 15,
+    "embedding_status": "called",
+    "semantic_rerank_status": "called",
+    "fused_count": 15,
+    "selected_count": 3,
+    "llm_rerank_status": "called",
+    "candidate_assessment_count": 15,
+    "dimension_profile": "generic",
+    "active_dimensions": [
+      "hazard_match",
+      "area",
+      "temporal",
+      "mechanism",
+      "intensity"
+    ],
+    "enriched_count": 3,
+    "chunk_count": 18,
+    "reference_statuses": {
+      "called": 3
+    },
+    "reference_max_workers": 2,
+    "synthesis_status": "called",
+    "synthesis_reference_count": 3,
+    "excluded_fallback_reference_count": 0,
+    "tip_count": 3,
+    "summary_available": true,
+    "output_case_count": 3
+  },
+  "candidate_llm": {
+    "status": "called",
+    "candidate_ids": [
+      "FST2025-4-std-case-001",
+      "FST2025-4-std-case-003",
+      "FST2025-4-std-case-002",
+      "山西省2025年2月天气过程总结-std-case-002",
+      "山西省2025年2月天气过程总结-std-case-001",
+      "FST2025-5-std-case-002",
+      "FST2025-3-std-case-003",
+      "FST2025-3-std-case-002",
+      "FST2025-5-std-case-005",
+      "FST2025-5-std-case-003",
+      "FST2025-5-std-case-001",
+      "FST2025-5-std-case-004",
+      "山西省2025年1月天气过程总结-std-case-003",
+      "山西省2025年1月天气过程总结-std-case-002",
+      "山西省2025年1月天气过程总结-std-case-001"
+    ],
+    "ordered_case_ids": [
+      "FST2025-4-std-case-001",
+      "FST2025-4-std-case-003",
+      "FST2025-4-std-case-002",
+      "山西省2025年2月天气过程总结-std-case-002",
+      "山西省2025年2月天气过程总结-std-case-001",
+      "FST2025-5-std-case-002",
+      "FST2025-3-std-case-003",
+      "FST2025-3-std-case-002",
+      "FST2025-5-std-case-005",
+      "FST2025-5-std-case-003",
+      "FST2025-5-std-case-001",
+      "FST2025-5-std-case-004",
+      "山西省2025年1月天气过程总结-std-case-003",
+      "山西省2025年1月天气过程总结-std-case-002",
+      "山西省2025年1月天气过程总结-std-case-001"
+    ]
+  },
+  "reference_generation": [
+    {
+      "case_id": "FST2025-4-std-case-001",
+      "source": "llm_valid",
+      "status": "called",
+      "reference_point_count": 2
+    },
+    {
+      "case_id": "FST2025-4-std-case-003",
+      "source": "llm_valid",
+      "status": "called",
+      "reference_point_count": 2
+    },
+    {
+      "case_id": "山西省2025年2月天气过程总结-std-case-002",
+      "source": "llm_valid",
+      "status": "called",
+      "reference_point_count": 2
+    }
+  ],
+  "candidate_count": 15,
+  "candidates": [
+    {
+      "case_id": "山西省2025年2月天气过程总结-std-case-002",
+      "title": "2月19～22日雨雪天气过程",
+      "date_range": "2025年2月19-22日",
+      "source_pdf": "山西省2025年2月天气过程总结.pdf",
+      "disaster_types": [
+        "大风",
+        "雨雪",
+        "寒潮",
+        "低温",
+        "沙尘",
+        "雾"
+      ],
+      "affected_areas": [
+        "山西省",
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 1,
+      "post_llm_rank": 4,
+      "llm_order_rank": 4,
+      "entered_llm_top15": true,
+      "structured_score": 1.0,
+      "semantic_score": 0.7688,
+      "semantic_rerank_score": 0.783,
+      "fused_score_before_llm": 0.9191,
+      "final_retrieval_score": 0.881,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 1.0,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.908,
+        "llm_raw_compatibility": 0.908,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 0.8,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.7,
+        "intensity": 0.7
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 0.8,
+        "mechanism": 0.8,
+        "intensity": 0.7
+      },
+      "metric_scores": {
+        "过程强度": 0.7,
+        "持续时间": 0.8,
+        "影响范围": 1.0,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.908,
+      "dimension_compatibility": 0.908,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "山西省2025年2月天气过程总结-chunk-034",
+        "山西省2025年2月天气过程总结-chunk-042"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-034",
+          "role": "semantic",
+          "preview": "5日08 时 42 分大风蓝色预警（变更）"
+        },
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-042",
+          "role": "semantic",
+          "preview": "12日10 时 15 分大风蓝色预警（变更） 预警区域：全省大部分地区。"
+        },
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-030",
+          "role": "diagnostic",
+          "preview": "尔山地区高压脊发展，脊前贝加尔湖西部有横槽存在，500hPa 高空槽位于贝加尔湖西部到我国新疆东部一带，高空槽东移发展，位于蒙古国到我国河套一带，同时南支上多短波槽活动，温度槽落后于高度槽，高空槽将继续发展，20日08时，横槽东移南压至我省北部内蒙古地区，槽后西北气流携带冷空气影响我省。对应海平面气压场，19日08 时蒙古国西部有两个冷高压，强度分别达106"
+        },
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-032",
+          "role": "diagnostic",
+          "preview": "图 30 19日08 时、20日08 时、21日08 时 700 及 850hPa 系统配置图3.大雾成因分析（1）大雾出现在 500hPa 高空槽前、700hPa、850hPa 切变线附近，地面倒槽内，冷空气南下缓慢，地面风小，为弱辐合区。图 31 19日20 时太原、20日20 时卢氏站探空（3）从 19日20 时太原站和 20日20 时距离山西省南部较"
+        }
+      ],
+      "decision": "selected",
+      "rejection_reasons": []
+    },
+    {
+      "case_id": "山西省2025年2月天气过程总结-std-case-001",
+      "title": "2月5～8日寒潮大风过程",
+      "date_range": "2025年2月5-8日",
+      "source_pdf": "山西省2025年2月天气过程总结.pdf",
+      "disaster_types": [
+        "大风",
+        "寒潮",
+        "低温"
+      ],
+      "affected_areas": [
+        "山西省",
+        "全省",
+        "太原",
+        "大同"
+      ],
+      "structured_rank": 2,
+      "post_llm_rank": 5,
+      "llm_order_rank": 5,
+      "entered_llm_top15": true,
+      "structured_score": 1.0,
+      "semantic_score": 0.7657,
+      "semantic_rerank_score": 0.783,
+      "fused_score_before_llm": 0.918,
+      "final_retrieval_score": 0.8916,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 1.0,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.936,
+        "llm_raw_compatibility": 0.936,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 0.8,
+        "llm_mechanism": 0.9,
+        "mechanism": 0.9,
+        "llm_intensity": 0.8,
+        "intensity": 0.8
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 0.8,
+        "mechanism": 0.9,
+        "intensity": 0.8
+      },
+      "metric_scores": {
+        "过程强度": 0.8,
+        "持续时间": 0.8,
+        "影响范围": 1.0,
+        "主导系统": 0.9,
+        "演变过程": 0.9
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.936,
+      "dimension_compatibility": 0.936,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "山西省2025年2月天气过程总结-chunk-005",
+        "山西省2025年2月天气过程总结-chunk-004"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-005",
+          "role": "semantic",
+          "preview": "5日08 时至 8日08 时，全省大部分地区共 64 站出现 8 级及以上大风天气，"
+        },
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-004",
+          "role": "semantic",
+          "preview": "2025年2月5～8日，受高空冷涡、横槽和地面冷高压共同影响，此次冷空气过程影响范围大，降温剧烈，低温持续时间久，风力强。"
+        },
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-015",
+          "role": "diagnostic",
+          "preview": "图 10 2月5日20 时、6日08 时 500hPa 温度平流此次冷空气源地为新地岛以东洋面，5日白天开始，在西伯利亚中部已经形成大范围冷高压，冷空气在此处酝酿加强，冷空气堆积，强度 1065hPa。500hPa 的横槽向下延伸到 850hPa，700hPa 冷中心达 6日20 时南压至山西北部达-36℃；等温线密集，其后部风速最大达 22m/s 且风向与"
+        },
+        {
+          "chunk_id": "山西省2025年2月天气过程总结-chunk-010",
+          "role": "diagnostic",
+          "preview": "图 4 6日14 时-7日14 时最低气温 24h 变温、最低气温分布图、7日14 时-8日14 时最低气温分布图2.环流形势演变特征5日08 时，高纬度地区呈“两槽一脊”型，贝加尔湖向东鄂霍茨克海为低压区，有两个低压中心，西部的深厚低压中心位于贝加尔湖附近，中心位势高度500 dagpm，对应-48℃的冷中心，西部低压中心则位于我国东北地区，中心为 504"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-4-std-case-003",
+      "title": "4月20-21日降水大风天气过程",
+      "date_range": "2025年4月20-21日",
+      "source_pdf": "FST2025-4.pdf",
+      "disaster_types": [
+        "雷暴大风",
+        "雷暴",
+        "大风",
+        "雨雪",
+        "寒潮",
+        "低温",
+        "霜冻",
+        "沙尘",
+        "雾"
+      ],
+      "affected_areas": [
+        "山西省",
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 3,
+      "post_llm_rank": 2,
+      "llm_order_rank": 2,
+      "entered_llm_top15": true,
+      "structured_score": 1.0,
+      "semantic_score": 0.8249,
+      "semantic_rerank_score": 0.9717,
+      "fused_score_before_llm": 0.9387,
+      "final_retrieval_score": 0.91,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 1.0,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.932,
+        "llm_raw_compatibility": 0.932,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 1.0,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.7,
+        "intensity": 0.7
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 1.0,
+        "mechanism": 0.8,
+        "intensity": 0.7
+      },
+      "metric_scores": {
+        "过程强度": 0.7,
+        "持续时间": 0.6,
+        "影响范围": 1.0,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.932,
+      "dimension_compatibility": 0.932,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-4-chunk-031",
+        "FST2025-4-chunk-038"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-4-chunk-031",
+          "role": "semantic",
+          "preview": "预计未来 48 小时预警区域地面最低温度将要下降到 0℃以下，对农业将产生影响。"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-038",
+          "role": "semantic",
+          "preview": "预计未来 48 小时预警区域地面最低温度将要下降到 0℃以下，对农业将产生影响。预计 4月30日夜间至 5月1日早晨，预警区域地面最低温度将要下降到 0℃以下，对农业将产生影响。"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-036",
+          "role": "diagnostic",
+          "preview": "预计未来 48 小时预警区域地面最低温度将要下降到 0℃以下，对农业将产生影响。预警区域部分地区已经出现能见度小于 500 米、大于等于 200 米的雾并将持续。"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-027",
+          "role": "diagnostic",
+          "preview": "图 20 4月20-21日降水大风实况4月20日08 时，500hPa 山西受偏西气流影响，高原槽东移影响山西，出现降水。4月21日08 时，500hPa 高原槽东移移出山西，北支槽移近，形成疏散形势。700hPa 切变线位于山西中南部地区，切变线移出后，降水结束，地面为冷锋。"
+        }
+      ],
+      "decision": "selected",
+      "rejection_reasons": []
+    },
+    {
+      "case_id": "FST2025-4-std-case-002",
+      "title": "4月16-18日大风、沙尘、霜冻和降水过程",
+      "date_range": "2025年4月16-18日",
+      "source_pdf": "FST2025-4.pdf",
+      "disaster_types": [
+        "大风",
+        "霜冻",
+        "沙尘"
+      ],
+      "affected_areas": [
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 4,
+      "post_llm_rank": 3,
+      "llm_order_rank": 3,
+      "entered_llm_top15": true,
+      "structured_score": 1.0,
+      "semantic_score": 0.7712,
+      "semantic_rerank_score": 0.8868,
+      "fused_score_before_llm": 0.9199,
+      "final_retrieval_score": 0.8918,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 1.0,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.932,
+        "llm_raw_compatibility": 0.932,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 1.0,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.7,
+        "intensity": 0.7
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 1.0,
+        "mechanism": 0.8,
+        "intensity": 0.7
+      },
+      "metric_scores": {
+        "过程强度": 0.7,
+        "持续时间": 0.6,
+        "影响范围": 1.0,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.932,
+      "dimension_compatibility": 0.932,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-4-chunk-025",
+        "FST2025-4-chunk-026"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-4-chunk-025",
+          "role": "semantic",
+          "preview": "4月17日08 时至 04月18日08 时，风力有所减弱，忻州市、大同市、晋中市、太原市、阳泉市、长治市、吕梁市、运城市的局部，共 38 站出现 8 级以上大风天气，最大值出现在五台山东台鸿门岩，达到 25 m/s（10 级）。"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-026",
+          "role": "semantic",
+          "preview": "图 19 4月16-18日高空地面形势4月16日08 时，山西受西北气流影响，500hPa 高空河套地区有短波槽发展，地面为气旋控制，山西北中部部分和南部局部地区出现大风天气。17日08 时，500hPa 短波槽过境，地面气旋东移，风力减弱，受北部冷高压影响，个别高寒站"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-027",
+          "role": "diagnostic",
+          "preview": "图 20 4月20-21日降水大风实况4月20日08 时，500hPa 山西受偏西气流影响，高原槽东移影响山西，出现降水。4月21日08 时，500hPa 高原槽东移移出山西，北支槽移近，形成疏散形势。700hPa 切变线位于山西中南部地区，切变线移出后，降水结束，地面为冷锋。"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-023",
+          "role": "diagnostic",
+          "preview": "对过程伴随弱雨雪天气来说，EC 模式预报水汽条件偏差，导致局地的漏报和空报。二是在弱天气强迫、较差水汽条件下的小量级降水存在预报难点，还需要进一步更深入的复盘和总结。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-4-std-case-001",
+      "title": "4月11-13日极端大风和寒潮、沙尘、霜冻、弱降水过程",
+      "date_range": "2025年4月11-13日",
+      "source_pdf": "FST2025-4.pdf",
+      "disaster_types": [
+        "大风",
+        "雨雪",
+        "降雪",
+        "寒潮",
+        "低温",
+        "霜冻",
+        "沙尘"
+      ],
+      "affected_areas": [
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "长治",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 5,
+      "post_llm_rank": 1,
+      "llm_order_rank": 1,
+      "entered_llm_top15": true,
+      "structured_score": 1.0,
+      "semantic_score": 0.8256,
+      "semantic_rerank_score": 0.9717,
+      "fused_score_before_llm": 0.939,
+      "final_retrieval_score": 0.9272,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 1.0,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.972,
+        "llm_raw_compatibility": 0.972,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 1.0,
+        "llm_mechanism": 0.9,
+        "mechanism": 0.9,
+        "llm_intensity": 0.9,
+        "intensity": 0.9
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 1.0,
+        "mechanism": 0.9,
+        "intensity": 0.9
+      },
+      "metric_scores": {
+        "过程强度": 0.9,
+        "持续时间": 0.8,
+        "影响范围": 1.0,
+        "主导系统": 0.9,
+        "演变过程": 0.9
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.972,
+      "dimension_compatibility": 0.972,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-4-chunk-004",
+        "FST2025-4-chunk-021"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-4-chunk-004",
+          "role": "semantic",
+          "preview": "图 2 2025年4月11日08 时-14日08 时山西极大风速实况分布及超历史极值的极大风分布（3）持续时间长。五台山中台沁源王陶蒲县图 3 2025年4月11日08 时-14日08 时五台山中台、沁源王陶、蒲县等站点小时极大风速风向时序图（4）伴随寒潮、霜冻、沙尘和弱降水。"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-021",
+          "role": "semantic",
+          "preview": "15日应急响应解除，省台共报送应急响应工作情况报告 4 期，总结 1 期。4月10日至 14日，省台共发布寒潮黄色预警 1 期，霜冻蓝色预警 2 期，大风蓝色预警 2"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-008",
+          "role": "diagnostic",
+          "preview": "图 5 4月11日08 时、20 时、12日08 时、20 时、13日08 时、20 时地面系统地面系统的演变与高空环流背景和影响系统变化有关。第一阶段（11日08 时12日08 时），500hPa 亚欧中高纬两槽一脊，80°E 高压发展，对应-20℃暖区北伸至 66°N，脊前负涡度平流和冷平流均使得地面冷高压发展，并随着≥40m/s 的偏北风大风速核南移，"
+        },
+        {
+          "chunk_id": "FST2025-4-chunk-012",
+          "role": "diagnostic",
+          "preview": "再者是异常强大的高空冷平流，从 500hPa 温度平流标准化异常场可见，110°E 附近的高空脊前温度平流具有明显负异常，即异常强大的冷平流，偏离气候态-3σ，达到极端异常状态，强冷平流形成的强斜压性有利于地面锋生；图 9 4月11-13日08 时 500hPa 位势高度、风速、温度平流的标准化异常场从 4月12日08 时太原站的温度对数压力图可知，600h"
+        }
+      ],
+      "decision": "selected",
+      "rejection_reasons": []
+    },
+    {
+      "case_id": "山西省2025年1月天气过程总结-std-case-003",
+      "title": "1月23-26日雨雪寒潮大风天气过程",
+      "date_range": "2025年1月23-26日",
+      "source_pdf": "山西省2025年1月天气过程总结.pdf",
+      "disaster_types": [
+        "强降水",
+        "大风",
+        "雨雪",
+        "降雪",
+        "暴雪",
+        "寒潮",
+        "低温",
+        "雾"
+      ],
+      "affected_areas": [
+        "山西省",
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 6,
+      "post_llm_rank": 8,
+      "llm_order_rank": 13,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6004,
+      "semantic_rerank_score": 0.2736,
+      "fused_score_before_llm": 0.6781,
+      "final_retrieval_score": 0.6549,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.924,
+        "llm_raw_compatibility": 0.924,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.9,
+        "mechanism": 0.9,
+        "llm_intensity": 0.8,
+        "intensity": 0.8
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 0.7,
+        "mechanism": 0.9,
+        "intensity": 0.8
+      },
+      "metric_scores": {
+        "过程强度": 0.8,
+        "持续时间": 0.8,
+        "影响范围": 1.0,
+        "主导系统": 0.9,
+        "演变过程": 0.9
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.924,
+      "dimension_compatibility": 0.924,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-051",
+        "山西省2025年1月天气过程总结-chunk-030"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-051",
+          "role": "semantic",
+          "preview": "1月07日9 时 47 分1月08日10 时 04 分1月08日10 时 23 分1月11日8 时 13 分1月11日8 时 20 分1月13日16 时 01 分1月14日10 时 20 分1月24日11 时 23 分1月24日15 时 06 分1月24日17 时 02 分1月25日03 时 30 分1月25日10 时 02 分1月25日16 时 17 分大"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+          "role": "semantic",
+          "preview": "图 14 24日08 时、20 时，25日08 时、14 时、20 时，26日02 时雷达拼图受冷空气活动影响，雨雪过程有寒潮、大风天气，25-26日降温幅度较大，部分地区达到寒潮，26日最低气温出现在新荣（-29.8℃），27日最低气温出现在新荣（-30.7℃）；25-26日部分地区出现有大风天气，25日交口、宁武、晋城城区、神池共 4 站出现大风天气，最"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-035",
+          "role": "diagnostic",
+          "preview": "此时 850hPa-4℃线压在山西以北，相态为雨，并且随着冷空气南下，700hPa 及 850hPa 河套地区有西北风与偏南风的切变线，24日山西南部的雨雪转换过程主要受低层切变线辐合、700hPa 和 850hPa 偏东暖湿气流以及地面锋前暖低压共同影响。25日08 时西南涡南移，影响减弱，850hPa 河套切变线东移至山西中部，切变线西部有西北急流加大，"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-033",
+          "role": "diagnostic",
+          "preview": "北气流加大，引导冷空气南下，我省位于脊前，高原槽逐渐靠近。25日08 时，中高纬呈阶梯槽形势，温度槽仍落后于高度槽，槽继续发展加深，我省受槽前西北气流控制，有正涡度平流，有利于上升运动，为降雪提供动力条件，20 时新疆冷槽缓慢东移至山西上游蒙古高原附近，冷槽气温达-40℃，强冷平流使槽进一步发展，我省位于仍受槽前西北气流控制，动力条件良好，26日08 时北支"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "山西省2025年1月天气过程总结-std-case-002",
+      "title": "1月14日-15日寒潮天气过程",
+      "date_range": "2025年1月14-15日",
+      "source_pdf": "山西省2025年1月天气过程总结.pdf",
+      "disaster_types": [
+        "大风",
+        "寒潮"
+      ],
+      "affected_areas": [
+        "山西省",
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 7,
+      "post_llm_rank": 9,
+      "llm_order_rank": 14,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.5837,
+      "semantic_rerank_score": 0.1981,
+      "fused_score_before_llm": 0.6723,
+      "final_retrieval_score": 0.6493,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.924,
+        "llm_raw_compatibility": 0.924,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 1.0,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.9,
+        "mechanism": 0.9,
+        "llm_intensity": 0.8,
+        "intensity": 0.8
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 1.0,
+        "temporal": 0.7,
+        "mechanism": 0.9,
+        "intensity": 0.8
+      },
+      "metric_scores": {
+        "过程强度": 0.8,
+        "持续时间": 0.6,
+        "影响范围": 1.0,
+        "主导系统": 0.9,
+        "演变过程": 0.9
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.924,
+      "dimension_compatibility": 0.924,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-019",
+        "山西省2025年1月天气过程总结-chunk-018"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-019",
+          "role": "semantic",
+          "preview": "6 级以上大风天气，41 县市出现 7 级以上大风天气，最大值出现在天镇,风速达到 17 m/s。图 7 1月14-15日08-08 时最大风速、极大风速、最低气温实况图2.环流形势演变特征1月13日20 时，500hPa 欧亚中高纬地区为“两槽一脊”型，巴尔喀什湖上空有一高压脊，贝湖东侧有一横槽，经向度较大，贝加尔湖以东上空有一冷涡，冷中心强度达到-48℃"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-018",
+          "role": "semantic",
+          "preview": "1月14日08 时至 15日08 时，全省共 116 县市出现 5 级以上大风天气，103 县市出现"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-024",
+          "role": "diagnostic",
+          "preview": "此次寒潮天气过程是由横槽转竖引导槽后冷空气南下，通过西北路径影响山西，给山西带来了大范围的大风、降温天气。此次过程环流经向度大，随着阻高崩溃，横槽迅速转竖，引导聚集在蒙古和西伯利亚的冷空气大举南下，寒潮爆发，中低层有强的冷平流，加上 14日夜间晴空少云，辐射降温明显，因此，14-15日受平流降温、辐射降温的影响，降温显著。山西位于分裂冷高压中心附近，且 15"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-020",
+          "role": "diagnostic",
+          "preview": "山西位于高空槽底部，环流平直，主要受偏西气流的影响。随着横槽北侧的冷空气越积越多，1月14日08 时，横槽转竖东移南压，冷涡移到东北上空，高空槽过境山西，锋区南压。1月14日20 时，位于北面的高空槽东移过程中与南支上的短波槽合并加深，山西受槽后西北气流控制，1月15日08 时，高空槽东移出山西，锋区进一步南压到山西以南地区。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "山西省2025年1月天气过程总结-std-case-001",
+      "title": "1月11日降雪天气过程",
+      "date_range": "2025年1月11日",
+      "source_pdf": "山西省2025年1月天气过程总结.pdf",
+      "disaster_types": [
+        "大风",
+        "降雪",
+        "雾"
+      ],
+      "affected_areas": [
+        "全省",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "临汾"
+      ],
+      "structured_rank": 8,
+      "post_llm_rank": 15,
+      "llm_order_rank": 15,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.5426,
+      "semantic_rerank_score": 0.1226,
+      "fused_score_before_llm": 0.6579,
+      "final_retrieval_score": 0.6011,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.808,
+        "llm_raw_compatibility": 0.808,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.8,
+        "llm_area": 1.0,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.6,
+        "intensity": 0.6
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.8,
+        "area": 1.0,
+        "temporal": 0.7,
+        "mechanism": 0.8,
+        "intensity": 0.6
+      },
+      "metric_scores": {
+        "过程强度": 0.6,
+        "持续时间": 0.4,
+        "影响范围": 1.0,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.808,
+      "dimension_compatibility": 0.808,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-004",
+        "山西省2025年1月天气过程总结-chunk-007"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-004",
+          "role": "semantic",
+          "preview": "一、1月11日降雪天气过程"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-007",
+          "role": "semantic",
+          "preview": "1月11日08 时至 12日08 时，太谷、乡宁出现大风，最大值出现在太谷，达到 8 级。"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-009",
+          "role": "diagnostic",
+          "preview": "图 3 1月11日08 时至 12日08 时降水实况及最低气温实况2.环流形势演变特征：500hPa 亚洲中高纬在降雪开始前为阻塞高压的形式，2025年1月11日08 时，阻高崩溃，其后部冷空气迅速东移南下，贝加尔湖到内蒙中部一带有一高空槽存在，高空槽东移南下影响山西。山西位于槽前受西偏北气流影响，11日20 时位于内蒙中部的高空槽在其后部西北气流作用下东移"
+        },
+        {
+          "chunk_id": "山西省2025年1月天气过程总结-chunk-013",
+          "role": "diagnostic",
+          "preview": "高空槽、地面冷锋数值预报产品应数值预报在环流形势场上预报效果较好。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-5-std-case-005",
+      "title": "5月21~22日暴雨天气过程",
+      "date_range": "2025年5月21-22日",
+      "source_pdf": "FST2025-5.pdf",
+      "disaster_types": [
+        "强对流",
+        "暴雨",
+        "强降水",
+        "短时强降水",
+        "雷暴大风",
+        "雷暴",
+        "大风",
+        "冰雹",
+        "霜冻",
+        "高温",
+        "沙尘"
+      ],
+      "affected_areas": [
+        "山西省",
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 9,
+      "post_llm_rank": 7,
+      "llm_order_rank": 9,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6528,
+      "semantic_rerank_score": 0.4528,
+      "fused_score_before_llm": 0.6965,
+      "final_retrieval_score": 0.6476,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.844,
+        "llm_raw_compatibility": 0.844,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.8,
+        "llm_area": 1.0,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.9,
+        "intensity": 0.9
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.8,
+        "area": 1.0,
+        "temporal": 0.7,
+        "mechanism": 0.8,
+        "intensity": 0.9
+      },
+      "metric_scores": {
+        "过程强度": 0.9,
+        "持续时间": 0.6,
+        "影响范围": 1.0,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.844,
+      "dimension_compatibility": 0.844,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-5-chunk-038",
+        "FST2025-5-chunk-044"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-5-chunk-038",
+          "role": "semantic",
+          "preview": "05月05日10时 46 分05月05日10时 59 分05月05日11时 00 分05月05日22时 35 分05月05日22时 45 分05月08日15时 26 分05月09日13时 45 分05月13日10时 00 分05月16日08时 00 分05月16日17时 15 分05月16日20时 05 分大风黄色预警沙尘蓝色预警霜冻蓝色预警（变更）大风蓝色"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-044",
+          "role": "semantic",
+          "preview": "气，阵风风力达 7 级以上并有较强雷电，部分地区伴有短时强降水或冰雹。预警区域：大同市、朔州市、忻州市、太原市、晋中05月22日13大风蓝色预警市、阳泉市、吕梁市。"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-024",
+          "role": "diagnostic",
+          "preview": "图 22 21日20:00 （左上）500hPa 环流形势场、（右上）700hPa 环流形势场、（左下）850hPa 环流形势场、（右下）海平面气压场22日08:00，亚欧中高纬低涡和高压脊强烈发展，形成切断低涡，系统稳定。高空槽和高原槽向东移动，高空槽移速快追赶上高原槽，同位相叠加加深发展，山西转受槽前西南气流控制。700hPa 内蒙古中部形成低涡，低涡切"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-036",
+          "role": "diagnostic",
+          "preview": "CMA 中尺度对晋东南的回波没有体现，北部、西部回波预报偏强。CMA 回波移动速度快，降水预报偏小，CMA-GD 模式移动速度慢，降水预报较好。图 37 EC 21日20 时起报的 0-6km 垂直风切变、对流降水比率、平均比湿预报时考虑 21日夜间，降水以对流降水为主，考虑 22日08 时后对流性减弱。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-5-std-case-004",
+      "title": "5月19~21日高温天气",
+      "date_range": "2025年5月19-21日",
+      "source_pdf": "FST2025-5.pdf",
+      "disaster_types": [
+        "高温"
+      ],
+      "affected_areas": [
+        "山西省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "阳泉",
+        "晋中",
+        "吕梁",
+        "长治",
+        "晋城",
+        "临汾",
+        "运城"
+      ],
+      "structured_rank": 10,
+      "post_llm_rank": 14,
+      "llm_order_rank": 12,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6055,
+      "semantic_rerank_score": 0.3396,
+      "fused_score_before_llm": 0.6799,
+      "final_retrieval_score": 0.5887,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.702,
+        "llm_raw_compatibility": 0.702,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.5,
+        "llm_area": 1.0,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.7,
+        "mechanism": 0.7,
+        "llm_intensity": 0.8,
+        "intensity": 0.8
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.5,
+        "area": 1.0,
+        "temporal": 0.7,
+        "mechanism": 0.7,
+        "intensity": 0.8
+      },
+      "metric_scores": {
+        "过程强度": 0.8,
+        "持续时间": 0.6,
+        "影响范围": 1.0,
+        "主导系统": 0.7,
+        "演变过程": 0.7
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.702,
+      "dimension_compatibility": 0.702,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-5-chunk-020",
+        "FST2025-5-chunk-017"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-5-chunk-020",
+          "role": "semantic",
+          "preview": "图 19 5月19、20、21日20 时 850hPa 形势场; 19、20、21日14 时地面形势图图 20 5月21日08 时 500 hPa 高度场和标准化距平项目影响系统数值预报产品应用预报着眼点内容热低压，高压脊，暖中心高温过程模式对形势场预报较为稳定，且可以预报大于 40℃以上的区域， 具有较好的参考性环流形势的稳定性，高压脊五、 5月21~22"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-017",
+          "role": "semantic",
+          "preview": "项目影响系统数值预报产品应用预报着眼点内容地面冷锋，冷高压，冷涡 EC 能够较好的预报出大风落区和强度，GFS 预报的大风量级偏小严重， 从形势场来看，GFS 预报的地面气旋和冷锋位置偏东。冷涡、冷锋移动四、 5月19~21日高温天气1 天气实况5月19日07 时至 20日07 时，我省各地最高气温介于 29.7℃（神池）～40.7℃（阳泉矿区）之间，阳泉和"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-019",
+          "role": "diagnostic",
+          "preview": "图 17 5月19、20、21日最高气温实况2 环流形势演变特征5月19-21日，500 hPa 亚欧中高纬大部分地区受稳定的高压脊控制，冷涡位置偏北，21日河套到华北地区受高压控制，盛行下沉气流，22日冷空气南下，本轮高温天气结束。850hPa 的温度变化与地面气温变化具有较强的相关性。暖中心自西北向华北延伸，19日，西北和华北地区受 28 ℃等温线控制，"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-5-std-case-003",
+      "title": "5月16日大风天气过程",
+      "date_range": "2025年5月16日",
+      "source_pdf": "FST2025-5.pdf",
+      "disaster_types": [
+        "强对流",
+        "雷暴大风",
+        "雷暴",
+        "大风",
+        "沙尘"
+      ],
+      "affected_areas": [
+        "太原"
+      ],
+      "structured_rank": 11,
+      "post_llm_rank": 12,
+      "llm_order_rank": 10,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6443,
+      "semantic_rerank_score": 0.4623,
+      "fused_score_before_llm": 0.6935,
+      "final_retrieval_score": 0.603,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.71,
+        "llm_raw_compatibility": 0.71,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.8,
+        "llm_area": 0.5,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.7,
+        "intensity": 0.7
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.8,
+        "area": 0.5,
+        "temporal": 0.7,
+        "mechanism": 0.8,
+        "intensity": 0.7
+      },
+      "metric_scores": {
+        "过程强度": 0.7,
+        "持续时间": 0.4,
+        "影响范围": 0.5,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.71,
+      "dimension_compatibility": 0.71,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-5-chunk-012",
+        "FST2025-5-chunk-015"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-5-chunk-012",
+          "role": "semantic",
+          "preview": "三、 5月16日大风天气过程"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-015",
+          "role": "semantic",
+          "preview": "压梯度大，变压梯度大，冷锋后出现大范围 8 级以上西北风，以及沙尘的起沙和向东移动，我省浮尘和扬沙天气自西北向东南推进。图 13 5月16日08、20 时 500 形势图"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-014",
+          "role": "diagnostic",
+          "preview": "图 12 5月16日8 级以上大风分布、24 小时强对流监测2 环流形势演变特征亚欧中高纬为“两槽一脊”形势，西西伯利亚为脊区，高空槽后冷气团中心温度为-32℃；东北冷涡中心位于黑龙江北侧，我省受涡后的西北气流控制之下，20 时，高空槽加深东移，引导高纬度冷空气南下，冷中心南移至贝加尔湖南侧，华北上空等高线密度显著增加。对应 700 、850 hPa 上，1"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-016",
+          "role": "diagnostic",
+          "preview": "从呼和浩特 08 探空站可以看出，T85=32.8℃，热力不稳定，对流层中层为西风，风速大，低层为偏南风，上冷下暖的结构有利于不稳定层结建立。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-5-std-case-002",
+      "title": "5月8~9日强对流天气过程",
+      "date_range": "2025年5月8-9日",
+      "source_pdf": "FST2025-5.pdf",
+      "disaster_types": [
+        "强对流",
+        "强降水",
+        "短时强降水",
+        "雷暴大风",
+        "雷暴",
+        "大风",
+        "冰雹"
+      ],
+      "affected_areas": [
+        "太原"
+      ],
+      "structured_rank": 12,
+      "post_llm_rank": 10,
+      "llm_order_rank": 6,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6983,
+      "semantic_rerank_score": 0.6226,
+      "fused_score_before_llm": 0.7124,
+      "final_retrieval_score": 0.6233,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.722,
+        "llm_raw_compatibility": 0.722,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.8,
+        "llm_area": 0.5,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.8,
+        "intensity": 0.8
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.8,
+        "area": 0.5,
+        "temporal": 0.7,
+        "mechanism": 0.8,
+        "intensity": 0.8
+      },
+      "metric_scores": {
+        "过程强度": 0.8,
+        "持续时间": 0.6,
+        "影响范围": 0.5,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.722,
+      "dimension_compatibility": 0.722,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-5-chunk-008",
+        "FST2025-5-chunk-012"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-5-chunk-008",
+          "role": "semantic",
+          "preview": "个县（市、区）出现大风，最大值出现在永和，达到 10 级。方山、蒲县出现冰雹。"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-012",
+          "role": "semantic",
+          "preview": "三、 5月16日大风天气过程"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-009",
+          "role": "diagnostic",
+          "preview": "5月8、9日强对流天气监测2 环流形势演变特征8日08 时，短波槽位于山西中西部到南部，20 时移出山西。对流层低层受切变线影响，T85>25℃，有热力不稳定条件，山西东北部低层为湿层，暖脊向山西北中部延伸，存在上冷下暖的不稳定层结。"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-010",
+          "role": "diagnostic",
+          "preview": "图 9 5月8日08 时太原、延安探空图9日08 时，河套上游高空槽移至山西中部，并切断形成低涡，20 时移出山西。对应低层，低涡和切变线东移，地面山西处于高低压之间，等压线密集，有利于大风天气形成。太原探空可以看出，热力、能量条件好，垂直风切变强，-20 层和湿球零度层高度适宜冰雹生长（Cape=1690.1J/kg,shr6=20.7,T85=30℃，2"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-5-std-case-001",
+      "title": "5月2日雷暴大风天气过程",
+      "date_range": "2025年5月2日",
+      "source_pdf": "FST2025-5.pdf",
+      "disaster_types": [
+        "雷暴大风",
+        "雷暴",
+        "大风"
+      ],
+      "affected_areas": [
+        "太原"
+      ],
+      "structured_rank": 13,
+      "post_llm_rank": 13,
+      "llm_order_rank": 11,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6418,
+      "semantic_rerank_score": 0.4057,
+      "fused_score_before_llm": 0.6926,
+      "final_retrieval_score": 0.6022,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.71,
+        "llm_raw_compatibility": 0.71,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.8,
+        "llm_area": 0.5,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.7,
+        "intensity": 0.7
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.8,
+        "area": 0.5,
+        "temporal": 0.7,
+        "mechanism": 0.8,
+        "intensity": 0.7
+      },
+      "metric_scores": {
+        "过程强度": 0.7,
+        "持续时间": 0.4,
+        "影响范围": 0.5,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.71,
+      "dimension_compatibility": 0.71,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-5-chunk-004",
+        "FST2025-5-chunk-007"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-5-chunk-004",
+          "role": "semantic",
+          "preview": "一、 5月2日雷暴大风天气过程"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-007",
+          "role": "semantic",
+          "preview": "图 6 5月2日太原（08 时）、卢氏（20 时）探空图项目影响系统数值预报产品应用内容高空槽，冷锋，低层切变线模式对形势场预报较为稳定，GFS 和 EC 能够较好的预报出大风落区，GFS 落区更加精确预报着眼点地面冷锋移速、环境场配置二、 5月8~9日强对流天气过程1 天气实况受短波槽、切变线以及地面冷锋过境影响，山西大部分地区出现降水，局地伴有短时强降水"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-006",
+          "role": "diagnostic",
+          "preview": "对流层低层切变线自西北向东南推进，山西受暖脊控制，对应地面上冷锋自山西北部向南推进，高低压之间等压线密集。图 4 5月2日08:00、20:00 500hPa、700hPa、850hPa 环流形势场图 5 5月2日14:00、20:00 海平面气压场和填图从太原和卢氏探空可以看出，温湿廓线呈现“下喇叭口”形状，对流层中低层温度递减率接近干绝热递减率，高空风风"
+        },
+        {
+          "chunk_id": "FST2025-5-chunk-005",
+          "role": "diagnostic",
+          "preview": "图 3 5月2日08:00-3日08:00 极大风分布图，国家站雷暴大风分布图2 环流形势演变特征2日08:00，短波槽位于华北北部，山西受西北气流影响，20 时短波槽移"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-3-std-case-003",
+      "title": "3月25～28日沙尘、寒潮、雨雪天气过程",
+      "date_range": "2025年3月25-28日",
+      "source_pdf": "FST2025-3.pdf",
+      "disaster_types": [
+        "大风",
+        "雨雪",
+        "降雪",
+        "寒潮",
+        "沙尘"
+      ],
+      "affected_areas": [
+        "太原",
+        "晋中",
+        "吕梁",
+        "运城"
+      ],
+      "structured_rank": 14,
+      "post_llm_rank": 6,
+      "llm_order_rank": 7,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6973,
+      "semantic_rerank_score": 0.6038,
+      "fused_score_before_llm": 0.7121,
+      "final_retrieval_score": 0.6525,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.814,
+        "llm_raw_compatibility": 0.814,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 1.0,
+        "llm_area": 0.5,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.9,
+        "mechanism": 0.9,
+        "llm_intensity": 0.8,
+        "intensity": 0.8
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 1.0,
+        "area": 0.5,
+        "temporal": 0.7,
+        "mechanism": 0.9,
+        "intensity": 0.8
+      },
+      "metric_scores": {
+        "过程强度": 0.8,
+        "持续时间": 0.8,
+        "影响范围": 0.5,
+        "主导系统": 0.9,
+        "演变过程": 0.9
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.814,
+      "dimension_compatibility": 0.814,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-3-chunk-014",
+        "FST2025-3-chunk-010"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-3-chunk-014",
+          "role": "semantic",
+          "preview": "27日气旋出海，形成大范围大风沙尘天气。"
+        },
+        {
+          "chunk_id": "FST2025-3-chunk-010",
+          "role": "semantic",
+          "preview": "图 11 14日08 时、15日08 时 500hPa 环流形势图 12 14日08 时、15日08 时 500hPa 海平面气压场图 13 14日08 时 700hPa、850hPa 高度场、温度场、风场图 14 15日08 时 700hPa、850hPa 高度场、温度场、风场三、3月25～28日沙尘、寒潮、雨雪天气过程"
+        },
+        {
+          "chunk_id": "FST2025-3-chunk-013",
+          "role": "diagnostic",
+          "preview": "图 15 2025年3月25-28日大风、能见度、最气气温变温、累计降水实况分布2.环流形势演变特征2025年3月25日08 时，乌拉尔山高压脊发展，至 26日08 时形成阻塞高压，阻塞高压前部有一横槽，冷空气在此堆积，冷中心为-44℃。27日乌拉尔山高压脊向西北方向伸展，脊前偏北气流转为西北气流，横槽转竖，对应对流层低层温度平流水平分布显示强降温与 700"
+        },
+        {
+          "chunk_id": "FST2025-3-chunk-016",
+          "role": "diagnostic",
+          "preview": "图 18 风云地球卫星平台识别沙尘区演变特征3. 27日山西中南部降水天气成因分析27日08 时 500hPa 横槽位于河西走廊，山西处在槽前西西南气流控制。对应 700 和850hPa 上为冷平流。700hPa 上在山西南部有一切变线活动。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    },
+    {
+      "case_id": "FST2025-3-std-case-002",
+      "title": "14-15日暴雪天气过程",
+      "date_range": "2025年3月14-15日",
+      "source_pdf": "FST2025-3.pdf",
+      "disaster_types": [
+        "雨雪",
+        "暴雪"
+      ],
+      "affected_areas": [
+        "全省",
+        "太原",
+        "大同",
+        "朔州",
+        "忻州",
+        "晋中",
+        "吕梁",
+        "长治",
+        "临汾"
+      ],
+      "structured_rank": 15,
+      "post_llm_rank": 11,
+      "llm_order_rank": 8,
+      "entered_llm_top15": true,
+      "structured_score": 0.72,
+      "semantic_score": 0.6798,
+      "semantic_rerank_score": 0.6132,
+      "fused_score_before_llm": 0.7059,
+      "final_retrieval_score": 0.6424,
+      "score_breakdown": {
+        "area": 0.0,
+        "disaster": 0.0,
+        "temporal": 0.72,
+        "disaster_coverage": 0.0,
+        "llm_compatibility": 0.8,
+        "llm_raw_compatibility": 0.8,
+        "dimension_coverage": 1.0,
+        "llm_hazard_match": 0.8,
+        "llm_area": 0.8,
+        "llm_temporal": 0.7,
+        "llm_mechanism": 0.8,
+        "mechanism": 0.8,
+        "llm_intensity": 0.9,
+        "intensity": 0.9
+      },
+      "disaster_gate_passed": true,
+      "dimension_scores": {
+        "hazard_match": 0.8,
+        "area": 0.8,
+        "temporal": 0.7,
+        "mechanism": 0.8,
+        "intensity": 0.9
+      },
+      "metric_scores": {
+        "过程强度": 0.9,
+        "持续时间": 0.6,
+        "影响范围": 0.8,
+        "主导系统": 0.8,
+        "演变过程": 0.8
+      },
+      "missing_dimensions": [],
+      "missing_metrics": [],
+      "dimension_raw_compatibility": 0.8,
+      "dimension_compatibility": 0.8,
+      "dimension_coverage": 1.0,
+      "assessment_source": "llm",
+      "semantic_chunk_ids": [
+        "FST2025-3-chunk-008",
+        "FST2025-3-chunk-010"
+      ],
+      "semantic_evidence_previews": [
+        {
+          "chunk_id": "FST2025-3-chunk-008",
+          "role": "semantic",
+          "preview": "15日20 时，随着横槽转竖，冷空气大举南下，降水结束，夜间气温继续下降，16日早晨全省共 110 站最低点气温下降 3.2～12.1℃，降温 12℃以上有 1 站（左权 12.1）、降温 10℃以上有 13 站（出现在大同、忻州、朔州、太原、晋中、长治、临汾）、降温 8～10℃有 19 站。图 9 3月15日、16日最低气温 24 小时变温图 10 15日"
+        },
+        {
+          "chunk_id": "FST2025-3-chunk-010",
+          "role": "semantic",
+          "preview": "图 11 14日08 时、15日08 时 500hPa 环流形势图 12 14日08 时、15日08 时 500hPa 海平面气压场图 13 14日08 时 700hPa、850hPa 高度场、温度场、风场图 14 15日08 时 700hPa、850hPa 高度场、温度场、风场三、3月25～28日沙尘、寒潮、雨雪天气过程"
+        },
+        {
+          "chunk_id": "FST2025-3-chunk-009",
+          "role": "diagnostic",
+          "preview": "部有气旋式环流发展，暖切北侧东南气流与内蒙中部的西北气流在山西北部形成冷式切变线，850hPa 为偏东风形成的冷垫，地面河套倒槽向北发展至内蒙中部，冷暖空气在山西北部持续强烈对峙，因此暴雪出现在北部。15日08 时，500hPa 上游横槽东移加深发展，山西受槽前西南气流控制，低层转为偏北风，地面冷空气扩散南下，冷锋进入山西，倒槽减弱，锋后暖湿气流沿锋面抬升，"
+        },
+        {
+          "chunk_id": "FST2025-3-chunk-007",
+          "role": "diagnostic",
+          "preview": "图 7 3日08 时 700hPa、850hPa 高度场、温度场、风场二、14-15日暴雪天气过程1.实况特征受低空切变线和冷空气活动影响，14-15日我省大部分地区出现了雨雪天气。"
+        }
+      ],
+      "decision": "rejected",
+      "rejection_reasons": [
+        "最终排序或多样性选择未进入目标数量"
+      ]
+    }
+  ],
+  "selected_case_ids": [
+    "FST2025-4-std-case-001",
+    "FST2025-4-std-case-003",
+    "山西省2025年2月天气过程总结-std-case-002"
+  ],
+  "warnings": []
+}

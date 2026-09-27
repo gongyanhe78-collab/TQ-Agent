@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>多维个例自然语言检索</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --text: #17202a;
+      --muted: #637083;
+      --line: #d9dee7;
+      --brand: #155e75;
+      --brand-strong: #0e4f63;
+      --accent: #b45309;
+      --soft: #e8f3f5;
+      --danger: #b42318;
+      --radius: 6px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) 0; grid-template-rows: 58px 1fr auto; transition: grid-template-columns .22s ease; }
+    .topbar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 22px;
+      color: #fff;
+      background: #153b47;
+      border-bottom: 1px solid #0f303a;
+    }
+    .brand { min-width: 0; }
+    .brand h1 { margin: 0; font-size: 18px; font-weight: 700; }
+    .brand p { margin: 3px 0 0; color: #cde0e5; font-size: 12px; }
+    .top-actions { display: flex; gap: 8px; flex: none; }
+    .button {
+      min-height: 36px;
+      padding: 7px 13px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      color: #fff;
+      background: var(--brand);
+      font-weight: 600;
+    }
+    .button:hover { background: var(--brand-strong); }
+    .button:disabled { cursor: not-allowed; opacity: .48; }
+    .button.secondary { color: var(--text); background: #fff; border-color: var(--line); }
+    .button.secondary:hover { background: #f7f9fb; }
+    .topbar .button.secondary { color: #fff; background: transparent; border-color: #63818a; }
+    .topbar .button.secondary:hover { background: #204d5a; }
+    .conversation {
+      grid-column: 1;
+      grid-row: 2;
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 26px 22px 40px;
+      overflow-wrap: anywhere;
+    }
+    .welcome {
+      padding: 30px 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .welcome h2 { margin: 0 0 10px; font-size: 25px; }
+    .welcome p { margin: 0; max-width: 780px; color: var(--muted); line-height: 1.8; }
+    .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .example {
+      padding: 8px 11px;
+      border: 1px solid #a9bec4;
+      border-radius: var(--radius);
+      color: #174957;
+      background: #f8fcfd;
+      font-size: 13px;
+    }
+    .message { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: #52606d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .message.assistant .avatar { background: var(--brand); }
+    .message-body { min-width: 0; }
+    .message-role { margin: 0 0 7px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .message-text { margin: 0; line-height: 1.8; white-space: pre-wrap; }
+    .proposal, .progress-panel, .pdf-card {
+      width: min(680px, 100%);
+    }
+    .proposal {
+      margin-top: 12px;
+      border: 1px solid #9eb9c0;
+      border-left: 4px solid var(--brand);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .proposal-head { padding: 13px 16px; background: var(--soft); border-bottom: 1px solid #c9dce0; }
+    .proposal-head strong { display: block; font-size: 15px; }
+    .proposal-head span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .condition-list { margin: 0; padding: 12px 16px; list-style: none; display: grid; gap: 7px; }
+    .condition-list li { line-height: 1.55; }
+    .changes, .warnings { margin: 0 16px 12px; padding: 10px 12px; border-radius: 4px; font-size: 13px; line-height: 1.7; }
+    .changes { color: #164e63; background: #ecf7f9; }
+    .warnings { color: #7c3e06; background: #fff7e8; }
+    .proposal-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 15px; }
+    .progress-panel { margin-top: 13px; padding: 14px 16px; background: #f8fafb; border: 1px solid var(--line); border-radius: var(--radius); }
+    .progress-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; }
+    .progress-head strong { color: var(--text); font-size: 14px; }
+    .progress-percent { color: var(--brand); font-variant-numeric: tabular-nums; }
+    .progress-steps { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .progress-step { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; align-items: center; color: #87929e; font-size: 13px; line-height: 1.45; }
+    .progress-step::before { content: ""; width: 8px; height: 8px; justify-self: center; border: 1px solid #b8c2ca; border-radius: 50%; background: #fff; }
+    .progress-step.is-active { color: var(--brand-strong); font-weight: 700; }
+    .progress-step.is-active::before { border-color: var(--brand); background: var(--brand); box-shadow: 0 0 0 3px #d9edf1; }
+    .progress-step.is-complete { color: #52606d; }
+    .progress-step.is-complete::before { content: "✓"; display: grid; width: 15px; height: 15px; place-items: center; border: 0; color: #fff; background: var(--brand); font-size: 10px; font-weight: 700; }
+    .progress-track { height: 5px; margin-top: 13px; border-radius: 3px; background: #dce3e8; overflow: hidden; }
+    .progress-bar { width: 0; height: 100%; background: var(--brand); transition: width .25s ease; }
+    .progress-foot { display: flex; justify-content: space-between; gap: 12px; margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .report { margin-top: 14px; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .stat { padding: 13px 15px; background: #f8fafb; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat strong { display: block; color: var(--brand); font-size: 21px; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .report-section { padding: 23px 0 5px; }
+    .report-section + .report-section { border-top: 1px solid var(--line); }
+    .report-section h2 { margin: 0 0 15px; font-size: 20px; }
+    .report-section h3 { margin: 22px 0 10px; font-size: 16px; }
+    .report-section h4 { margin: 0 0 8px; font-size: 15px; }
+    .answer p { margin: 0 0 12px; line-height: 1.85; text-indent: 2em; }
+    .table-wrap { overflow-x: auto; margin: 12px 0 20px; }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; font-size: 13px; }
+    th, td { padding: 9px 10px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #eef3f5; }
+    .table-note, .scope { color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .visuals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 15px 0 20px; }
+    figure { margin: 0; min-width: 0; }
+    figure img { display: block; width: 100%; max-height: 620px; object-fit: contain; background: #fff; border: 1px solid var(--line); }
+    figcaption { padding: 8px 2px 0; line-height: 1.55; font-size: 13px; text-align: center; }
+    .chart-insight { margin: 7px 0 0; color: var(--muted); line-height: 1.65; font-size: 13px; text-align: left; }
+    .case-group { margin-top: 22px; }
+    .case-item { padding: 18px 0; border-top: 1px solid var(--line); }
+    .case-meta { margin: 0 0 11px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .recommendations { margin: 0; padding-left: 23px; }
+    .recommendations li { margin-bottom: 10px; line-height: 1.75; }
+    .report-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; }
+    .pdf-card { margin-top: 15px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 8px 24px rgba(31, 50, 61, .08); }
+    .pdf-card-head { display: flex; align-items: center; gap: 11px; min-height: 54px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+    .pdf-file-icon { display: grid; width: 32px; height: 32px; flex: none; place-items: center; border-radius: 4px; color: #fff; background: #b42318; font-size: 11px; font-weight: 700; }
+    .pdf-card-title { min-width: 0; flex: 1; }
+    .pdf-card-title strong { display: block; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+    .pdf-card-title span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .pdf-thumbnail { position: relative; height: 318px; overflow: hidden; background: #e9edf1; }
+    .pdf-thumbnail embed { width: 100%; height: 470px; border: 0; pointer-events: none; }
+    .pdf-thumbnail-button { position: absolute; inset: 0; width: 100%; border: 0; color: transparent; background: transparent; }
+    .pdf-thumbnail-button:focus-visible { outline: 3px solid #1677ff; outline-offset: -3px; }
+    .pdf-loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); background: linear-gradient(110deg, #eef1f4 30%, #f8fafb 45%, #eef1f4 60%); background-size: 240% 100%; animation: pdf-loading 1.4s linear infinite; }
+    @keyframes pdf-loading { to { background-position-x: -240%; } }
+    .pdf-card-actions { display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-top: 1px solid var(--line); }
+    .pdf-card-actions .pdf-meta { margin-right: auto; color: var(--muted); font-size: 12px; }
+    .preview-panel { grid-column: 2; grid-row: 2 / 4; min-width: 0; overflow: hidden; border-left: 0 solid var(--line); background: #eef1f4; visibility: hidden; }
+    .preview-inner { width: 100%; height: 100%; display: grid; grid-template-rows: 52px minmax(0, 1fr); }
+    .preview-toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); background: #fff; }
+    .preview-toolbar strong { min-width: 0; margin-right: auto; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+    .preview-tool { width: 36px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 4px; color: var(--text); background: #fff; font-size: 18px; }
+    .preview-tool:hover { background: #f2f5f7; }
+    .preview-frame { width: 100%; height: 100%; border: 0; background: #dfe4e8; }
+    .app.preview-open { grid-template-columns: minmax(390px, 44%) minmax(520px, 56%); }
+    .app.preview-open .preview-panel { border-left-width: 1px; visibility: visible; }
+    .app.preview-open .conversation, .app.preview-open .composer { width: 100%; }
+    .app.preview-expanded { grid-template-columns: 0 minmax(0, 1fr); }
+    .app.preview-expanded .conversation, .app.preview-expanded .composer-shell { visibility: hidden; overflow: hidden; }
+    .composer-shell { grid-column: 1; grid-row: 3; position: sticky; bottom: 0; z-index: 5; background: rgba(244,246,248,.96); border-top: 1px solid var(--line); }
+    .composer { width: min(1120px, 100%); margin: 0 auto; padding: 13px 22px 17px; }
+    .composer-box { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: end; padding: 8px; border: 1px solid #9aa7b5; border-radius: var(--radius); background: #fff; }
+    textarea { width: 100%; min-height: 52px; max-height: 170px; padding: 8px; resize: vertical; border: 0; outline: none; color: var(--text); background: transparent; line-height: 1.55; }
+    .composer-hint { margin: 6px 3px 0; color: var(--muted); font-size: 12px; }
+    .error { color: var(--danger); }
+    @media (max-width: 760px) {
+      .topbar { padding: 0 12px; }
+      .brand p { display: none; }
+      .conversation { padding: 16px 14px 28px; }
+      .message { grid-template-columns: 32px minmax(0, 1fr); gap: 9px; }
+      .avatar { width: 30px; height: 30px; font-size: 11px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .visuals { grid-template-columns: 1fr; }
+      .composer { padding: 10px 12px 12px; }
+      .composer-box { grid-template-columns: 1fr; }
+      .composer-box .button { width: 100%; }
+      .app.preview-open, .app.preview-expanded { grid-template-columns: minmax(0, 1fr); }
+      .preview-panel { position: fixed; inset: 58px 0 0; z-index: 20; border-left: 0; }
+      .app.preview-open .preview-panel { visibility: visible; }
+      .app.preview-open .conversation, .app.preview-open .composer-shell { visibility: hidden; }
+      .pdf-thumbnail { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>多维个例自然语言检索</h1>
+        <p>条件确认后复用现有个例分析、图表与 PDF 报告流程</p>
+      </div>
+      <div class="top-actions">
+        <button id="newChatButton" class="button secondary" type="button">新建会话</button>
+      </div>
+    </header>
+
+    <main id="conversation" class="conversation" aria-live="polite">
+      <section id="welcome" class="welcome">
+        <h2>用一句话描述要检索的天气过程</h2>
+        <p>系统会结合当前表达和已确认的聊天上下文判断检索意图，并在执行前展示最终的时间、灾种和影响区域供你核对。</p>
+        <div class="examples">
+          <button class="example" type="button">检索2025年1月至5月强对流、暴雨和冰雹过程，关注太原、晋中和吕梁</button>
+          <button class="example" type="button">查询2025年春季山西北部寒潮和大风过程</button>
+        </div>
+      </section>
+    </main>
+
+    <aside id="pdfPreviewPanel" class="preview-panel" aria-hidden="true">
+      <div class="preview-inner">
+        <div class="preview-toolbar">
+          <strong id="previewTitle">山西省气象灾害个例多维分析报告</strong>
+          <button id="previewDownload" class="preview-tool" type="button" title="下载 PDF" aria-label="下载 PDF">↓</button>
+          <button id="previewExpand" class="preview-tool" type="button" title="展开预览" aria-label="展开预览">↗</button>
+          <button id="previewClose" class="preview-tool" type="button" title="关闭预览" aria-label="关闭预览">×</button>
+        </div>
+        <iframe id="previewFrame" class="preview-frame" title="PDF 报告预览"></iframe>
+      </div>
+    </aside>
+
+    <footer class="composer-shell">
+      <div class="composer">
+        <div class="composer-box">
+          <textarea id="messageInput" maxlength="2000" placeholder="输入自然语言检索条件；Enter 发送，Shift+Enter 换行"></textarea>
+          <button id="sendButton" class="button" type="button">发送</button>
+        </div>
+        <p class="composer-hint">系统会分析本轮是新检索还是对上一轮的补充或修改；每次执行前请核对最终结构化条件。</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const state = {
+      conversationId: window.localStorage.getItem("caseMultidimNaturalConversation") || "",
+      latestProposalId: "",
+      busy: false,
+      progressTimer: null,
+      progressStartedAt: 0,
+      currentPdf: null,
+      pdfUrls: new Set(),
+    };
+
+    const conversation = document.querySelector("#conversation");
+    const input = document.querySelector("#messageInput");
+    const sendButton = document.querySelector("#sendButton");
+    const app = document.querySelector(".app");
+    const previewPanel = document.querySelector("#pdfPreviewPanel");
+    const previewFrame = document.querySelector("#previewFrame");
+    const previewTitle = document.querySelector("#previewTitle");
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function createProgressId() {
+      return window.crypto && window.crypto.randomUUID
+        ? window.crypto.randomUUID()
+        : "progress-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    }
+
+    function setBusy(busy) {
+      state.busy = busy;
+      sendButton.disabled = busy;
+      input.disabled = busy;
+      sendButton.textContent = busy ? "处理中" : "发送";
+    }
+
+    function scrollToBottom() {
+      window.requestAnimationFrame(() => window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"}));
+    }
+
+    function appendMessage(role, text) {
+      document.querySelector("#welcome")?.remove();
+      const section = document.createElement("section");
+      section.className = "message " + role;
+      section.innerHTML = `
+        <div class="avatar">${role === "user" ? "我" : "系统"}</div>
+        <div class="message-body">
+          <p class="message-role">${role === "user" ? "你" : "多维个例检索"}</p>
+          <p class="message-text"></p>
+        </div>`;
+      section.querySelector(".message-text").textContent = text;
+      conversation.appendChild(section);
+      scrollToBottom();
+      return section.querySelector(".message-body");
+    }
+
+    async function jsonRequest(url, payload) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        let message = await response.text();
+        try { message = JSON.parse(message).detail || message; } catch (_) {}
+        throw new Error(message);
+      }
+      return response.json();
+    }
+
+    function invalidateProposalCards() {
+      document.querySelectorAll("[data-proposal-confirm]").forEach(button => {
+        button.disabled = true;
+        button.textContent = "已失效";
+      });
+    }
+
+    function proposalCard(data) {
+      invalidateProposalCards();
+      state.conversationId = data.conversation_id;
+      state.latestProposalId = data.proposal_id || "";
+      window.localStorage.setItem("caseMultidimNaturalConversation", state.conversationId);
+
+      const body = appendMessage("assistant", data.can_confirm ? "请核对以下最终检索条件。" : "当前消息还不能形成可执行检索。请根据提示补充条件。");
+      const card = document.createElement("div");
+      card.className = "proposal";
+      const conditions = (data.display_lines || []).map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      const changes = (data.change_summary || []).length
+        ? `<div class="changes">${data.change_summary.map(escapeHtml).join("<br>")}</div>` : "";
+      // 只展示需要用户修正的业务提示，不暴露内部上下文路由策略。
+      const visibleWarnings = (data.warnings || []).filter(item =>
+        !String(item).includes("未继承上一轮") && !String(item).includes("上下文操作词")
+      );
+      const warnings = visibleWarnings.length
+        ? `<div class="warnings">${visibleWarnings.map(escapeHtml).join("<br>")}</div>` : "";
+      card.innerHTML = `
+        <div class="proposal-head">
+          <strong>最终结构化检索条件</strong>
+          <span>${escapeHtml(data.operation_label || "")}</span>
+        </div>
+        <ul class="condition-list">${conditions}</ul>
+        ${changes}${warnings}
+        <div class="proposal-actions">
+          <button class="button" type="button" data-proposal-confirm ${data.can_confirm ? "" : "disabled"}>确认并开始检索</button>
+          <button class="button secondary" type="button" data-proposal-edit>修改输入</button>
+        </div>`;
+      body.appendChild(card);
+      card.querySelector("[data-proposal-edit]").addEventListener("click", () => input.focus());
+      const confirmButton = card.querySelector("[data-proposal-confirm]");
+      confirmButton.addEventListener("click", () => confirmSearch(data, body, confirmButton));
+      scrollToBottom();
+    }
+
+    async function sendMessage() {
+      const message = input.value.trim();
+      if (!message || state.busy) return;
+      appendMessage("user", message);
+      input.value = "";
+      setBusy(true);
+      try {
+        const data = await jsonRequest("/api/case-multidim/natural/parse", {
+          message,
+          conversation_id: state.conversationId,
+        });
+        proposalCard(data);
+      } catch (error) {
+        appendMessage("assistant", "条件解析失败：" + error.message).querySelector(".message-text").classList.add("error");
+      } finally {
+        setBusy(false);
+        input.focus();
+      }
+    }
+
+    function createProgressPanel(parent) {
+      const panel = document.createElement("div");
+      panel.className = "progress-panel";
+      panel.innerHTML = `
+        <div class="progress-head"><strong data-progress-text>正在准备检索</strong><span class="progress-percent" data-progress-percent>0%</span></div>
+        <ol class="progress-steps" aria-label="报告生成进度">
+          <li class="progress-step" data-progress-step="0">确认检索条件</li>
+          <li class="progress-step" data-progress-step="1">筛选相关天气过程</li>
+          <li class="progress-step" data-progress-step="2">读取正文并分析个例</li>
+          <li class="progress-step" data-progress-step="3">生成综合分析与图表</li>
+          <li class="progress-step" data-progress-step="4">整理 PDF 报告</li>
+        </ol>
+        <div class="progress-track"><div class="progress-bar" data-progress-bar></div></div>
+        <div class="progress-foot"><span data-progress-cases></span><span data-progress-elapsed>已用时 0 秒</span></div>`;
+      parent.appendChild(panel);
+      state.progressStartedAt = Date.now();
+      panel.dataset.startedAt = String(state.progressStartedAt);
+      return panel;
+    }
+
+    function progressStageIndex(progress) {
+      if (Number.isFinite(Number(progress.step_index))) {
+        return Math.max(0, Math.min(4, Number(progress.step_index)));
+      }
+      const stage = String(progress.stage || "").toLowerCase();
+      if (stage === "json_statistics") return 1;
+      if (stage === "case_analysis") return 2;
+      if (stage === "report_llm") return 3;
+      if (["rendering", "saving", "completed"].includes(stage)) return 4;
+      return 0;
+    }
+
+    function progressStageLabel(progress, index) {
+      if (progress.status === "failed" || String(progress.message || "").includes("失败")) return "检索失败";
+      if (Number(progress.percent || 0) >= 100 && index >= 4) return "报告已生成";
+      return ["正在确认检索条件", "正在筛选相关天气过程", "正在读取正文并分析个例", "正在生成综合分析与图表", "正在整理 PDF 报告"][index];
+    }
+
+    function renderProgress(panel, progress) {
+      if (!panel || !panel.isConnected) return;
+      const percent = Math.max(0, Math.min(100, Number(progress.percent || 0)));
+      const currentIndex = progressStageIndex(progress);
+      panel.querySelector("[data-progress-text]").textContent = progressStageLabel(progress, currentIndex);
+      panel.querySelector("[data-progress-percent]").textContent = percent + "%";
+      panel.querySelector("[data-progress-bar]").style.width = percent + "%";
+      panel.querySelectorAll("[data-progress-step]").forEach(step => {
+        const stepIndex = Number(step.dataset.progressStep);
+        step.classList.toggle("is-complete", stepIndex < currentIndex || (percent >= 100 && progress.status !== "failed"));
+        step.classList.toggle("is-active", stepIndex === currentIndex && !(percent >= 100 && progress.status !== "failed"));
+      });
+      const completed = Number(progress.completed_cases || 0);
+      const total = Number(progress.total_cases || 0);
+      panel.querySelector("[data-progress-cases]").textContent = total > 0 ? `个例分析：${completed}/${total}` : "";
+      const startedAt = Number(panel.dataset.startedAt || Date.now());
+      panel.querySelector("[data-progress-elapsed]").textContent = `已用时 ${Math.max(0, Math.floor((Date.now() - startedAt) / 1000))} 秒`;
+    }
+
+    function startProgressPolling(progressId, panel) {
+      window.clearTimeout(state.progressTimer);
+      const poll = async () => {
+        try {
+          const response = await fetch("/api/case-multidim/search/progress/" + encodeURIComponent(progressId));
+          if (response.ok) {
+            const progress = await response.json();
+            renderProgress(panel, progress);
+            if (["completed", "failed"].includes(progress.status)) return;
+          }
+        } catch (_) {}
+        state.progressTimer = window.setTimeout(poll, 500);
+      };
+      poll();
+    }
+
+    async function confirmSearch(proposal, body, button) {
+      if (state.busy || !proposal.proposal_id) return;
+      setBusy(true);
+      button.disabled = true;
+      button.textContent = "检索中";
+      const progressId = createProgressId();
+      const panel = createProgressPanel(body);
+      renderProgress(panel, {percent: 2, step_index: 0});
+      startProgressPolling(progressId, panel);
+      try {
+        const data = await jsonRequest("/api/case-multidim/natural/search", {
+          conversation_id: proposal.conversation_id,
+          proposal_id: proposal.proposal_id,
+          progress_id: progressId,
+        });
+        window.clearTimeout(state.progressTimer);
+        const count = Number(data.search_response?.displayed_result_count || 0);
+        renderProgress(panel, {percent: 96, step_index: 4, completed_cases: count, total_cases: count});
+        button.textContent = "已确认";
+        const reportReady = await renderReport(body, data, panel);
+        if (reportReady) {
+          renderProgress(panel, {percent: 100, step_index: 4, status: "completed", completed_cases: count, total_cases: count});
+          panel.remove();
+        }
+      } catch (error) {
+        window.clearTimeout(state.progressTimer);
+        renderProgress(panel, {percent: 100, step_index: 2, status: "failed"});
+        const errorText = document.createElement("p");
+        errorText.className = "error";
+        errorText.textContent = error.message;
+        body.appendChild(errorText);
+        button.textContent = "确认失败";
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function safePdfFilename(title) {
+      return ((title || "山西省气象灾害个例多维分析报告") + ".pdf").replace(/[\\/:*?"<>|]/g, "_");
+    }
+
+    function formatFileSize(size) {
+      const bytes = Number(size || 0);
+      if (bytes < 1024 * 1024) return Math.max(1, Math.round(bytes / 1024)) + " KB";
+      return (bytes / 1024 / 1024).toFixed(1) + " MB";
+    }
+
+    function downloadPdfArtifact(artifact) {
+      if (!artifact?.url) return;
+      const link = document.createElement("a");
+      link.href = artifact.url;
+      link.download = artifact.filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function openPdfPreview(artifact) {
+      if (!artifact?.url) return;
+      state.currentPdf = artifact;
+      previewTitle.textContent = artifact.filename;
+      previewFrame.src = artifact.url + "#toolbar=1&navpanes=0&view=FitH";
+      app.classList.add("preview-open");
+      app.classList.remove("preview-expanded");
+      previewPanel.setAttribute("aria-hidden", "false");
+      document.querySelector("#previewExpand").textContent = "↗";
+      document.querySelector("#previewExpand").title = "展开预览";
+    }
+
+    function closePdfPreview() {
+      app.classList.remove("preview-open", "preview-expanded");
+      previewPanel.setAttribute("aria-hidden", "true");
+      previewFrame.removeAttribute("src");
+    }
+
+    async function requestPdfArtifact(data) {
+      const title = data.title || "山西省气象灾害个例多维分析报告";
+      const filename = safePdfFilename(title);
+      const response = await fetch("/api/case-multidim/export-pdf", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({answer_id: data.answer_id, filename, report_title: title}),
+      });
+      if (!response.ok) throw new Error(await response.text());
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      state.pdfUrls.add(url);
+      return {url, blob, filename, title};
+    }
+
+    async function renderReport(parent, data, progressPanel = null) {
+      const response = data.search_response || {};
+      const card = document.createElement("article");
+      card.className = "pdf-card";
+      card.innerHTML = `
+        <div class="pdf-card-head">
+          <span class="pdf-file-icon" aria-hidden="true">PDF</span>
+          <div class="pdf-card-title">
+            <strong>${escapeHtml(safePdfFilename(data.title))}</strong>
+            <span data-pdf-status>正在生成与下载内容完全一致的预览文件</span>
+          </div>
+        </div>
+        <div class="pdf-thumbnail">
+          <div class="pdf-loading" data-pdf-loading>正在排版正式报告…</div>
+          <embed data-pdf-thumbnail type="application/pdf" title="PDF 第一页缩略预览">
+          <button class="pdf-thumbnail-button" type="button" data-pdf-open disabled>查看完整报告</button>
+        </div>
+        <div class="pdf-card-actions">
+          <span class="pdf-meta">${Number(response.result_count || 0)} 个命中个例</span>
+          <button class="button secondary" type="button" data-pdf-open-button disabled>查看</button>
+          <button class="button" type="button" data-pdf-download disabled>下载 PDF</button>
+        </div>`;
+      parent.appendChild(card);
+      scrollToBottom();
+
+      try {
+        renderProgress(progressPanel, {percent: 98, step_index: 4});
+        const artifact = await requestPdfArtifact(data);
+        const source = artifact.url + "#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+        card.querySelector("[data-pdf-thumbnail]").src = source;
+        card.querySelector("[data-pdf-loading]").remove();
+        card.querySelector("[data-pdf-status]").textContent = `生成日期：${new Date().toLocaleDateString("zh-CN")} · ${formatFileSize(artifact.blob.size)}`;
+        const openTargets = [card.querySelector("[data-pdf-open]"), card.querySelector("[data-pdf-open-button]")];
+        openTargets.forEach(button => {
+          button.disabled = false;
+          button.addEventListener("click", () => openPdfPreview(artifact));
+        });
+        const downloadButton = card.querySelector("[data-pdf-download]");
+        downloadButton.disabled = false;
+        downloadButton.addEventListener("click", () => downloadPdfArtifact(artifact));
+        return true;
+      } catch (error) {
+        card.querySelector("[data-pdf-status]").textContent = "PDF 生成失败";
+        const loading = card.querySelector("[data-pdf-loading]");
+        loading.textContent = "无法生成报告：" + error.message;
+        loading.classList.add("error");
+        return false;
+      }
+    }
+
+    async function resetConversation() {
+      if (state.busy) return;
+      setBusy(true);
+      try {
+        const data = await jsonRequest("/api/case-multidim/natural/reset", {conversation_id: state.conversationId});
+        state.conversationId = data.conversation_id;
+        state.latestProposalId = "";
+        closePdfPreview();
+        state.pdfUrls.forEach(url => URL.revokeObjectURL(url));
+        state.pdfUrls.clear();
+        state.currentPdf = null;
+        window.localStorage.setItem("caseMultidimNaturalConversation", state.conversationId);
+        conversation.innerHTML = `<section id="welcome" class="welcome"><h2>新会话已建立</h2><p>旧会话中已确认的检索条件已清除。请重新描述要检索的时间、灾种或影响区域。</p></section>`;
+      } catch (error) { window.alert("新建会话失败：" + error.message); }
+      finally { setBusy(false); input.focus(); }
+    }
+
+    sendButton.addEventListener("click", sendMessage);
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+    document.querySelector("#newChatButton").addEventListener("click", resetConversation);
+    document.querySelector("#previewClose").addEventListener("click", closePdfPreview);
+    document.querySelector("#previewDownload").addEventListener("click", () => downloadPdfArtifact(state.currentPdf));
+    document.querySelector("#previewExpand").addEventListener("click", event => {
+      const expanded = app.classList.toggle("preview-expanded");
+      event.currentTarget.textContent = expanded ? "−" : "↗";
+      event.currentTarget.title = expanded ? "缩小预览" : "展开预览";
+    });
+    document.querySelectorAll(".example").forEach(button => button.addEventListener("click", () => {
+      input.value = button.textContent.trim();
+      input.focus();
+    }));
+    input.focus();
+  </script>
+</body>
+</html>

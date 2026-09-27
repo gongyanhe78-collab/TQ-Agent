@@ -1,0 +1,273 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "过程最大降水量",
+      "value": 15.1,
+      "unit": "mm",
+      "location": "太原",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-028",
+      "source_text": "1月24日08 时至 25日08 时，运城、临汾、吕梁的全域，晋城大部和太原、长治局部共 51 个县（市、区）出现降水，降水量介于 0.1～15.1 毫米之间，最大值在盐湖",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -29.8,
+      "unit": "℃",
+      "location": "阳泉",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+      "source_text": "图 14 24日08 时、20 时，25日08 时、14 时、20 时，26日02 时雷达拼图受冷空气活动影响，雨雪过程有寒潮、大风天气，25-26日降温幅度较大，部分地区达到寒潮，26日最低气温出现在新荣（-29.8℃），27日最低气温出现在新荣（-30.7℃）；25-26日部分地区出现有大风天气，25日交口、宁武、晋城城区、神池共 4 站出现大风天气，最大位于交口（23.3m/s）；26日阳泉矿区、宁武、神池等共 29 站出现大风天气，最大位于阳泉矿区（24.7m/s）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -30.7,
+      "unit": "℃",
+      "location": "阳泉",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+      "source_text": "图 14 24日08 时、20 时，25日08 时、14 时、20 时，26日02 时雷达拼图受冷空气活动影响，雨雪过程有寒潮、大风天气，25-26日降温幅度较大，部分地区达到寒潮，26日最低气温出现在新荣（-29.8℃），27日最低气温出现在新荣（-30.7℃）；25-26日部分地区出现有大风天气，25日交口、宁武、晋城城区、神池共 4 站出现大风天气，最大位于交口（23.3m/s）；26日阳泉矿区、宁武、神池等共 29 站出现大风天气，最大位于阳泉矿区（24.7m/s）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 3.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-029",
+      "source_text": "小时最大雪强在芮城，出现在 25日13 时，达 3mm/h",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 23.4,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-027",
+      "source_text": "全省 117 个县（市、区）均出现降水，过程降水量介于 0.1～23.4 毫米之间，前 3 位为永济（23.4）、盐湖（23.3）、平陆（23.1）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 23.3,
+      "unit": "m/s",
+      "location": "阳泉",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+      "source_text": "图 14 24日08 时、20 时，25日08 时、14 时、20 时，26日02 时雷达拼图受冷空气活动影响，雨雪过程有寒潮、大风天气，25-26日降温幅度较大，部分地区达到寒潮，26日最低气温出现在新荣（-29.8℃），27日最低气温出现在新荣（-30.7℃）；25-26日部分地区出现有大风天气，25日交口、宁武、晋城城区、神池共 4 站出现大风天气，最大位于交口（23.3m/s）；26日阳泉矿区、宁武、神池等共 29 站出现大风天气，最大位于阳泉矿区（24.7m/s）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 5.0,
+      "unit": "cm",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-028",
+      "source_text": "25日08 时观测积雪深度≧5cm 的有 8 站，最大为 10cm（平陆）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 10.0,
+      "unit": "cm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-028",
+      "source_text": "25日08 时观测积雪深度≧5cm 的有 8 站，最大为 10cm（平陆）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 24.7,
+      "unit": "m/s",
+      "location": "阳泉",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+      "source_text": "图 14 24日08 时、20 时，25日08 时、14 时、20 时，26日02 时雷达拼图受冷空气活动影响，雨雪过程有寒潮、大风天气，25-26日降温幅度较大，部分地区达到寒潮，26日最低气温出现在新荣（-29.8℃），27日最低气温出现在新荣（-30.7℃）；25-26日部分地区出现有大风天气，25日交口、宁武、晋城城区、神池共 4 站出现大风天气，最大位于交口（23.3m/s）；26日阳泉矿区、宁武、神池等共 29 站出现大风天气，最大位于阳泉矿区（24.7m/s）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 3.7,
+      "unit": "mm",
+      "location": "长治",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-027",
+      "source_text": "1月23日08 时至 24日08 时，运城、晋城大部和临汾、长治局部共 23 个县（市、区）出现降水，降水量介于 0.1～3.7 毫米之间，最大值在平陆",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 9.8,
+      "unit": "mm",
+      "location": "",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-028",
+      "source_text": "1月25日08 时至 26日08 时，全省各地共 117 个县（市、区）均出现降水，降水量介于 0.1～9.8 毫米之间，最大值在绛县",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 8.0,
+      "unit": "cm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-028",
+      "source_text": "26日08 时观测积雪深度≧5cm 的有 38 站，最大为 8cm（绛县、浮山、陵川、灵石、中阳）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 23.4,
+      "unit": "mm",
+      "location": "永济",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-027",
+      "source_text": "全省 117 个县（市、区）均出现降水，过程降水量介于 0.1～23.4 毫米之间，前 3 位为永济（23.4）、盐湖（23.3）、平陆（23.1）。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最大积雪深度",
+      "value": 10.0,
+      "unit": "cm",
+      "location": "平陆",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-028",
+      "source_text": "25日08 时观测积雪深度≧5cm 的有 8 站，最大为 10cm（平陆）。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 24.7,
+      "unit": "m/s",
+      "location": "阳泉矿区",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+      "source_text": "26日阳泉矿区、宁武、神池等共 29 站出现大风天气，最大位于阳泉矿区（24.7m/s）。",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "最低气温",
+      "value": -30.7,
+      "unit": "℃",
+      "location": "新荣",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-030",
+      "source_text": "27日最低气温出现在新荣（-30.7℃）；",
+      "confidence": 0.9
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 15.4,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-031",
+      "source_text": "图 15（d）26日14 时-27日14 时最低气温图 15（e）27日14 时-28日14 时最低气温图 15（f）25日08 时-26日08 时极大风速实况图 15（g）26日08 时-27日08 时极大风速实况25日14 时-26日14 时最低气温较前一日：全省共 117 个县（市、区）均出现降温，降温幅度 0.9～15.4℃（五寨），西部降温明显。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 12.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-031",
+      "source_text": "其中降温幅度在 8～12℃之间有 37 站，降温幅度大于等于 12℃有 7 站。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 16.7,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-031",
+      "source_text": "26日14 时-27日14 时最低气温较前一日：全省共 116 个县（市、区）出现降温，降温幅度 1.2～16.7℃（平城），北部降温最显著。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 21.4,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-031",
+      "source_text": "26日14 时-27日14 时最低气温较前两日：全省共 117 个县（市、区）均出现降温，降温幅度 5.2～21.4℃（岢岚）。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程降温幅度",
+      "value": 10.0,
+      "unit": "℃",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-031",
+      "source_text": "其中降温幅度大于等于 10℃有 90 站。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 22.0,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-035",
+      "source_text": "山西附近等温线密集，切变线后部西北急流风速最大达 22m/s 且风向与等温线近于垂直，有较强冷平流，有利于降温。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 15.0,
+      "unit": "mm",
+      "location": "运城",
+      "relation": "范围上限",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-040",
+      "source_text": "中，山西地区湿舌自西向东不断移动,整层可降水量达到 10-15mm，水汽条件较好，运城上空水汽在 24日16 时达到峰值 21.8mm，较高的水汽使运城降水强度逐渐增强，25日16 时左右水汽开始下降，水汽条件不足，此后运城降水逐渐趋于停止",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 3.0,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-042",
+      "source_text": "25日13 时，芮城附近达 30-35dBz，小时雪强达 3mm/h。",
+      "confidence": 0.8
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 21.8,
+      "unit": "mm",
+      "location": "运城",
+      "relation": "站点实测",
+      "source_chunk_id": "山西省2025年1月天气过程总结-chunk-040",
+      "source_text": "中，山西地区湿舌自西向东不断移动,整层可降水量达到 10-15mm，水汽条件较好，运城上空水汽在 24日16 时达到峰值 21.8mm，较高的水汽使运城降水强度逐渐增强，25日16 时左右水汽开始下降，水汽条件不足，此后运城降水逐渐趋于停止。",
+      "confidence": 0.9
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "confirmed",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "confirmed",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "confirmed",
+    "阵风风力": "not_present_after_all_chunks_scanned",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 5,
+  "rule_metric_count": 20,
+  "llm_metric_count": 6
+}

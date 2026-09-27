@@ -1,0 +1,73 @@
+{
+  "cache_version": "case-metric-facts-v3-boundary-sliced-wind-warning-filter",
+  "metrics": [
+    {
+      "metric_name": "阵风风力",
+      "value": 10.0,
+      "unit": "级",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-008",
+      "source_text": "个县（市、区）出现大风，最大值出现在永和，达到 10 级",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 77.9,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-007",
+      "source_text": "5月8日08 时至 5月9日08 时，共 2294 站出现降水，降水量介于 0.1~77.9mm 之间，最大值出现在五台兴郑（77.9 mm），降水时段主要集中在 14:00~20:00",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大小时雨强",
+      "value": 36.8,
+      "unit": "mm/h",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-007",
+      "source_text": "出现 18 站次短时强降水，最大为 36.8 mm/h（05-08 18:00:00 五台兴郑）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "过程最大降水量",
+      "value": 36.8,
+      "unit": "mm",
+      "location": "",
+      "relation": "原文提取",
+      "source_chunk_id": "FST2025-5-chunk-007",
+      "source_text": "出现 18 站次短时强降水，最大为 36.8 mm/h（05-08 18:00:00 五台兴郑）",
+      "confidence": 0.86
+    },
+    {
+      "metric_name": "最大风速",
+      "value": 27.4,
+      "unit": "m/s",
+      "location": "",
+      "relation": "",
+      "source_chunk_id": "FST2025-5-chunk-007",
+      "source_text": "局部出现 8 级以上大风天气，最大值出现在中阳南垣，达到 27.4 m/s。",
+      "confidence": 0.8
+    }
+  ],
+  "status_by_metric": {
+    "最低气温": "not_present_after_all_chunks_scanned",
+    "最低能见度": "not_present_after_all_chunks_scanned",
+    "最大冰雹直径": "not_present_after_all_chunks_scanned",
+    "最大小时雨强": "confirmed",
+    "最大积雪深度": "not_present_after_all_chunks_scanned",
+    "最大风速": "confirmed",
+    "最高气温": "not_present_after_all_chunks_scanned",
+    "极大风速": "not_present_after_all_chunks_scanned",
+    "过程最大降水量": "confirmed",
+    "过程最大降雪量": "not_present_after_all_chunks_scanned",
+    "过程降温幅度": "not_present_after_all_chunks_scanned",
+    "阵风风力": "confirmed",
+    "雷达回波强度": "not_present_after_all_chunks_scanned"
+  },
+  "batch_count": 1,
+  "rule_metric_count": 5,
+  "llm_metric_count": 0
+}

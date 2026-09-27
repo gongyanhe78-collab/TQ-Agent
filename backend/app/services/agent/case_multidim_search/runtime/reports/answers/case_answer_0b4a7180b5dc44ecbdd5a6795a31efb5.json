@@ -1,0 +1,3488 @@
+{
+  "answer_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5",
+  "title": "山西省气象灾害个例多维分析报告",
+  "question": "年份：2025；月份：5月、6月",
+  "answer": "本次检索围绕当前灾害过程获得 7 个有效个例，并对其中 7 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与雷暴大风、雷暴、大风、强对流共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+  "sections": [
+    {
+      "heading": "一、时间分布分析",
+      "content": "时间演变上，命中过程覆盖5—6月，整体集中于暖季；5月样本最多，占全部个例的 71.4%。这种分布说明当前材料中的过程具有明确时段集中性，后续对比应优先选择相同时段的个例。"
+    },
+    {
+      "heading": "二、灾种结构分析",
+      "content": "灾种关系上，高频灾种主要集中在雷暴大风、雷暴，材料呈现多灾种共现而非单一灾种孤立发展的特征。伴随灾种中，雷暴大风、雷暴、大风等出现较为突出，提示过程复盘不能只看检索勾选灾种本身，还要同步核对大风、短时强降水、低能见度或雨雪低温等伴随风险是否改变服务重点。业务上建议按“主导灾种—伴随灾种—影响区域—强度证据”的顺序拆解，先判断每个个例的主风险，再评估多灾种叠加是否会放大交通、农业、电力或城市运行影响。 本次报告的业务视角为：当前检索未指定单一主导灾种，报告应以时间、灾种共现和地市分布为主线，避免套用固定强度指标。"
+    },
+    {
+      "heading": "三、影响区域分析",
+      "content": "空间影响涉及 16 个地市或区域，其中太原、山西中部、晋中在 7 个命中个例中反复出现，并延伸至吕梁、山西北部、山西南部等区域。这里统计的是地市被个例涉及的次数，同一个例可以同时计入多个地市，因此只用于识别高频影响区，不能解释为互斥占比或各地受灾强度。"
+    },
+    {
+      "heading": "四、关键强度指标分析",
+      "content": "各过程的实况强度表明，最大小时雨强达63.3mm/h，过程最大降水量达92.9mm，阵风风力达12级，最大风速达43.4m/s，最高气温达40℃。相关数值均可在对应天气过程的正式业务材料中核验；材料未明确记录的指标在汇总表中保留为“—”，不作推断。"
+    }
+  ],
+  "images": [
+    {
+      "visual_id": "FST2025-6-page-006-image-001",
+      "visual_type": "database_image",
+      "title": "图 1 2025年6月14日05时850hPa锋生函数，散度场垂直剖面及500hPa垂直速度场",
+      "chart_key": "",
+      "url": "/api/case-multidim/assets/images/FST2025-6-page-006-image-001",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\data\\document_images\\FST2025-6\\FST2025-6-page-006-image-001.png",
+      "source": "FST2025-6.pdf"
+    },
+    {
+      "visual_id": "FST2025-6-page-007-image-001",
+      "visual_type": "database_image",
+      "title": "图 2 2025年6月13日20时太原站T-lnP图及14日02时红外增强云图",
+      "chart_key": "",
+      "url": "/api/case-multidim/assets/images/FST2025-6-page-007-image-001",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\data\\document_images\\FST2025-6\\FST2025-6-page-007-image-001.png",
+      "source": "FST2025-6.pdf"
+    },
+    {
+      "visual_id": "FST2025-5-page-011-image-001",
+      "visual_type": "database_image",
+      "title": "图 3 5月19、20、21日最高气温实况",
+      "chart_key": "",
+      "url": "/api/case-multidim/assets/images/FST2025-5-page-011-image-001",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\data\\document_images\\FST2025-5\\FST2025-5-page-011-image-001.png",
+      "source": "FST2025-5.pdf"
+    }
+  ],
+  "charts": [
+    {
+      "visual_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-1",
+      "visual_type": "generated_chart",
+      "title": "个例数量月度变化",
+      "chart_key": "temporal",
+      "url": "/api/case-multidim/assets/case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-1.png",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-1.png",
+      "source": "个例集中于5月，提示当前处于强对流高发期。短临监测需重点比对同期历史过程的热力条件与触发机制，优先选取5月样本进行相似性研判，以提升预警的时效性和针对性。"
+    },
+    {
+      "visual_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-2",
+      "visual_type": "generated_chart",
+      "title": "灾种频次分布",
+      "chart_key": "disaster_frequency",
+      "url": "/api/case-multidim/assets/case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-2.png",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-2.png",
+      "source": "雷暴大风、雷暴与大风频次并列最高，表明多灾种共现是常态。业务复盘不能仅关注检索灾种，须同步核查短时强降水等伴随风险，按主导与伴随灾种拆解，避免漏判叠加影响。"
+    },
+    {
+      "visual_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-3",
+      "visual_type": "generated_chart",
+      "title": "灾种共现热力图",
+      "chart_key": "disaster_cooccurrence",
+      "url": "/api/case-multidim/assets/case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-3.png",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-3.png",
+      "source": "热力图揭示灾种间的强关联性，证实单一灾种极少孤立发展。在证据复核时，应结合共现规律，检查是否遗漏了如冰雹或沙尘等高频伴随灾害，确保风险评估覆盖全链条风险要素。"
+    },
+    {
+      "visual_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-4",
+      "visual_type": "generated_chart",
+      "title": "主要影响区域命中个例数",
+      "chart_key": "spatial",
+      "url": "/api/case-multidim/assets/case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-4.png",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-4.png",
+      "source": "业务启示：太原可作为空间复核的优先区域，后续应结合地形、站点密度和灾情记录判断集中原因。"
+    },
+    {
+      "visual_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-5",
+      "visual_type": "generated_chart",
+      "title": "代表个例最大风速对比",
+      "chart_key": "intensity_wind_max",
+      "url": "/api/case-multidim/assets/case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-5.png",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-5.png",
+      "source": "最大风速超40m/s，显示极端大风破坏力强。短临预警需重点关注阵风级数，复核雷达回波中的飑线或下击暴流特征，依据实测风速校准预警等级，防止因低估风力导致防御措施不足。"
+    },
+    {
+      "visual_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-6",
+      "visual_type": "generated_chart",
+      "title": "代表个例过程最大降水量对比",
+      "chart_key": "intensity_rain_total",
+      "url": "/api/case-multidim/assets/case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-6.png",
+      "path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\charts\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5-chart-6.png",
+      "source": "过程降水量近100mm，具备引发城市内涝潜力。风险研判需结合前期土壤湿度与汇流条件，评估累积降雨对排水系统的压力，针对高值区提前部署排涝力量，防范次生洪涝灾害发生。"
+    }
+  ],
+  "evidence": [
+    {
+      "case_id": "FST2025-6-std-case-002",
+      "title": "6月27-28日强对流天气过程",
+      "date_range": "2025年6月27-28日",
+      "source_pdf": "FST2025-6.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    },
+    {
+      "case_id": "FST2025-6-std-case-001",
+      "title": "6月13-14日大范围降水过程",
+      "date_range": "2025年6月13-14日",
+      "source_pdf": "FST2025-6.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    },
+    {
+      "case_id": "FST2025-5-std-case-002",
+      "title": "5月8~9日强对流天气过程",
+      "date_range": "2025年5月8-9日",
+      "source_pdf": "FST2025-5.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    },
+    {
+      "case_id": "FST2025-5-std-case-005",
+      "title": "5月21~22日暴雨天气过程",
+      "date_range": "2025年5月21-22日",
+      "source_pdf": "FST2025-5.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    },
+    {
+      "case_id": "FST2025-5-std-case-004",
+      "title": "5月19~21日高温天气",
+      "date_range": "2025年5月19-21日",
+      "source_pdf": "FST2025-5.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    },
+    {
+      "case_id": "FST2025-5-std-case-003",
+      "title": "5月16日大风天气过程",
+      "date_range": "2025年5月16日",
+      "source_pdf": "FST2025-5.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    },
+    {
+      "case_id": "FST2025-5-std-case-001",
+      "title": "5月2日雷暴大风天气过程",
+      "date_range": "2025年5月2日",
+      "source_pdf": "FST2025-5.pdf",
+      "matched_fields": [
+        "date"
+      ],
+      "reason": "date"
+    }
+  ],
+  "search_response": {
+    "question": "年份：2025；月份：5月、6月",
+    "parsed_query": {
+      "start_date": "",
+      "end_date": "",
+      "years": [
+        2025
+      ],
+      "months": [
+        5,
+        6
+      ],
+      "disaster_types": [],
+      "cities": [],
+      "areas": [],
+      "limit": 50
+    },
+    "retrieval_mode": "structured_json_then_case_chunks",
+    "result_count": 7,
+    "displayed_result_count": 7,
+    "answer": "本次检索围绕当前灾害过程获得 7 个有效个例，并对其中 7 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与雷暴大风、雷暴、大风、强对流共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+    "analysis": {
+      "executive_summary": "本次检索围绕当前灾害过程获得 7 个有效个例，并对其中 7 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与雷暴大风、雷暴、大风、强对流共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+      "analysis_case_count": 7,
+      "displayed_case_count": 7,
+      "key_findings": [
+        "时间证据表明过程集中在暖季的5—6月，5月样本最多，占全部个例的 71.4%。",
+        "灾种关系显示，高频灾种主要集中在雷暴大风、雷暴，材料呈现多灾种共现而非单一灾种孤立发展的特征。伴随灾种中，雷暴大风、雷暴、大风等出现较为突出，提示过程复盘不能只看检索勾选灾种本身，还要同步核对大风、短时强降水、低能见度或雨雪低温等伴随风险是否改变服务重点。",
+        "空间影响以太原、山西中部、晋中出现最为频繁，并延伸至多个山地、盆地和城市区域。",
+        "强度特征表现为：最大风速达 43.4m/s（5月16日）、阵风等级达 14级（5月16日）、最大小时雨强达 63.3mm/h（6月13-14日）、过程最大降水量达 92.9mm（6月13-14日）、最高气温达 32℃（5月19-21日）。"
+      ],
+      "disaster_view": "当前检索未指定单一主导灾种，报告应以时间、灾种共现和地市分布为主线，避免套用固定强度指标。",
+      "sections": {
+        "temporal": "时间演变上，命中过程覆盖5—6月，整体集中于暖季；5月样本最多，占全部个例的 71.4%。这种分布说明当前材料中的过程具有明确时段集中性，后续对比应优先选择相同时段的个例。",
+        "disaster": "灾种关系上，高频灾种主要集中在雷暴大风、雷暴，材料呈现多灾种共现而非单一灾种孤立发展的特征。伴随灾种中，雷暴大风、雷暴、大风等出现较为突出，提示过程复盘不能只看检索勾选灾种本身，还要同步核对大风、短时强降水、低能见度或雨雪低温等伴随风险是否改变服务重点。业务上建议按“主导灾种—伴随灾种—影响区域—强度证据”的顺序拆解，先判断每个个例的主风险，再评估多灾种叠加是否会放大交通、农业、电力或城市运行影响。 本次报告的业务视角为：当前检索未指定单一主导灾种，报告应以时间、灾种共现和地市分布为主线，避免套用固定强度指标。",
+        "spatial": "空间影响涉及 16 个地市或区域，其中太原、山西中部、晋中在 7 个命中个例中反复出现，并延伸至吕梁、山西北部、山西南部等区域。这里统计的是地市被个例涉及的次数，同一个例可以同时计入多个地市，因此只用于识别高频影响区，不能解释为互斥占比或各地受灾强度。",
+        "intensity": "各过程的实况强度表明，最大小时雨强达63.3mm/h，过程最大降水量达92.9mm，阵风风力达12级，最大风速达43.4m/s，最高气温达40℃。相关数值均可在对应天气过程的正式业务材料中核验；材料未明确记录的指标在汇总表中保留为“—”，不作推断。"
+      },
+      "representative_cases": [
+        {
+          "case_id": "FST2025-6-std-case-002",
+          "title": "6月27-28日强对流天气过程",
+          "reason": "材料包含可核验量化记录",
+          "summary": "2025年6月27-28日，山西省、全省、太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部出现以强对流、暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、高温为主的天气过程。二、6月27-28日强对流天气过程1. 过程特征及实况：受华北低涡影响，6月27～28日，我省出现了一次强对流天气过程。；配套图件说明涉及的对流环境导致 13 日夜间出现大范围强降水。过程期间，数值模式对 13 日夜间 晋西南强降水明显漏报、14 日降水严重空报。前者是由于模式预报高空槽径向度 不及观测，槽前上升运动预估不足，700hP。"
+        },
+        {
+          "case_id": "FST2025-6-std-case-001",
+          "title": "6月13-14日大范围降水过程",
+          "reason": "材料包含可核验量化记录",
+          "summary": "2025年6月13-14日，全省、太原、忻州、阳泉、吕梁、运城、晋北、山西北部、晋中、山西中部、晋南、山西南部出现以强对流、暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹为主的天气过程。一、6月13-14日大范围降水过程1. 过程特征及实况受高空槽、低空切变线和地面冷锋共同影响，2025年6月13-14日，山西出现一次大范围降水天气过程，全省共 2424 站出现降水，过程降水量为 0.1～92.9 毫米，国家站最大降水出现。；配套图件说明涉及2025 年 6 月，我省以对流天气为主， 呈现面弱点强特征。 主要天气过程有13~14 日大范围降水过程、27~28 日强对流天气过程。 主要天气过程及其预报 一、6 月 13-14 日大范围降水过。"
+        },
+        {
+          "case_id": "FST2025-5-std-case-005",
+          "title": "5月21~22日暴雨天气过程",
+          "reason": "材料包含可核验量化记录",
+          "summary": "2025年5月21-22日，山西省、全省、太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部出现以强对流、暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、霜冻、高温、沙尘为主的天气过程。五、 5月21~22日暴雨天气过程1 天气实况5月21日08:00-22日08:00，山西北部大部和中南部部分地区出现小到中雨，局部大雨。；配套图件包括图 19 5月 19、20、21 日20 时 850hPa 形势场; 19、20、21 日 14 时地面形势图。"
+        }
+      ],
+      "overview_intensity_tables": [
+        {
+          "key": "wind",
+          "title": "大风类强度汇总",
+          "columns": [
+            {
+              "key": "max_wind",
+              "label": "最大风速",
+              "metric_names": [
+                "极大风速",
+                "最大风速"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_wind_level",
+              "label": "阵风等级",
+              "metric_names": [
+                "阵风风力"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "wind_impact_scope",
+              "label": "8级以上大风范围",
+              "metric_names": [],
+              "prefer_min": false,
+              "text_metric": "wind_impact_scope",
+              "non_numeric": true
+            }
+          ],
+          "rows": [
+            {
+              "case_id": "FST2025-5-std-case-003",
+              "case": "5月16日",
+              "title": "5月16日大风天气过程",
+              "main_disasters": "大风",
+              "concurrent_disasters": "强对流、雷暴、沙尘",
+              "metrics": {
+                "max_wind": "43.4 m/s",
+                "max_wind_level": "14 级",
+                "wind_impact_scope": "—"
+              },
+              "metric_values": {
+                "max_wind": 43.4,
+                "max_wind_level": 14.0,
+                "wind_impact_scope": null
+              },
+              "main_areas": "太原",
+              "data_completeness": "已提取2/3项",
+              "max_hourly_precip": "—",
+              "max_hourly_precip_value": null,
+              "max_wind": "43.4 m/s",
+              "max_wind_value": 43.4,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            },
+            {
+              "case_id": "FST2025-5-std-case-001",
+              "case": "5月2日",
+              "title": "5月2日雷暴大风天气过程",
+              "main_disasters": "雷暴大风",
+              "concurrent_disasters": "—",
+              "metrics": {
+                "max_wind": "37.4 m/s",
+                "max_wind_level": "13 级",
+                "wind_impact_scope": "—"
+              },
+              "metric_values": {
+                "max_wind": 37.4,
+                "max_wind_level": 13.0,
+                "wind_impact_scope": null
+              },
+              "main_areas": "太原",
+              "data_completeness": "已提取2/3项",
+              "max_hourly_precip": "—",
+              "max_hourly_precip_value": null,
+              "max_wind": "37.4 m/s",
+              "max_wind_value": 37.4,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            }
+          ]
+        },
+        {
+          "key": "convection_hail",
+          "title": "强对流、雷暴、冰雹类强度汇总",
+          "columns": [
+            {
+              "key": "max_hourly_precip",
+              "label": "最大小时雨强",
+              "metric_names": [
+                "最大小时雨强"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_wind",
+              "label": "最大风速",
+              "metric_names": [
+                "极大风速",
+                "最大风速"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_wind_level",
+              "label": "阵风等级",
+              "metric_names": [
+                "阵风风力"
+              ],
+              "prefer_min": false
+            }
+          ],
+          "rows": [
+            {
+              "case_id": "FST2025-6-std-case-002",
+              "case": "6月27-28日",
+              "title": "6月27-28日强对流天气过程",
+              "main_disasters": "强对流",
+              "concurrent_disasters": "暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、高温",
+              "metrics": {
+                "max_hourly_precip": "43.3 mm/h",
+                "max_wind": "27.7 m/s",
+                "max_wind_level": "10 级"
+              },
+              "metric_values": {
+                "max_hourly_precip": 43.3,
+                "max_wind": 27.7,
+                "max_wind_level": 10.0
+              },
+              "main_areas": "全省",
+              "data_completeness": "强度记录完整",
+              "max_hourly_precip": "43.3 mm/h",
+              "max_hourly_precip_value": 43.3,
+              "max_wind": "27.7 m/s",
+              "max_wind_value": 27.7,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            },
+            {
+              "case_id": "FST2025-5-std-case-002",
+              "case": "5月8-9日",
+              "title": "5月8~9日强对流天气过程",
+              "main_disasters": "强对流",
+              "concurrent_disasters": "强降水、短时强降水、雷暴大风、雷暴、大风、冰雹",
+              "metrics": {
+                "max_hourly_precip": "36.8 mm/h",
+                "max_wind": "27.4 m/s",
+                "max_wind_level": "10 级"
+              },
+              "metric_values": {
+                "max_hourly_precip": 36.8,
+                "max_wind": 27.4,
+                "max_wind_level": 10.0
+              },
+              "main_areas": "太原",
+              "data_completeness": "强度记录完整",
+              "max_hourly_precip": "36.8 mm/h",
+              "max_hourly_precip_value": 36.8,
+              "max_wind": "27.4 m/s",
+              "max_wind_value": 27.4,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            }
+          ]
+        },
+        {
+          "key": "rain",
+          "title": "暴雨、大暴雨、强降水、短时强降水类强度汇总",
+          "columns": [
+            {
+              "key": "max_hourly_precip",
+              "label": "最大小时雨强",
+              "metric_names": [
+                "最大小时雨强"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_precip",
+              "label": "过程最大降水量",
+              "metric_names": [
+                "过程最大降水量",
+                "最大降水量"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "max_wind",
+              "label": "最大风速",
+              "metric_names": [
+                "极大风速",
+                "最大风速"
+              ],
+              "prefer_min": false
+            }
+          ],
+          "rows": [
+            {
+              "case_id": "FST2025-6-std-case-001",
+              "case": "6月13-14日",
+              "title": "6月13-14日大范围降水过程",
+              "main_disasters": "短时强降水",
+              "concurrent_disasters": "强对流、暴雨、雷暴大风、雷暴、大风、冰雹",
+              "metrics": {
+                "max_hourly_precip": "63.3 mm/h",
+                "max_precip": "92.9 mm",
+                "max_wind": "34.5 m/s"
+              },
+              "metric_values": {
+                "max_hourly_precip": 63.3,
+                "max_precip": 92.9,
+                "max_wind": 34.5
+              },
+              "main_areas": "全省",
+              "data_completeness": "强度记录完整",
+              "max_hourly_precip": "63.3 mm/h",
+              "max_hourly_precip_value": 63.3,
+              "max_wind": "34.5 m/s",
+              "max_wind_value": 34.5,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            },
+            {
+              "case_id": "FST2025-5-std-case-005",
+              "case": "5月21-22日",
+              "title": "5月21~22日暴雨天气过程",
+              "main_disasters": "暴雨",
+              "concurrent_disasters": "强对流、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、霜冻、高温、沙尘",
+              "metrics": {
+                "max_hourly_precip": "38.7 mm/h",
+                "max_precip": "85.2 mm",
+                "max_wind": "30.7 m/s"
+              },
+              "metric_values": {
+                "max_hourly_precip": 38.7,
+                "max_precip": 85.2,
+                "max_wind": 30.7
+              },
+              "main_areas": "全省",
+              "data_completeness": "强度记录完整",
+              "max_hourly_precip": "38.7 mm/h",
+              "max_hourly_precip_value": 38.7,
+              "max_wind": "30.7 m/s",
+              "max_wind_value": 30.7,
+              "max_temperature": "—",
+              "max_temperature_value": null
+            }
+          ]
+        },
+        {
+          "key": "heat",
+          "title": "高温类强度汇总",
+          "columns": [
+            {
+              "key": "max_temperature",
+              "label": "最高气温",
+              "metric_names": [
+                "最高气温"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "hot_days",
+              "label": "高温持续天数",
+              "metric_names": [
+                "高温持续天数"
+              ],
+              "prefer_min": false
+            },
+            {
+              "key": "min_temperature",
+              "label": "最低气温",
+              "metric_names": [
+                "最低气温"
+              ],
+              "prefer_min": true
+            }
+          ],
+          "rows": [
+            {
+              "case_id": "FST2025-5-std-case-004",
+              "case": "5月19-21日",
+              "title": "5月19~21日高温天气",
+              "main_disasters": "高温",
+              "concurrent_disasters": "—",
+              "metrics": {
+                "max_temperature": "32 ℃",
+                "hot_days": "—",
+                "min_temperature": "—"
+              },
+              "metric_values": {
+                "max_temperature": 32.0,
+                "hot_days": null,
+                "min_temperature": null
+              },
+              "main_areas": "阳泉、运城、长治、晋城、晋中等",
+              "data_completeness": "已提取1/3项",
+              "max_hourly_precip": "—",
+              "max_hourly_precip_value": null,
+              "max_wind": "—",
+              "max_wind_value": null,
+              "max_temperature": "32 ℃",
+              "max_temperature_value": 32.0
+            }
+          ]
+        }
+      ],
+      "overview_intensity_columns": [
+        {
+          "key": "max_wind",
+          "label": "最大风速",
+          "metric_names": [
+            "极大风速",
+            "最大风速"
+          ],
+          "prefer_min": false
+        },
+        {
+          "key": "max_wind_level",
+          "label": "阵风等级",
+          "metric_names": [
+            "阵风风力"
+          ],
+          "prefer_min": false
+        },
+        {
+          "key": "wind_impact_scope",
+          "label": "8级以上大风范围",
+          "metric_names": [],
+          "prefer_min": false,
+          "text_metric": "wind_impact_scope",
+          "non_numeric": true
+        }
+      ],
+      "overview_intensity_table": [
+        {
+          "case_id": "FST2025-5-std-case-003",
+          "case": "5月16日",
+          "title": "5月16日大风天气过程",
+          "main_disasters": "大风",
+          "concurrent_disasters": "强对流、雷暴、沙尘",
+          "metrics": {
+            "max_wind": "43.4 m/s",
+            "max_wind_level": "14 级",
+            "wind_impact_scope": "—"
+          },
+          "metric_values": {
+            "max_wind": 43.4,
+            "max_wind_level": 14.0,
+            "wind_impact_scope": null
+          },
+          "main_areas": "太原",
+          "data_completeness": "已提取2/3项",
+          "max_hourly_precip": "—",
+          "max_hourly_precip_value": null,
+          "max_wind": "43.4 m/s",
+          "max_wind_value": 43.4,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        },
+        {
+          "case_id": "FST2025-5-std-case-001",
+          "case": "5月2日",
+          "title": "5月2日雷暴大风天气过程",
+          "main_disasters": "雷暴大风",
+          "concurrent_disasters": "—",
+          "metrics": {
+            "max_wind": "37.4 m/s",
+            "max_wind_level": "13 级",
+            "wind_impact_scope": "—"
+          },
+          "metric_values": {
+            "max_wind": 37.4,
+            "max_wind_level": 13.0,
+            "wind_impact_scope": null
+          },
+          "main_areas": "太原",
+          "data_completeness": "已提取2/3项",
+          "max_hourly_precip": "—",
+          "max_hourly_precip_value": null,
+          "max_wind": "37.4 m/s",
+          "max_wind_value": 37.4,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        },
+        {
+          "case_id": "FST2025-6-std-case-002",
+          "case": "6月27-28日",
+          "title": "6月27-28日强对流天气过程",
+          "main_disasters": "强对流",
+          "concurrent_disasters": "暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、高温",
+          "metrics": {
+            "max_hourly_precip": "43.3 mm/h",
+            "max_wind": "27.7 m/s",
+            "max_wind_level": "10 级"
+          },
+          "metric_values": {
+            "max_hourly_precip": 43.3,
+            "max_wind": 27.7,
+            "max_wind_level": 10.0
+          },
+          "main_areas": "全省",
+          "data_completeness": "强度记录完整",
+          "max_hourly_precip": "43.3 mm/h",
+          "max_hourly_precip_value": 43.3,
+          "max_wind": "27.7 m/s",
+          "max_wind_value": 27.7,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        },
+        {
+          "case_id": "FST2025-5-std-case-002",
+          "case": "5月8-9日",
+          "title": "5月8~9日强对流天气过程",
+          "main_disasters": "强对流",
+          "concurrent_disasters": "强降水、短时强降水、雷暴大风、雷暴、大风、冰雹",
+          "metrics": {
+            "max_hourly_precip": "36.8 mm/h",
+            "max_wind": "27.4 m/s",
+            "max_wind_level": "10 级"
+          },
+          "metric_values": {
+            "max_hourly_precip": 36.8,
+            "max_wind": 27.4,
+            "max_wind_level": 10.0
+          },
+          "main_areas": "太原",
+          "data_completeness": "强度记录完整",
+          "max_hourly_precip": "36.8 mm/h",
+          "max_hourly_precip_value": 36.8,
+          "max_wind": "27.4 m/s",
+          "max_wind_value": 27.4,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        },
+        {
+          "case_id": "FST2025-6-std-case-001",
+          "case": "6月13-14日",
+          "title": "6月13-14日大范围降水过程",
+          "main_disasters": "短时强降水",
+          "concurrent_disasters": "强对流、暴雨、雷暴大风、雷暴、大风、冰雹",
+          "metrics": {
+            "max_hourly_precip": "63.3 mm/h",
+            "max_precip": "92.9 mm",
+            "max_wind": "34.5 m/s"
+          },
+          "metric_values": {
+            "max_hourly_precip": 63.3,
+            "max_precip": 92.9,
+            "max_wind": 34.5
+          },
+          "main_areas": "全省",
+          "data_completeness": "强度记录完整",
+          "max_hourly_precip": "63.3 mm/h",
+          "max_hourly_precip_value": 63.3,
+          "max_wind": "34.5 m/s",
+          "max_wind_value": 34.5,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        },
+        {
+          "case_id": "FST2025-5-std-case-005",
+          "case": "5月21-22日",
+          "title": "5月21~22日暴雨天气过程",
+          "main_disasters": "暴雨",
+          "concurrent_disasters": "强对流、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、霜冻、高温、沙尘",
+          "metrics": {
+            "max_hourly_precip": "38.7 mm/h",
+            "max_precip": "85.2 mm",
+            "max_wind": "30.7 m/s"
+          },
+          "metric_values": {
+            "max_hourly_precip": 38.7,
+            "max_precip": 85.2,
+            "max_wind": 30.7
+          },
+          "main_areas": "全省",
+          "data_completeness": "强度记录完整",
+          "max_hourly_precip": "38.7 mm/h",
+          "max_hourly_precip_value": 38.7,
+          "max_wind": "30.7 m/s",
+          "max_wind_value": 30.7,
+          "max_temperature": "—",
+          "max_temperature_value": null
+        },
+        {
+          "case_id": "FST2025-5-std-case-004",
+          "case": "5月19-21日",
+          "title": "5月19~21日高温天气",
+          "main_disasters": "高温",
+          "concurrent_disasters": "—",
+          "metrics": {
+            "max_temperature": "32 ℃",
+            "hot_days": "—",
+            "min_temperature": "—"
+          },
+          "metric_values": {
+            "max_temperature": 32.0,
+            "hot_days": null,
+            "min_temperature": null
+          },
+          "main_areas": "阳泉、运城、长治、晋城、晋中等",
+          "data_completeness": "已提取1/3项",
+          "max_hourly_precip": "—",
+          "max_hourly_precip_value": null,
+          "max_wind": "—",
+          "max_wind_value": null,
+          "max_temperature": "32 ℃",
+          "max_temperature_value": 32.0
+        }
+      ],
+      "intensity_extremes": "强度特征表现为：最大风速达 43.4m/s（5月16日）、阵风等级达 14级（5月16日）、最大小时雨强达 63.3mm/h（6月13-14日）、过程最大降水量达 92.9mm（6月13-14日）、最高气温达 32℃（5月19-21日）。",
+      "query_strength_assessments": [],
+      "recommendations": [
+        "建议探索建立短临触发信号联合识别流程，把雷达回波增强、站点雨强跃增和大风站数扩展与预警发布时间对应起来，优先在太原、晋中盆地和北部山区检验提前量与命中效果。",
+        "建议在吕梁山、五台山和太行山迎风坡试点建立分区模式偏差档案，按天气形势分别检验降水、风速和温度误差，通过滚动复盘筛选稳定的本地订正因子。",
+        "建议探索多灾种叠加风险研判清单，围绕大风与沙尘低能见度、雨雪降温与道路结冰、强降水与城市内涝等场景，明确风险升级条件、重点区域和服务对象。",
+        "建议统一个例库的过程边界、灾种标签、影响区域和强度指标口径，并关联预报结论、预警发布、站点实况和服务反馈，形成可追溯、可检验的复盘记录。"
+      ],
+      "conclusion": "综合研判，本次命中材料反映的核心特征不是当前灾害过程单独出现，而是主导天气与雷暴大风、雷暴、大风、强对流在不同区域、不同阶段相互叠加。山西山地与盆地相间的地形使降水、风速、温度和能见度的局地差异明显，同一过程内的风险重点也会随天气系统演变而转换。\n\n现有复盘对过程实况的描述相对充分，但强对流触发、短时强降水落区偏差、冷空气动量下传及雨雪相态转换等关键环节的诊断深度仍不均衡。部分个例尚未把雷达回波、站点极值、模式预报与预警发布时间串联起来，因而难以准确判断预警提前量、落区偏差来源和服务响应效果。\n\n这些材料能够支撑对主要天气过程和重点影响区域的判断，也表明吕梁山、五台山、太行山迎风坡、晋中盆地及城市敏感区是业务误差容易被放大的场景。当前最突出的业务短板，是局地突发性风险的识别证据尚未形成统一、可量化、可连续复盘的闭环。",
+      "limitations": [
+        "空间分析使用影响区域回退，尚未形成统一的地市级标准标签。",
+        "统计和共现关系仅代表当前检索命中样本，不代表完整气候统计口径。"
+      ],
+      "json_overview": "本次检索围绕当前灾害过程获得 7 个有效个例，并对其中 7 个过程展开逐例分析。检索条件用于定位相关过程，不等同于每个命中个例均达到相应灾种的强度标准。从现有材料看，过程风险通常由主导天气与雷暴大风、雷暴、大风、强对流共同构成，影响落区还受到山西山地、盆地及南北差异的调制。总体研判应以逐例实况强度、发生时段和影响区域为依据，避免仅凭标签扩大灾种等级。",
+      "report_llm_status": "invalid_json",
+      "chart_llm_status": "llm_generated"
+    },
+    "results": [
+      {
+        "case": {
+          "case_id": "FST2025-6-std-case-002",
+          "title": "6月27-28日强对流天气过程",
+          "date_range": "2025年6月27-28日",
+          "disaster_types": [
+            "强对流",
+            "暴雨",
+            "强降水",
+            "短时强降水",
+            "雷暴大风",
+            "雷暴",
+            "大风",
+            "冰雹",
+            "高温"
+          ],
+          "affected_areas": [
+            "山西省",
+            "全省",
+            "太原",
+            "大同",
+            "朔州",
+            "忻州",
+            "阳泉",
+            "晋中",
+            "吕梁",
+            "长治",
+            "晋城",
+            "临汾",
+            "运城",
+            "晋北",
+            "山西北部",
+            "山西中部",
+            "晋南",
+            "山西南部"
+          ],
+          "source_pdf": "FST2025-6.pdf",
+          "source_chunk_ids": [
+            "FST2025-6-chunk-017",
+            "FST2025-6-chunk-018",
+            "FST2025-6-chunk-019",
+            "FST2025-6-chunk-020",
+            "FST2025-6-chunk-021",
+            "FST2025-6-chunk-022",
+            "FST2025-6-chunk-023",
+            "FST2025-6-chunk-024",
+            "FST2025-6-chunk-025",
+            "FST2025-6-chunk-026",
+            "FST2025-6-chunk-027",
+            "FST2025-6-chunk-028",
+            "FST2025-6-chunk-029",
+            "FST2025-6-chunk-030",
+            "FST2025-6-chunk-031",
+            "FST2025-6-chunk-032",
+            "FST2025-6-chunk-033",
+            "FST2025-6-chunk-034",
+            "FST2025-6-chunk-035"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-6-page-010-snapshot",
+            "FST2025-6-page-011-snapshot",
+            "FST2025-6-page-011-image-001",
+            "FST2025-6-page-012-snapshot",
+            "FST2025-6-page-012-image-001",
+            "FST2025-6-page-013-snapshot",
+            "FST2025-6-page-013-image-001",
+            "FST2025-6-page-013-image-002",
+            "FST2025-6-page-014-snapshot",
+            "FST2025-6-page-014-image-001",
+            "FST2025-6-page-015-snapshot",
+            "FST2025-6-page-016-snapshot",
+            "FST2025-6-page-017-snapshot",
+            "FST2025-6-page-018-snapshot"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "强对流"
+          ],
+          "matched_disaster": "强对流",
+          "analysis_focus_disaster": "强对流"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年6月27-28日，山西省、全省、太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部发生以强对流、暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、高温为主的天气过程。已核验的强度事实包括最大小时雨强43.3mm/h（长治）、过程最大降水量81.4mm、阵风风力10级、最大风速27.7m/s（长治）、最高气温37℃。6月27-28日受华北低涡影响，全省出现强对流天气。过程以短时强降水和雷暴大风为主。最大小时雨强43.3mm/h（长子大堡头），极大风速27.7m/s（夏县中吴）。降水落区北中部及中南部偏东，晋东南大风显著。\n\n低涡槽前西南气流输送暖湿空气，配合高空冷中心造成不稳定层结。动热力条件由差转好，CAPE值增大，触发对流。雷达显示回波自西南向东北移动，强度增强后移出，导致局地短时强降水及雷暴大风。\n\n此次过程能量条件前期较差，后期迅速改善，提示需关注低涡发展期热力条件的突变。",
+        "intensity_metrics": [
+          {
+            "metric_name": "最大小时雨强",
+            "value": 43.3,
+            "unit": "mm/h",
+            "location": "长治",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-018",
+            "source_text": "6月27日08 时～28日08 时，小时最大降水量为 43.3mm，位于长子大堡头，出现在 28日04:00，另外，北中部局部和南部部分地区出现 7 级及以上雷暴大风天气，其中，有 4 站达到10 级，最大为 27.7m/s，出现在夏县中吴；6月28日08 时～29日08 时，小时最大雨强为 43mm/h，位于长治双桥庄，出现在 28日19:00，另外，主要是晋东南地区出现了 7 级及以上雷暴大风天气，其中，有 3 站达到 10 级，最大为 27.4m/s，出现在高平米山。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 66.0,
+            "unit": "mm",
+            "location": "",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-6-chunk-017",
+            "source_text": "从降水量来看，6月27日08 时～28日08 时，全省大部共 2172 站出现降水，降水量介于 0.1-66mm 之间，其中，有 98 站出现大雨，6 站达到暴雨，最大值出现在沁源王家沟",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 10.0,
+            "unit": "级",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-018",
+            "source_text": "6月27日08 时～28日08 时，小时最大降水量为 43.3mm，位于长子大堡头，出现在 28日04:00，另外，北中部局部和南部部分地区出现 7 级及以上雷暴大风天气，其中，有 4 站达到10 级，最大为 27.7m/s，出现在夏县中吴",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 27.7,
+            "unit": "m/s",
+            "location": "长治",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-018",
+            "source_text": "6月27日08 时～28日08 时，小时最大降水量为 43.3mm，位于长子大堡头，出现在 28日04:00，另外，北中部局部和南部部分地区出现 7 级及以上雷暴大风天气，其中，有 4 站达到10 级，最大为 27.7m/s，出现在夏县中吴；6月28日08 时～29日08 时，小时最大雨强为 43mm/h，位于长治双桥庄，出现在 28日19:00，另外，主要是晋东南地区出现了 7 级及以上雷暴大风天气，其中，有 3 站达到 10 级，最大为 27.4m/s，出现在高平米山。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 43.0,
+            "unit": "mm/h",
+            "location": "长治",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-018",
+            "source_text": "6月28日08 时～29日08 时，小时最大雨强为 43mm/h，位于长治双桥庄，出现在 28日19:00，另外，主要是晋东南地区出现了 7 级及以上雷暴大风天气，其中，有 3 站达到 10 级，最大为 27.4m/s，出现在高平米山",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 81.4,
+            "unit": "mm",
+            "location": "",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-6-chunk-017",
+            "source_text": "6月28日08 时～29日08 时，北部大部及中南部偏东地区共 1340站出现降水，降水量介于 0.1～81.4mm 之间，其中，有 41 站出现大雨，7 站达到",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 27.4,
+            "unit": "m/s",
+            "location": "长治",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-018",
+            "source_text": "6月27日08 时～28日08 时，小时最大降水量为 43.3mm，位于长子大堡头，出现在 28日04:00，另外，北中部局部和南部部分地区出现 7 级及以上雷暴大风天气，其中，有 4 站达到10 级，最大为 27.7m/s，出现在夏县中吴；6月28日08 时～29日08 时，小时最大雨强为 43mm/h，位于长治双桥庄，出现在 28日19:00，另外，主要是晋东南地区出现了 7 级及以上雷暴大风天气，其中，有 3 站达到 10 级，最大为 27.4m/s，出现在高平米山。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 37.0,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-026",
+            "source_text": "预计未来 24 小时预警区域最高气温将升至 37℃以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 35.0,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-025",
+            "source_text": "预计未来连续三天预警区域内日最高气温将在 35℃以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 35.0,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-031",
+            "source_text": "预计连续三天预警区域内日最高气温将在 35℃或以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 30.0,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-030",
+            "source_text": "预计未来 12 小时预警区域将有最大雨强 30 毫米/小时以上的短时强降水，局部伴有雷暴大风或冰雹",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 30.0,
+            "unit": "mm",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-030",
+            "source_text": "预计未来 12 小时预警区域将有最大雨强 30 毫米/小时以上的短时强降水，局部伴有雷暴大风或冰雹。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 37.0,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-029",
+            "source_text": "预计未来 24 小时预警区域最高气温将升至 37℃以上。",
+            "confidence": 0.8
+          }
+        ],
+        "evidence_images": []
+      },
+      {
+        "case": {
+          "case_id": "FST2025-6-std-case-001",
+          "title": "6月13-14日大范围降水过程",
+          "date_range": "2025年6月13-14日",
+          "disaster_types": [
+            "强对流",
+            "暴雨",
+            "强降水",
+            "短时强降水",
+            "雷暴大风",
+            "雷暴",
+            "大风",
+            "冰雹"
+          ],
+          "affected_areas": [
+            "全省",
+            "太原",
+            "忻州",
+            "阳泉",
+            "吕梁",
+            "运城",
+            "晋北",
+            "山西北部",
+            "晋中",
+            "山西中部",
+            "晋南",
+            "山西南部"
+          ],
+          "source_pdf": "FST2025-6.pdf",
+          "source_chunk_ids": [
+            "FST2025-6-chunk-003",
+            "FST2025-6-chunk-004",
+            "FST2025-6-chunk-005",
+            "FST2025-6-chunk-006",
+            "FST2025-6-chunk-007",
+            "FST2025-6-chunk-008",
+            "FST2025-6-chunk-009",
+            "FST2025-6-chunk-010",
+            "FST2025-6-chunk-011",
+            "FST2025-6-chunk-012",
+            "FST2025-6-chunk-013",
+            "FST2025-6-chunk-014",
+            "FST2025-6-chunk-015",
+            "FST2025-6-chunk-016",
+            "FST2025-6-chunk-017"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-6-page-002-snapshot",
+            "FST2025-6-page-003-snapshot",
+            "FST2025-6-page-003-image-001",
+            "FST2025-6-page-004-snapshot",
+            "FST2025-6-page-004-image-001",
+            "FST2025-6-page-005-snapshot",
+            "FST2025-6-page-005-image-001",
+            "FST2025-6-page-006-snapshot",
+            "FST2025-6-page-006-image-001",
+            "FST2025-6-page-007-snapshot",
+            "FST2025-6-page-007-image-001",
+            "FST2025-6-page-008-snapshot",
+            "FST2025-6-page-008-image-001",
+            "FST2025-6-page-009-snapshot",
+            "FST2025-6-page-009-image-001",
+            "FST2025-6-page-010-snapshot"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "强对流"
+          ],
+          "matched_disaster": "强对流",
+          "analysis_focus_disaster": "强对流"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年6月13-14日，全省、太原、忻州、阳泉、吕梁、运城、晋北、山西北部、晋中、山西中部、晋南、山西南部发生以强对流、暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹为主的天气过程。已核验的强度事实包括最大小时雨强63.3mm/h、过程最大降水量92.9mm、最大风速34.5m/s（忻州）、阵风风力12级（忻州）。6月13-14日山西大范围降水，受高空槽、切变线及冷锋影响。过程分三阶段：13日08时至14日02时以分散对流为主，最大小时雨强63.3mm/h（壶关西堡水库）；14日00时至13时为混合性降水，最大小时雨强48.4mm/h（河津米家湾）；14日13时后转为分散对流，最大风速34.5m/s（忻州娄烦林钟山）。全省暴雨中心分散，呈阶段性演变特征。\n\n高空槽东移配合低空切变线，引导冷空气南下与西南暖湿气流交汇。图 1显示高低空风场配置利于动力抬升，图 2红外云图证实云顶高达12km，垂直方向水凝物分布支持强降水维持。热力不稳定能量释放触发短时强降水及雷暴大风，地形对降水增幅作用明显。短时强降水导致城市内涝风险，伴随的雷暴大风和冰雹威胁农业设施及户外安全。晋西南局地风力达11级，忻州等地阵风12级，叠加大范围降水，易引发中小河流洪水及地质灾害，需关注城乡积涝及次生灾害。\n\n模式对低层辐合及水汽输送预报偏弱，导致晋西南漏报；高空槽位置偏差致后期空报。启示在于需重点修正850hPa切变线西侧气流及低涡环流模拟，提升短临预警提前量，针对强对流高发区加密监测。",
+        "intensity_metrics": [
+          {
+            "metric_name": "最大小时雨强",
+            "value": 48.4,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 68.7,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "一、6月13-14日大范围降水过程1. 过程特征及实况受高空槽、低空切变线和地面冷锋共同影响，2025年6月13-14日，山西出现一次大范围降水天气过程，全省共 2424 站出现降水，过程降水量为 0.1～92.9 毫米，国家站最大降水出现在沁县68.7毫米，区域站最大降水出现在襄垣固村92.9mm",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 48.4,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 31.4,
+            "unit": "m/s",
+            "location": "忻州",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 11.0,
+            "unit": "级",
+            "location": "忻州",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 92.9,
+            "unit": "mm",
+            "location": "",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "一、6月13-14日大范围降水过程1. 过程特征及实况受高空槽、低空切变线和地面冷锋共同影响，2025年6月13-14日，山西出现一次大范围降水天气过程，全省共 2424 站出现降水，过程降水量为 0.1～92.9 毫米，国家站最大降水出现在沁县68.7毫米，区域站最大降水出现在襄垣固村92.9mm",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 31.5,
+            "unit": "mm/h",
+            "location": "忻州",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14日17-18 时，34.5m/s）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 31.5,
+            "unit": "mm",
+            "location": "忻州",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14日17-18 时，34.5m/s）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 30.4,
+            "unit": "mm",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 30.4,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 63.3,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 63.3,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 63.3,
+            "unit": "mm",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "国家站最大降水强度出现在河津 30.4mm/h，区域站最大降水强度出现在壶关西堡水库 63.3mm/h，为混合性降水。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 34.5,
+            "unit": "m/s",
+            "location": "忻州",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 12.0,
+            "unit": "级",
+            "location": "忻州",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-004",
+            "source_text": "日00 时-13 时为大范围混合性降水过程，山西境内出现 66 站次短时强降水，最大小时雨强 48.4mm/h（河津米家湾，14日03-04 时），晋西南伴有雷暴大风，最强风力 11 级（乡宁北家，14日03-04 时，31.4m/s）；14日13 时-15日08 时以分散对流为主，忻州、吕梁、运城、阳泉的局部地区出现 11 站次短时强降水天气，最大小时雨强 31.5mm（保德梅花沟，14日14-15 时）， 伴随系统性大风和局地雷暴大风，最强风力 12 级（娄烦林钟山，14",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 29.4,
+            "unit": "m/s",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-6-chunk-003",
+            "source_text": "降水可分为三个阶段：13日08 时-14日02 时以分散性对流为主，中南部 49站次出现短时强降水天气，最大小时雨强 63.3mm（壶关西堡水库，13日17-18 时），局地伴有雷暴大风和冰雹，最强风力 11 级（沁县，13日13-14 时，29.4m/s）；14",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 14.5,
+            "unit": "mm/h",
+            "location": "太原站",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-6-chunk-012",
+            "source_text": "图 7 2025年6月13日20 时太原站 T-lnP 图及 14日02 时红外增强云图太原站风廓线雷达显示：14日04 时后，4-5km 西南气流开始增大，但低层为偏北风，降水强度弱；06 时起，近地层转为西南风，3km 以下西南气流增大至16~20m/s，强的水汽输送及动力抬升作用导致 07 时小时降水量迅速增大至 14.5mm；此后，3km 以上西南气流持续增大，对应 500hPa 风场上太原附近形成风速辐散，降水中心向东北方向移动，太原单站降水量迅速降低。",
+            "confidence": 0.9
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 40.0,
+            "unit": "mm",
+            "location": "",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-6-chunk-015",
+            "source_text": "对应物理量场中，EC 对山西南部水汽预报偏弱（实况整层可降水量 35-40mm，预报 30-35mm）不及实况，CAPE 弱（实况 750J/kg 以上，预报 200-500J/kg），动力水汽能量均不及实况，综上西南部降水量级不及实况",
+            "confidence": 0.86
+          }
+        ],
+        "evidence_images": [
+          {
+            "image_id": "FST2025-6-page-006-image-001",
+            "source_pdf": "FST2025-6.pdf",
+            "page_no": 6,
+            "image_no": 1,
+            "image_path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\data\\document_images\\FST2025-6\\FST2025-6-page-006-image-001.png",
+            "extraction_type": "embedded",
+            "nearby_text": "图 5  2025 年 6 月 14 日 05 时 850hPa 锋生函数，散度场垂直剖面及 500hPa 垂直速度场 \n14 日 05 时，700hPa 切变线南侧山西中南部偏南气流增大至 8~16m/s，水汽\n通量达 13~15g/cm/hPa/s，自南向北输送水汽的同时在山西北部形成多个水汽通量\n辐合大值区，与北部降水区对应；850hPa 水汽通量辐合大值区位于晋西南，与低\n涡中心基本重合，中心值约 21×10-5g/m2/pa/s，与中南部降水区对应。 \n \n图 6  2025 年 6 月 14 日 05 时 700hPa 和 850hPa 水汽通量散度 \n13 日 20 时太原单站探空显示：湿层深厚，K 指数较大（41.2℃），BLI 为-\n3.6，CAPE 适当 （757.4J/kg， 呈细长型） ， 假相当位温随高度降低， 存在对流不稳\n定， 有利于出现短时强降水。 至14 日 02 时， 晋西南CAPE 维持在 700~1500J/kg,SI\n指数、K 指数及 TT 指数较 13 日 20 时明显增大，对流潜势进一步加强。对应红外\n云图中，14 日 00 时河套地区有切边线云系东移发展， 云顶亮温逐渐增大， 云系发\n展旺盛， 山西西南部上空云顶亮温可达330K 以上， 降水大值区出现在梯度大值区。",
+            "caption": "图 5 2025年6月14日05时850hPa锋生函数，散度场垂直剖面及500hPa垂直速度场",
+            "related_chunk_ids": [],
+            "width": 1081,
+            "height": 436,
+            "path_resolved": true,
+            "image_type": "synoptic",
+            "data_category": "环流形势图",
+            "original_caption": "图 5 2025年6月14日05时850hPa锋生函数，散度场垂直剖面及500hPa垂直速度场",
+            "display_number": 1,
+            "display_caption": "图 1 2025年6月14日05时850hPa锋生函数，散度场垂直剖面及500hPa垂直速度场"
+          },
+          {
+            "image_id": "FST2025-6-page-007-image-001",
+            "source_pdf": "FST2025-6.pdf",
+            "page_no": 7,
+            "image_no": 1,
+            "image_path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\data\\document_images\\FST2025-6\\FST2025-6-page-007-image-001.png",
+            "extraction_type": "embedded",
+            "nearby_text": "图 7  2025 年 6 月 13 日 20 时太原站 T-lnP 图及 14 日 02 时红外增强云图 \n太原站风廓线雷达显示：14 日 04 时后，4-5km 西南气流开始增大，但低层\n为偏北风，降水强度弱；06 时起，近地层转为西南风，3km 以下西南气流增大至\n16~20m/s，强的水汽输送及动力抬升作用导致 07 时小时降水量迅速增大至 14.5mm；\n此后，3km 以上西南气流持续增大，对应 500hPa 风场上太原附近形成风速辐散，\n降水中心向东北方向移动， 太原单站降水量迅速降低。 雨滴谱显示：14 日 06-07 时，\n雨滴谱拓宽， 数浓度增大， 导致太原单站降水强度较之前时段明显增大。 降水期间，\n云发展旺盛，以冰云为主，云顶高度可达 12km 左右，垂直方向上水凝物呈现“冰\n晶-雪花-雨滴”分布。 \n图 8  2025 年 6 月 14 日太原站 01-10 时风廓线图，03-09 时云相态分布、02:30 及 14:06 雨滴数浓度谱分布 \n4. 数值模式检验与偏差分析",
+            "caption": "图 7 2025年6月13日20时太原站T-lnP图及14日02时红外增强云图",
+            "related_chunk_ids": [],
+            "width": 944,
+            "height": 479,
+            "path_resolved": true,
+            "image_type": "satellite",
+            "data_category": "卫星图",
+            "original_caption": "图 7 2025年6月13日20时太原站T-lnP图及14日02时红外增强云图",
+            "display_number": 2,
+            "display_caption": "图 2 2025年6月13日20时太原站T-lnP图及14日02时红外增强云图"
+          }
+        ]
+      },
+      {
+        "case": {
+          "case_id": "FST2025-5-std-case-002",
+          "title": "5月8~9日强对流天气过程",
+          "date_range": "2025年5月8-9日",
+          "disaster_types": [
+            "强对流",
+            "强降水",
+            "短时强降水",
+            "雷暴大风",
+            "雷暴",
+            "大风",
+            "冰雹"
+          ],
+          "affected_areas": [
+            "太原",
+            "晋中",
+            "山西中部"
+          ],
+          "source_pdf": "FST2025-5.pdf",
+          "source_chunk_ids": [
+            "FST2025-5-chunk-007",
+            "FST2025-5-chunk-008",
+            "FST2025-5-chunk-009",
+            "FST2025-5-chunk-010",
+            "FST2025-5-chunk-011",
+            "FST2025-5-chunk-012"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-5-page-004-snapshot",
+            "FST2025-5-page-004-image-001",
+            "FST2025-5-page-005-snapshot",
+            "FST2025-5-page-005-image-001",
+            "FST2025-5-page-006-snapshot",
+            "FST2025-5-page-006-image-001",
+            "FST2025-5-page-007-snapshot",
+            "FST2025-5-page-007-image-001"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "强对流"
+          ],
+          "matched_disaster": "强对流",
+          "analysis_focus_disaster": "强对流"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年5月8-9日，太原、晋中、山西中部发生以强对流、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹为主的天气过程。已核验的强度事实包括阵风风力10级、过程最大降水量77.9mm、最大小时雨强36.8mm/h、最大风速27.4m/s。5月8-9日受短波槽、切变线及冷锋影响，山西大部出现强对流。降水集中在8日14-20时，最大降水量77.9mm（五台兴郑），最大小时雨强36.8mm/h。大风峰值27.4m/s（中阳南垣），阵风10级（永和）。冰雹出现在中阳、方山等地。\n\n8日低层湿层与中层干空气夹卷利于短时强降水；9日高空切断低涡东移，太原探空显示Cape达1690.1J/kg，垂直风切变强，-20℃层与湿球零度层高度适宜冰雹生长，配合等压线密集致大风。过程并发短时强降水、雷暴大风及冰雹灾害。降水导致城市内涝风险，大风造成设施损坏，冰雹威胁农业及户外人员安全，多灾种叠加增加防御难度。\n\n需重点关注高低空系统移速对强对流环境条件的维持作用。当Cape超1500J/kg且垂直风切变强时，应警惕冰雹与大风并发。数值预报对局地量级把握不足，需结合实况及时修正预警。",
+        "intensity_metrics": [
+          {
+            "metric_name": "阵风风力",
+            "value": 10.0,
+            "unit": "级",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-008",
+            "source_text": "个县（市、区）出现大风，最大值出现在永和，达到 10 级",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 77.9,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-007",
+            "source_text": "5月8日08 时至 5月9日08 时，共 2294 站出现降水，降水量介于 0.1~77.9mm 之间，最大值出现在五台兴郑（77.9 mm），降水时段主要集中在 14:00~20:00",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 36.8,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-007",
+            "source_text": "出现 18 站次短时强降水，最大为 36.8 mm/h（05-08 18:00:00 五台兴郑）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 36.8,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-007",
+            "source_text": "出现 18 站次短时强降水，最大为 36.8 mm/h（05-08 18:00:00 五台兴郑）",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 27.4,
+            "unit": "m/s",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-007",
+            "source_text": "局部出现 8 级以上大风天气，最大值出现在中阳南垣，达到 27.4 m/s。",
+            "confidence": 0.8
+          }
+        ],
+        "evidence_images": []
+      },
+      {
+        "case": {
+          "case_id": "FST2025-5-std-case-005",
+          "title": "5月21~22日暴雨天气过程",
+          "date_range": "2025年5月21-22日",
+          "disaster_types": [
+            "强对流",
+            "暴雨",
+            "强降水",
+            "短时强降水",
+            "雷暴大风",
+            "雷暴",
+            "大风",
+            "冰雹",
+            "霜冻",
+            "高温",
+            "沙尘"
+          ],
+          "affected_areas": [
+            "山西省",
+            "全省",
+            "太原",
+            "大同",
+            "朔州",
+            "忻州",
+            "阳泉",
+            "晋中",
+            "吕梁",
+            "长治",
+            "晋城",
+            "临汾",
+            "运城",
+            "晋北",
+            "山西北部",
+            "山西中部",
+            "晋南",
+            "山西南部"
+          ],
+          "source_pdf": "FST2025-5.pdf",
+          "source_chunk_ids": [
+            "FST2025-5-chunk-020",
+            "FST2025-5-chunk-021",
+            "FST2025-5-chunk-022",
+            "FST2025-5-chunk-023",
+            "FST2025-5-chunk-024",
+            "FST2025-5-chunk-025",
+            "FST2025-5-chunk-026",
+            "FST2025-5-chunk-027",
+            "FST2025-5-chunk-028",
+            "FST2025-5-chunk-029",
+            "FST2025-5-chunk-030",
+            "FST2025-5-chunk-031",
+            "FST2025-5-chunk-032",
+            "FST2025-5-chunk-033",
+            "FST2025-5-chunk-034",
+            "FST2025-5-chunk-035",
+            "FST2025-5-chunk-036",
+            "FST2025-5-chunk-037",
+            "FST2025-5-chunk-038",
+            "FST2025-5-chunk-039",
+            "FST2025-5-chunk-040",
+            "FST2025-5-chunk-041",
+            "FST2025-5-chunk-042",
+            "FST2025-5-chunk-043",
+            "FST2025-5-chunk-044",
+            "FST2025-5-chunk-045"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-5-page-012-snapshot",
+            "FST2025-5-page-012-image-002",
+            "FST2025-5-page-013-snapshot",
+            "FST2025-5-page-013-image-001",
+            "FST2025-5-page-014-snapshot",
+            "FST2025-5-page-014-image-001",
+            "FST2025-5-page-015-snapshot",
+            "FST2025-5-page-015-image-001",
+            "FST2025-5-page-016-snapshot",
+            "FST2025-5-page-016-image-001",
+            "FST2025-5-page-017-snapshot",
+            "FST2025-5-page-017-image-001",
+            "FST2025-5-page-018-snapshot",
+            "FST2025-5-page-018-image-001",
+            "FST2025-5-page-019-snapshot",
+            "FST2025-5-page-019-image-001",
+            "FST2025-5-page-020-snapshot",
+            "FST2025-5-page-020-image-001",
+            "FST2025-5-page-021-snapshot",
+            "FST2025-5-page-021-image-001",
+            "FST2025-5-page-022-snapshot",
+            "FST2025-5-page-023-snapshot",
+            "FST2025-5-page-024-snapshot"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "暴雨"
+          ],
+          "matched_disaster": "暴雨",
+          "analysis_focus_disaster": "暴雨"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年5月21-22日，山西省、全省、太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部发生以强对流、暴雨、强降水、短时强降水、雷暴大风、雷暴、大风、冰雹、霜冻、高温、沙尘为主的天气过程。已核验的强度事实包括过程最大降水量85.2mm、最大风速30.7m/s、最大小时雨强40mm/h、雷达回波强度60dBZ（襄汾附近）、阵风风力7级、最高气温40℃（临汾）。21-22日山西自西向东降水，南部雨强大。最大降水量85.2mm（沁水吉家），最大小时雨强40mm/h。襄汾附近雷达回波超60dBZ。\n\n东西冷空气挤压暖脊，切变线位于河套西部。东路冷空气先至，西路影响锋线附近。短临订正需关注对流合并及移动。暴雨叠加雷暴大风，阵风7级以上。短时强降水引发城市内涝及地质灾害风险。预警提示局地冰雹。\n\n水汽增湿早于降水，襄汾增湿快但无补充致雨强集中；天镇持续增湿致累计量大。监测可降水量演变有助研判雨型。",
+        "intensity_metrics": [
+          {
+            "metric_name": "过程最大降水量",
+            "value": 85.2,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-021",
+            "source_text": "暴雨，最大沁水吉家 85.2mm",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 28.1,
+            "unit": "m/s",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-021",
+            "source_text": "77 站出现 8 级以上大风，最大出现在潞城老顶山28.1m/s。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 50.7,
+            "unit": "mm",
+            "location": "",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-5-chunk-020",
+            "source_text": "共 1351 站出现降水，降水量介于 0.1～50.7mm",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 40.0,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "范围上限",
+            "source_chunk_id": "FST2025-5-chunk-022",
+            "source_text": "雨强介于 20～40mm",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 27.2,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-022",
+            "source_text": "国家站最大襄汾 27.2mm/h",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 38.7,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-022",
+            "source_text": "区域站最大盐湖凤凰谷38.7mm/h",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 30.7,
+            "unit": "m/s",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-020",
+            "source_text": "140 站出现 8级以上大风，最大出现在岚县上明 30.7m/s。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 59.7,
+            "unit": "mm",
+            "location": "",
+            "relation": "原文提取",
+            "source_chunk_id": "FST2025-5-chunk-020",
+            "source_text": "国家站 5站暴雨（天镇、襄汾、浮山、阳高、曲沃），最大天镇 59.7mm",
+            "confidence": 0.86
+          },
+          {
+            "metric_name": "雷达回波强度",
+            "value": 35.0,
+            "unit": "dBZ",
+            "location": "上党",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-5-chunk-030",
+            "source_text": "上党回波具有对流性质，其初始回波高度发展高度高，降水开始出现低质心，并有间歇性，最大回波强度超过 35dBZ。",
+            "confidence": 0.9
+          },
+          {
+            "metric_name": "过程最大降水量",
+            "value": 15.1,
+            "unit": "mm",
+            "location": "襄汾",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-5-chunk-034",
+            "source_text": "图 33 22日8:44、8:55 临汾雷达组合反射率及剖面图、9:35-9:46 组合反射率、06:05 组合反射率及剖面图襄汾 22日8:41-8:50 10 分钟降水量 15.1mm；对流有组织化，回波倾斜，低层弱回波区、中高层悬垂回波，强回波移动过程中呈弓形，深厚 MARC，后侧风暴顶辐散，超级单体；中气旋从 8:50 持续到 9:07。",
+            "confidence": 0.95
+          },
+          {
+            "metric_name": "雷达回波强度",
+            "value": 60.0,
+            "unit": "dBZ",
+            "location": "襄汾附近",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-5-chunk-034",
+            "source_text": "22日7:13 从临汾雷达组合反射率图看，襄汾附近强回波超过 60dBZ,并且有明显的旁瓣回波。",
+            "confidence": 0.95
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 7.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-040",
+            "source_text": "6 级，或者阵风 7 级以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 37.0,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-042",
+            "source_text": "预计 24 小时预警区域最高气温将升至 37℃以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 35.0,
+            "unit": "℃",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-042",
+            "source_text": "此外，上述地区的其余部分县市未来 24 小时最高气温也将达35℃或以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最高气温",
+            "value": 40.0,
+            "unit": "℃",
+            "location": "临汾",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-042",
+            "source_text": "预计 24 小时预警区域最高气温将升至 37℃以上，其中运城、临汾等地的局部地区最高气温将升至 40℃以上。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大小时雨强",
+            "value": 30.0,
+            "unit": "mm/h",
+            "location": "",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-5-chunk-043",
+            "source_text": "过去 6 小时预警区域内部分地区已经出现雨强 20 毫米/小时以上的短时强降水，预计未来 6 小时预警区域内部分地区还会有雨强 30 毫米/小时以上的短时强降水。",
+            "confidence": 0.9
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 7.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-044",
+            "source_text": "气，阵风风力达 7 级以上并有较强雷电，部分地区伴有短时强降水或冰雹。",
+            "confidence": 0.8
+          }
+        ],
+        "evidence_images": []
+      },
+      {
+        "case": {
+          "case_id": "FST2025-5-std-case-004",
+          "title": "5月19~21日高温天气",
+          "date_range": "2025年5月19-21日",
+          "disaster_types": [
+            "高温"
+          ],
+          "affected_areas": [
+            "山西省",
+            "太原",
+            "大同",
+            "朔州",
+            "忻州",
+            "阳泉",
+            "晋中",
+            "吕梁",
+            "长治",
+            "晋城",
+            "临汾",
+            "运城",
+            "晋北",
+            "山西北部",
+            "山西中部",
+            "晋南",
+            "山西南部"
+          ],
+          "source_pdf": "FST2025-5.pdf",
+          "source_chunk_ids": [
+            "FST2025-5-chunk-017",
+            "FST2025-5-chunk-018",
+            "FST2025-5-chunk-019",
+            "FST2025-5-chunk-020"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-5-page-010-snapshot",
+            "FST2025-5-page-011-snapshot",
+            "FST2025-5-page-011-image-001",
+            "FST2025-5-page-012-snapshot",
+            "FST2025-5-page-012-image-002"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "高温"
+          ],
+          "matched_disaster": "高温",
+          "analysis_focus_disaster": "高温"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年5月19-21日，山西省、太原、大同、朔州、忻州、阳泉、晋中、吕梁、长治、晋城、临汾、运城、晋北、山西北部、山西中部、晋南、山西南部出现以高温为主的天气过程。本次检索将该个例归入高温视角，分析优先围绕高温展开。\n\n四、 5月19~21日高温天气1 天气实况5月19日07 时至 20日07 时，我省各地最高气温介于 29.7℃（神池）～40.7℃（阳泉矿区）之间，阳泉和运城的全域，太原、长治、晋城、晋中和临汾的大部，忻州和吕梁的部分共 80 个县（市、。；温，其中运城的大部，阳泉、长治、晋城、朔州、晋中、临汾和吕梁的部分，大同和忻州的局部共 47 个县（市、区）在 37～40℃之间，阳泉矿区、大宁在 40℃以上。；配套图件说明涉及项目 内容 影响系统 地面冷锋，冷高压，冷涡 数值预报产品应用 EC 能够较好的预报出大风落区和强 度，GFS 预报的大风量级偏小严重， 从形势场来看，GFS 预报的地面气旋 和冷锋位置偏东。 预报着。；配套图件包括图 3 5月 19、20、21 日最高气温实况。\n\n当前原文中尚未提取到统一可比的关键强度指标数值。\n\n配套的 2 张实况或诊断图件可用于核对过程形态、影响落区及演变依据。\n\n业务复盘应围绕高温的实况跃增、影响系统演变和重点落区建立对应关系，并结合吕梁山、五台山、太行山迎风坡、晋中盆地或城市敏感区复核短临触发信号、预警提前量及服务衔接。",
+        "intensity_metrics": [
+          {
+            "metric_name": "最高气温",
+            "value": 32.0,
+            "unit": "℃",
+            "location": "太原",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-017",
+            "source_text": "5月20日07 时至 21日07 时，我省各地最高气温介于 32.0℃（神池）～41.7℃（阳泉矿区）之间，太原、阳泉和运城的全域，长治、晋城、晋中、临汾和吕梁的大部，大同、朔州和忻州的部分共 97 个县（市、区）出现 35℃以上高",
+            "confidence": 0.8
+          }
+        ],
+        "evidence_images": [
+          {
+            "image_id": "FST2025-5-page-011-image-001",
+            "source_pdf": "FST2025-5.pdf",
+            "page_no": 11,
+            "image_no": 1,
+            "image_path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\data\\document_images\\FST2025-5\\FST2025-5-page-011-image-001.png",
+            "extraction_type": "embedded",
+            "nearby_text": "图 17 5月 19、20、21 日最高气温实况 \n2 环流形势演变特征 \n5 月19-21 日，500 hPa 亚欧中高纬大部分地区受稳定的高压脊控制，冷涡\n位置偏北，21 日河套到华北地区受高压控制， 盛行下沉气流，22 日冷空气南下，\n本轮高温天气结束。850hPa 的温度变化与地面气温变化具有较强的相关性。暖\n中心自西北向华北延伸，19 日，西北和华北地区受28 ℃等温线控制，暖中心强\n度达32 ℃，20 日，暖中心东移，山西大部分地区仍受 28 ℃等温线影响，高温\n最强的 21 日，暖中心西移，山西受到向华北地区伸展暖脊的影响，从标准化距\n平场可以看出，山西中南部高度场相较于气候态偏高 2𝜎。高温持续期间，山西\n以及周边区域温度露点差都在 20 ℃以上，在19 日夜间达到了 40 ℃，具有显著\n暖干特征。对应地面形势，高温持续期间，山西省基本处于低压的控制下，且等\n压线稀疏，近地表风力较弱，不利于空气热量的上下交换，使得增温速度加快。 \n \n图 18 5月 18 日20 时、21 日 08 时 500 hPa形势场",
+            "caption": "图 17 5月19、20、21日最高气温实况",
+            "related_chunk_ids": [],
+            "width": 940,
+            "height": 461,
+            "path_resolved": true,
+            "image_type": "temperature",
+            "data_category": "温度图",
+            "original_caption": "图 17 5月19、20、21日最高气温实况",
+            "display_number": 3,
+            "display_caption": "图 3 5月19、20、21日最高气温实况"
+          }
+        ]
+      },
+      {
+        "case": {
+          "case_id": "FST2025-5-std-case-003",
+          "title": "5月16日大风天气过程",
+          "date_range": "2025年5月16日",
+          "disaster_types": [
+            "强对流",
+            "雷暴大风",
+            "雷暴",
+            "大风",
+            "沙尘"
+          ],
+          "affected_areas": [
+            "太原",
+            "晋中",
+            "山西中部"
+          ],
+          "source_pdf": "FST2025-5.pdf",
+          "source_chunk_ids": [
+            "FST2025-5-chunk-012",
+            "FST2025-5-chunk-013",
+            "FST2025-5-chunk-014",
+            "FST2025-5-chunk-015",
+            "FST2025-5-chunk-016",
+            "FST2025-5-chunk-017"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-5-page-007-snapshot",
+            "FST2025-5-page-007-image-001",
+            "FST2025-5-page-008-snapshot",
+            "FST2025-5-page-008-image-001",
+            "FST2025-5-page-009-snapshot",
+            "FST2025-5-page-009-image-001",
+            "FST2025-5-page-010-snapshot"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "大风"
+          ],
+          "matched_disaster": "大风",
+          "analysis_focus_disaster": "大风"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年5月16日，太原、晋中、山西中部发生以强对流、雷暴大风、雷暴、大风、沙尘为主的天气过程。已核验的强度事实包括阵风风力12级、最大风速43.4m/s、极大风速43.4m/s（娄烦林钟山）。5月16日08时至17日，山西中部部分、北部大部及南部局部出现8级以上大风。最大风速出现在娄烦林钟山，达43.4m/s。南垴观测站等6站风力等级达12级及以上。过程伴随浮尘和扬沙天气，影响范围自西北向东南推进。\n\n亚欧中高纬呈“两槽一脊”形势，高空槽加深东移引导冷空气南下。冷锋过境时，高低压间气压梯度大，地面出现大范围西北风。探空显示高空风速大且温度递减率接近干绝热，利于动量下传增强地面风速；低层暖舌伸入配合上冷下暖配置，触发强对流与雷暴大风。大风与沙尘复合致灾。兴县等64个县（市、区）出现扬沙，孝义等29个县（市、区）出现浮尘。沙尘起沙并随大风向东移动，对交通视线及设施安全构成叠加风险。\n\n本次过程DCAPE达923J/kg，垂直风切变超25m/s，环境条件极利于雷暴大风生成。预报中需重点关注高空槽后冷平流强度及地面气压梯度变化，特别是动量下传机制对极大风速的放大作用，以精准研判极端阵风落区。",
+        "intensity_metrics": [
+          {
+            "metric_name": "阵风风力",
+            "value": 9.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-016",
+            "source_text": "图 14 5月16日08、20 时 700、850 hPa 形势场图 15 5月16日17 时地面形势图叠加 8 级以上阵风，3 小时变压分布叠加 9 级以上阵风山西北部出现雷暴大风。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 43.4,
+            "unit": "m/s",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-013",
+            "source_text": "1 天气实况5月16日08:00 至 17日08:00， 我省中部的部分、北部的大部、南部的局部地区出现 8 级以上大风，最大值出现在娄烦林钟山，达到 43.4 m/s。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 12.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-013",
+            "source_text": "风力等级在 12 级及以上的有 6 站,分别为南垴观测站、古交阁上、神池、平城万龙滑雪场、宁武分水岭气象观测站、娄烦林钟山。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "最大风速",
+            "value": 32.0,
+            "unit": "m/s",
+            "location": "太原",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-014",
+            "source_text": "对应 700 、850 hPa 上，16日08 时，内蒙古中部至华北北部也有深厚的低压槽，槽区等温线密集，槽后最大风速增大至 32 m/s，风向与等温线正交，有一定冷平流强，锋生明显；从太原 20 时探空图看出，高空风速大且温度递减率与干绝热递减率接近，有利于动量下传加大地面风速。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "极大风速",
+            "value": 43.4,
+            "unit": "m/s",
+            "location": "娄烦林钟山",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-5-chunk-013",
+            "source_text": "1 天气实况5月16日08:00 至 17日08:00， 我省中部的部分、北部的大部、南部的局部地区出现 8 级以上大风，最大值出现在娄烦林钟山，达到 43.4 m/s。",
+            "confidence": 0.95
+          }
+        ],
+        "evidence_images": []
+      },
+      {
+        "case": {
+          "case_id": "FST2025-5-std-case-001",
+          "title": "5月2日雷暴大风天气过程",
+          "date_range": "2025年5月2日",
+          "disaster_types": [
+            "雷暴大风",
+            "雷暴",
+            "大风"
+          ],
+          "affected_areas": [
+            "太原",
+            "晋中",
+            "山西中部"
+          ],
+          "source_pdf": "FST2025-5.pdf",
+          "source_chunk_ids": [
+            "FST2025-5-chunk-004",
+            "FST2025-5-chunk-005",
+            "FST2025-5-chunk-006",
+            "FST2025-5-chunk-007"
+          ],
+          "summary": "",
+          "weather_facts": "",
+          "forecast_focus": "",
+          "evidence_image_ids": [
+            "FST2025-5-page-002-snapshot",
+            "FST2025-5-page-002-image-001",
+            "FST2025-5-page-003-snapshot",
+            "FST2025-5-page-003-image-001",
+            "FST2025-5-page-004-snapshot",
+            "FST2025-5-page-004-image-001"
+          ],
+          "year": null,
+          "months": [],
+          "start_date": "",
+          "end_date": "",
+          "city_tags": [],
+          "image_types": [],
+          "has_radar": false,
+          "has_satellite": false,
+          "has_precipitation_map": false,
+          "confidence": 0.0,
+          "matched_disasters": [
+            "雷暴大风"
+          ],
+          "matched_disaster": "雷暴大风",
+          "analysis_focus_disaster": "雷暴大风"
+        },
+        "score": 1.0,
+        "matched_fields": [
+          "date"
+        ],
+        "analysis": "2025年5月2日，太原、晋中、山西中部发生以雷暴大风、雷暴、大风为主的天气过程。已核验的强度事实包括最大风速37.4m/s、阵风风力12级、极大风速37.4m/s（石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底）。5月2日山西中南部受冷锋及切变线影响出现雷暴大风。14时大风集中在北中部，20时南移。石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底极大风速达37.4m/s（12级），覆盖范围广。\n\n强对流伴随的极端阵风对交通设施构成直接威胁。高风速站点多位于山区，地形加剧了风的破坏力，需重点关注基础设施受损风险。\n\n环境场配置是致灾关键。探空显示的干绝热递减率与高空急流结合，预示了极强的动量下传潜力。预报应重点研判冷锋移速与环境热力条件的匹配度，以精准锁定极值落区。",
+        "intensity_metrics": [
+          {
+            "metric_name": "最大风速",
+            "value": 37.4,
+            "unit": "m/s",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力超过 12 级以上的有 4 站，分别为石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底（37.4 m/s）。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 12.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力超过 12 级以上的有 4 站，分别为石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底（37.4 m/s）。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 11.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力在 11 级及以上的有 20 站；风力在 10 级及以上的有 70 站；风力在 9 级及以上的有 187 站；风力在 8 级及以上的有 391 站。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 10.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力在 11 级及以上的有 20 站；风力在 10 级及以上的有 70 站；风力在 9 级及以上的有 187 站；风力在 8 级及以上的有 391 站。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 9.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力在 11 级及以上的有 20 站；风力在 10 级及以上的有 70 站；风力在 9 级及以上的有 187 站；风力在 8 级及以上的有 391 站。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 8.0,
+            "unit": "级",
+            "location": "",
+            "relation": "",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力在 11 级及以上的有 20 站；风力在 10 级及以上的有 70 站；风力在 9 级及以上的有 187 站；风力在 8 级及以上的有 391 站。",
+            "confidence": 0.8
+          },
+          {
+            "metric_name": "极大风速",
+            "value": 37.4,
+            "unit": "m/s",
+            "location": "石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底",
+            "relation": "站点实测",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "风力超过 12 级以上的有 4 站，分别为石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底（37.4 m/s）。",
+            "confidence": 0.9
+          },
+          {
+            "metric_name": "阵风风力",
+            "value": 8.0,
+            "unit": "级",
+            "location": "山西北部局部和中南部部分地区",
+            "relation": "范围端点",
+            "source_chunk_id": "FST2025-5-chunk-005",
+            "source_text": "1 天气实况05月02日08:00 至 05月03日08:00，山西北部局部和中南部部分地区出现 8 级以上大风。",
+            "confidence": 0.9
+          }
+        ],
+        "evidence_images": []
+      }
+    ],
+    "aggregations": {
+      "case_count": 7,
+      "month_counts": {
+        "5": 5,
+        "6": 2
+      },
+      "disaster_counts": {
+        "雷暴大风": 6,
+        "雷暴": 6,
+        "大风": 6,
+        "强对流": 5,
+        "强降水": 4,
+        "短时强降水": 4,
+        "冰雹": 4,
+        "暴雨": 3,
+        "高温": 3,
+        "沙尘": 2,
+        "霜冻": 1
+      },
+      "disaster_cooccurrence": {
+        "labels": [
+          "雷暴大风",
+          "雷暴",
+          "大风",
+          "强对流",
+          "强降水",
+          "短时强降水",
+          "冰雹",
+          "暴雨"
+        ],
+        "matrix": [
+          [
+            6.0,
+            6.0,
+            6.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            6.0,
+            6.0,
+            6.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            6.0,
+            6.0,
+            6.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            5.0,
+            5.0,
+            5.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ]
+        ]
+      },
+      "city_counts": {
+        "太原": 7,
+        "晋中": 7,
+        "山西中部": 7,
+        "忻州": 4,
+        "阳泉": 4,
+        "吕梁": 4,
+        "运城": 4,
+        "晋北": 4,
+        "山西北部": 4,
+        "晋南": 4,
+        "山西南部": 4,
+        "大同": 3,
+        "朔州": 3,
+        "长治": 3,
+        "晋城": 3,
+        "临汾": 3
+      },
+      "intensity_values": {
+        "最大小时雨强": [
+          43.3,
+          43.0,
+          30.0,
+          48.4,
+          31.5,
+          30.4,
+          63.3,
+          14.5,
+          40.0,
+          27.2,
+          38.7,
+          30.0,
+          36.8
+        ],
+        "过程最大降水量": [
+          66.0,
+          81.4,
+          30.0,
+          68.7,
+          48.4,
+          92.9,
+          31.5,
+          30.4,
+          63.3,
+          63.3,
+          40.0,
+          85.2,
+          50.7,
+          59.7,
+          15.1,
+          77.9,
+          36.8
+        ],
+        "阵风风力": [
+          10.0,
+          11.0,
+          12.0,
+          7.0,
+          7.0,
+          9.0,
+          12.0,
+          10.0,
+          12.0,
+          11.0,
+          10.0,
+          9.0,
+          8.0,
+          8.0
+        ],
+        "最大风速": [
+          27.7,
+          27.4,
+          31.4,
+          34.5,
+          29.4,
+          28.1,
+          30.7,
+          43.4,
+          32.0,
+          27.4,
+          37.4
+        ],
+        "最高气温": [
+          37.0,
+          35.0,
+          35.0,
+          37.0,
+          37.0,
+          35.0,
+          40.0,
+          32.0
+        ],
+        "雷达回波强度": [
+          35.0,
+          60.0
+        ],
+        "极大风速": [
+          43.4,
+          37.4
+        ]
+      },
+      "intensity_case_values": {
+        "最大小时雨强": [
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 43.3,
+            "unit": "mm/h",
+            "location": "长治"
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 43.0,
+            "unit": "mm/h",
+            "location": "长治"
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 30.0,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 48.4,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 31.5,
+            "unit": "mm/h",
+            "location": "忻州"
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 30.4,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 63.3,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 14.5,
+            "unit": "mm/h",
+            "location": "太原站"
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 40.0,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 27.2,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 38.7,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 30.0,
+            "unit": "mm/h",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-002",
+            "title": "5月8~9日强对流天气过程",
+            "value": 36.8,
+            "unit": "mm/h",
+            "location": ""
+          }
+        ],
+        "过程最大降水量": [
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 66.0,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 81.4,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 30.0,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 68.7,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 48.4,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 92.9,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 31.5,
+            "unit": "mm",
+            "location": "忻州"
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 30.4,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 63.3,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 63.3,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 40.0,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 85.2,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 50.7,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 59.7,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 15.1,
+            "unit": "mm",
+            "location": "襄汾"
+          },
+          {
+            "case_id": "FST2025-5-std-case-002",
+            "title": "5月8~9日强对流天气过程",
+            "value": 77.9,
+            "unit": "mm",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-002",
+            "title": "5月8~9日强对流天气过程",
+            "value": 36.8,
+            "unit": "mm",
+            "location": ""
+          }
+        ],
+        "阵风风力": [
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 10.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 11.0,
+            "unit": "级",
+            "location": "忻州"
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 12.0,
+            "unit": "级",
+            "location": "忻州"
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 7.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 7.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-003",
+            "title": "5月16日大风天气过程",
+            "value": 9.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-003",
+            "title": "5月16日大风天气过程",
+            "value": 12.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-002",
+            "title": "5月8~9日强对流天气过程",
+            "value": 10.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 12.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 11.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 10.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 9.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 8.0,
+            "unit": "级",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 8.0,
+            "unit": "级",
+            "location": "山西北部局部和中南部部分地区"
+          }
+        ],
+        "最大风速": [
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 27.7,
+            "unit": "m/s",
+            "location": "长治"
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 27.4,
+            "unit": "m/s",
+            "location": "长治"
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 31.4,
+            "unit": "m/s",
+            "location": "忻州"
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 34.5,
+            "unit": "m/s",
+            "location": "忻州"
+          },
+          {
+            "case_id": "FST2025-6-std-case-001",
+            "title": "6月13-14日大范围降水过程",
+            "value": 29.4,
+            "unit": "m/s",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 28.1,
+            "unit": "m/s",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 30.7,
+            "unit": "m/s",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-003",
+            "title": "5月16日大风天气过程",
+            "value": 43.4,
+            "unit": "m/s",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-003",
+            "title": "5月16日大风天气过程",
+            "value": 32.0,
+            "unit": "m/s",
+            "location": "太原"
+          },
+          {
+            "case_id": "FST2025-5-std-case-002",
+            "title": "5月8~9日强对流天气过程",
+            "value": 27.4,
+            "unit": "m/s",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 37.4,
+            "unit": "m/s",
+            "location": ""
+          }
+        ],
+        "最高气温": [
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 37.0,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 35.0,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 35.0,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-6-std-case-002",
+            "title": "6月27-28日强对流天气过程",
+            "value": 37.0,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 37.0,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 35.0,
+            "unit": "℃",
+            "location": ""
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 40.0,
+            "unit": "℃",
+            "location": "临汾"
+          },
+          {
+            "case_id": "FST2025-5-std-case-004",
+            "title": "5月19~21日高温天气",
+            "value": 32.0,
+            "unit": "℃",
+            "location": "太原"
+          }
+        ],
+        "雷达回波强度": [
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 35.0,
+            "unit": "dBZ",
+            "location": "上党"
+          },
+          {
+            "case_id": "FST2025-5-std-case-005",
+            "title": "5月21~22日暴雨天气过程",
+            "value": 60.0,
+            "unit": "dBZ",
+            "location": "襄汾附近"
+          }
+        ],
+        "极大风速": [
+          {
+            "case_id": "FST2025-5-std-case-003",
+            "title": "5月16日大风天气过程",
+            "value": 43.4,
+            "unit": "m/s",
+            "location": "娄烦林钟山"
+          },
+          {
+            "case_id": "FST2025-5-std-case-001",
+            "title": "5月2日雷暴大风天气过程",
+            "value": 37.4,
+            "unit": "m/s",
+            "location": "石楼教鹏墕、沁县二郎山、娄烦林钟山、陵川西河底"
+          }
+        ]
+      }
+    },
+    "charts": [
+      {
+        "chart_key": "temporal",
+        "chart_type": "line",
+        "title": "个例数量月度变化",
+        "x_label": "月份",
+        "y_label": "个例数量",
+        "labels": [
+          "5月",
+          "6月"
+        ],
+        "values": [
+          5.0,
+          2.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 7,
+        "missing_count": 0,
+        "interpretation": "个例集中于5月，提示当前处于强对流高发期。短临监测需重点比对同期历史过程的热力条件与触发机制，优先选取5月样本进行相似性研判，以提升预警的时效性和针对性。"
+      },
+      {
+        "chart_key": "disaster_frequency",
+        "chart_type": "horizontal_bar",
+        "title": "灾种频次分布",
+        "x_label": "出现频次",
+        "y_label": "",
+        "labels": [
+          "大风",
+          "雷暴",
+          "雷暴大风",
+          "强对流",
+          "冰雹",
+          "强降水",
+          "短时强降水",
+          "暴雨",
+          "高温",
+          "沙尘",
+          "霜冻"
+        ],
+        "values": [
+          6.0,
+          6.0,
+          6.0,
+          5.0,
+          4.0,
+          4.0,
+          4.0,
+          3.0,
+          3.0,
+          2.0,
+          1.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 7,
+        "missing_count": 0,
+        "interpretation": "雷暴大风、雷暴与大风频次并列最高，表明多灾种共现是常态。业务复盘不能仅关注检索灾种，须同步核查短时强降水等伴随风险，按主导与伴随灾种拆解，避免漏判叠加影响。"
+      },
+      {
+        "chart_key": "disaster_cooccurrence",
+        "chart_type": "heatmap",
+        "title": "灾种共现热力图",
+        "x_label": "灾种",
+        "y_label": "灾种",
+        "labels": [],
+        "values": [],
+        "row_labels": [
+          "大风",
+          "雷暴",
+          "雷暴大风",
+          "强对流",
+          "冰雹",
+          "强降水",
+          "短时强降水",
+          "暴雨"
+        ],
+        "col_labels": [
+          "大风",
+          "雷暴",
+          "雷暴大风",
+          "强对流",
+          "冰雹",
+          "强降水",
+          "短时强降水",
+          "暴雨"
+        ],
+        "matrix": [
+          [
+            6.0,
+            6.0,
+            6.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            6.0,
+            6.0,
+            6.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            6.0,
+            6.0,
+            6.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            5.0,
+            5.0,
+            5.0,
+            5.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            4.0,
+            3.0
+          ],
+          [
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ]
+        ],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 7,
+        "missing_count": 0,
+        "interpretation": "热力图揭示灾种间的强关联性，证实单一灾种极少孤立发展。在证据复核时，应结合共现规律，检查是否遗漏了如冰雹或沙尘等高频伴随灾害，确保风险评估覆盖全链条风险要素。"
+      },
+      {
+        "chart_key": "spatial",
+        "chart_type": "horizontal_bar",
+        "title": "主要影响区域命中个例数",
+        "x_label": "命中个例数",
+        "y_label": "影响区域",
+        "labels": [
+          "太原",
+          "山西中部",
+          "晋中",
+          "吕梁",
+          "山西北部",
+          "山西南部",
+          "忻州",
+          "晋北"
+        ],
+        "values": [
+          7.0,
+          7.0,
+          7.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "",
+        "sample_size": 7,
+        "missing_count": 0,
+        "interpretation": "业务启示：太原可作为空间复核的优先区域，后续应结合地形、站点密度和灾情记录判断集中原因。"
+      },
+      {
+        "chart_key": "intensity_wind_max",
+        "chart_type": "horizontal_bar",
+        "title": "代表个例最大风速对比",
+        "x_label": "最大风速（m/s）",
+        "y_label": "个例",
+        "labels": [
+          "5月16日大风天气过程",
+          "5月2日雷暴大风天气过程",
+          "6月13-14日大范围降水过程",
+          "5月21~22日暴雨天气过程",
+          "6月27-28日强对流天气过程",
+          "5月8~9日强对流天气过程"
+        ],
+        "values": [
+          43.4,
+          37.4,
+          34.5,
+          30.7,
+          27.7,
+          27.4
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "m/s",
+        "sample_size": 6,
+        "missing_count": 0,
+        "interpretation": "最大风速超40m/s，显示极端大风破坏力强。短临预警需重点关注阵风级数，复核雷达回波中的飑线或下击暴流特征，依据实测风速校准预警等级，防止因低估风力导致防御措施不足。"
+      },
+      {
+        "chart_key": "intensity_rain_total",
+        "chart_type": "horizontal_bar",
+        "title": "代表个例过程最大降水量对比",
+        "x_label": "过程最大降水量（mm）",
+        "y_label": "个例",
+        "labels": [
+          "6月13-14日大范围降水过程",
+          "5月21~22日暴雨天气过程",
+          "6月27-28日强对流天气过程",
+          "5月8~9日强对流天气过程"
+        ],
+        "values": [
+          92.9,
+          85.2,
+          81.4,
+          77.9
+        ],
+        "row_labels": [],
+        "col_labels": [],
+        "matrix": [],
+        "x_values": [],
+        "y_values": [],
+        "unit": "mm",
+        "sample_size": 4,
+        "missing_count": 0,
+        "interpretation": "过程降水量近100mm，具备引发城市内涝潜力。风险研判需结合前期土壤湿度与汇流条件，评估累积降雨对排水系统的压力，针对高值区提前部署排涝力量，防范次生洪涝灾害发生。"
+      }
+    ],
+    "warnings": [
+      "有 1 个个例的大模型分析失败，已分别使用规则结果降级。",
+      "报告级大模型综合失败，已保留规则统计分析结果。"
+    ],
+    "audit": {
+      "structured_candidates": 7,
+      "json_statistics_case_count": 7,
+      "fused_results": 7,
+      "analysis_case_count": 7,
+      "displayed_results": 7,
+      "resolved_images": 3,
+      "all_case_ids": [
+        "FST2025-6-std-case-002",
+        "FST2025-6-std-case-001",
+        "FST2025-5-std-case-005",
+        "FST2025-5-std-case-004",
+        "FST2025-5-std-case-003",
+        "FST2025-5-std-case-002",
+        "FST2025-5-std-case-001"
+      ],
+      "displayed_case_ids": [
+        "FST2025-6-std-case-002",
+        "FST2025-6-std-case-001",
+        "FST2025-5-std-case-002",
+        "FST2025-5-std-case-005",
+        "FST2025-5-std-case-004",
+        "FST2025-5-std-case-003",
+        "FST2025-5-std-case-001"
+      ],
+      "report_include_all_cases": true,
+      "chunk_loading_mode": "shared_parallel_prefetch_pipeline",
+      "case_chunk_limit": 6,
+      "case_context_char_limit": 6000,
+      "case_analysis_concurrency": 4,
+      "llm_thinking_enabled": false,
+      "case_analysis_llm_calls_per_case": 1,
+      "metric_llm_batch_size": 6,
+      "metric_fact_batches_total": 16,
+      "metric_llm_calls_per_case_upper_bound": 5,
+      "case_max_output_tokens": 1536,
+      "case_max_output_tokens_requested": 1536,
+      "selected_chunk_count_total": 37,
+      "selected_chunk_count_max": 6,
+      "case_llm_requested": true,
+      "case_llm_available": true,
+      "case_llm_calls": 6,
+      "case_llm_attempts": 7,
+      "case_llm_cache_hits": 0,
+      "case_analysis_statuses": {
+        "llm_generated": 6,
+        "llm_incomplete": 1
+      },
+      "metric_fact_audit_by_case": {
+        "FST2025-6-std-case-002": {
+          "batch_size": 6,
+          "batch_count": 4,
+          "confirmed_metric_count": 13,
+          "rule_metric_count": 13,
+          "llm_metric_count": 0,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "confirmed",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "confirmed",
+            "最高气温": "confirmed",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "confirmed",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "confirmed",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        },
+        "FST2025-6-std-case-001": {
+          "batch_size": 6,
+          "batch_count": 3,
+          "confirmed_metric_count": 18,
+          "rule_metric_count": 19,
+          "llm_metric_count": 1,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "confirmed",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "confirmed",
+            "最高气温": "not_present_after_all_chunks_scanned",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "confirmed",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "confirmed",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        },
+        "FST2025-5-std-case-005": {
+          "batch_size": 6,
+          "batch_count": 5,
+          "confirmed_metric_count": 17,
+          "rule_metric_count": 13,
+          "llm_metric_count": 5,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "confirmed",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "confirmed",
+            "最高气温": "confirmed",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "confirmed",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "confirmed",
+            "雷达回波强度": "confirmed"
+          }
+        },
+        "FST2025-5-std-case-004": {
+          "batch_size": 6,
+          "batch_count": 1,
+          "confirmed_metric_count": 1,
+          "rule_metric_count": 1,
+          "llm_metric_count": 0,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "not_present_after_all_chunks_scanned",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "not_present_after_all_chunks_scanned",
+            "最高气温": "confirmed",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "not_present_after_all_chunks_scanned",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "not_present_after_all_chunks_scanned",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        },
+        "FST2025-5-std-case-003": {
+          "batch_size": 6,
+          "batch_count": 1,
+          "confirmed_metric_count": 5,
+          "rule_metric_count": 4,
+          "llm_metric_count": 2,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "not_present_after_all_chunks_scanned",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "confirmed",
+            "最高气温": "not_present_after_all_chunks_scanned",
+            "极大风速": "confirmed",
+            "过程最大降水量": "not_present_after_all_chunks_scanned",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "confirmed",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        },
+        "FST2025-5-std-case-002": {
+          "batch_size": 6,
+          "batch_count": 1,
+          "confirmed_metric_count": 5,
+          "rule_metric_count": 5,
+          "llm_metric_count": 0,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "confirmed",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "confirmed",
+            "最高气温": "not_present_after_all_chunks_scanned",
+            "极大风速": "not_present_after_all_chunks_scanned",
+            "过程最大降水量": "confirmed",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "confirmed",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        },
+        "FST2025-5-std-case-001": {
+          "batch_size": 6,
+          "batch_count": 1,
+          "confirmed_metric_count": 8,
+          "rule_metric_count": 6,
+          "llm_metric_count": 2,
+          "status_by_metric": {
+            "最低气温": "not_present_after_all_chunks_scanned",
+            "最低能见度": "not_present_after_all_chunks_scanned",
+            "最大冰雹直径": "not_present_after_all_chunks_scanned",
+            "最大小时雨强": "not_present_after_all_chunks_scanned",
+            "最大积雪深度": "not_present_after_all_chunks_scanned",
+            "最大风速": "confirmed",
+            "最高气温": "not_present_after_all_chunks_scanned",
+            "极大风速": "confirmed",
+            "过程最大降水量": "not_present_after_all_chunks_scanned",
+            "过程最大降雪量": "not_present_after_all_chunks_scanned",
+            "过程降温幅度": "not_present_after_all_chunks_scanned",
+            "阵风风力": "confirmed",
+            "雷达回波强度": "not_present_after_all_chunks_scanned"
+          }
+        }
+      },
+      "case_prepare_seconds_total": 114.14,
+      "case_analysis_seconds_total": 47.39,
+      "report_pipeline_seconds": 15.953,
+      "pipeline_wall_seconds": 68.718,
+      "report_llm_status": "invalid_json",
+      "report_llm_used": false
+    }
+  },
+  "can_export_pdf": true,
+  "warnings": [
+    "有 1 个个例的大模型分析失败，已分别使用规则结果降级。",
+    "报告级大模型综合失败，已保留规则统计分析结果。"
+  ],
+  "audit": {
+    "structured_candidates": 7,
+    "json_statistics_case_count": 7,
+    "fused_results": 7,
+    "analysis_case_count": 7,
+    "displayed_results": 7,
+    "resolved_images": 3,
+    "all_case_ids": [
+      "FST2025-6-std-case-002",
+      "FST2025-6-std-case-001",
+      "FST2025-5-std-case-005",
+      "FST2025-5-std-case-004",
+      "FST2025-5-std-case-003",
+      "FST2025-5-std-case-002",
+      "FST2025-5-std-case-001"
+    ],
+    "displayed_case_ids": [
+      "FST2025-6-std-case-002",
+      "FST2025-6-std-case-001",
+      "FST2025-5-std-case-002",
+      "FST2025-5-std-case-005",
+      "FST2025-5-std-case-004",
+      "FST2025-5-std-case-003",
+      "FST2025-5-std-case-001"
+    ],
+    "report_include_all_cases": true,
+    "chunk_loading_mode": "shared_parallel_prefetch_pipeline",
+    "case_chunk_limit": 6,
+    "case_context_char_limit": 6000,
+    "case_analysis_concurrency": 4,
+    "llm_thinking_enabled": false,
+    "case_analysis_llm_calls_per_case": 1,
+    "metric_llm_batch_size": 6,
+    "metric_fact_batches_total": 16,
+    "metric_llm_calls_per_case_upper_bound": 5,
+    "case_max_output_tokens": 1536,
+    "case_max_output_tokens_requested": 1536,
+    "selected_chunk_count_total": 37,
+    "selected_chunk_count_max": 6,
+    "case_llm_requested": true,
+    "case_llm_available": true,
+    "case_llm_calls": 6,
+    "case_llm_attempts": 7,
+    "case_llm_cache_hits": 0,
+    "case_analysis_statuses": {
+      "llm_generated": 6,
+      "llm_incomplete": 1
+    },
+    "metric_fact_audit_by_case": {
+      "FST2025-6-std-case-002": {
+        "batch_size": 6,
+        "batch_count": 4,
+        "confirmed_metric_count": 13,
+        "rule_metric_count": 13,
+        "llm_metric_count": 0,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "confirmed",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "confirmed",
+          "最高气温": "confirmed",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "confirmed",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "confirmed",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      },
+      "FST2025-6-std-case-001": {
+        "batch_size": 6,
+        "batch_count": 3,
+        "confirmed_metric_count": 18,
+        "rule_metric_count": 19,
+        "llm_metric_count": 1,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "confirmed",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "confirmed",
+          "最高气温": "not_present_after_all_chunks_scanned",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "confirmed",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "confirmed",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      },
+      "FST2025-5-std-case-005": {
+        "batch_size": 6,
+        "batch_count": 5,
+        "confirmed_metric_count": 17,
+        "rule_metric_count": 13,
+        "llm_metric_count": 5,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "confirmed",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "confirmed",
+          "最高气温": "confirmed",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "confirmed",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "confirmed",
+          "雷达回波强度": "confirmed"
+        }
+      },
+      "FST2025-5-std-case-004": {
+        "batch_size": 6,
+        "batch_count": 1,
+        "confirmed_metric_count": 1,
+        "rule_metric_count": 1,
+        "llm_metric_count": 0,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "not_present_after_all_chunks_scanned",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "not_present_after_all_chunks_scanned",
+          "最高气温": "confirmed",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "not_present_after_all_chunks_scanned",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "not_present_after_all_chunks_scanned",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      },
+      "FST2025-5-std-case-003": {
+        "batch_size": 6,
+        "batch_count": 1,
+        "confirmed_metric_count": 5,
+        "rule_metric_count": 4,
+        "llm_metric_count": 2,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "not_present_after_all_chunks_scanned",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "confirmed",
+          "最高气温": "not_present_after_all_chunks_scanned",
+          "极大风速": "confirmed",
+          "过程最大降水量": "not_present_after_all_chunks_scanned",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "confirmed",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      },
+      "FST2025-5-std-case-002": {
+        "batch_size": 6,
+        "batch_count": 1,
+        "confirmed_metric_count": 5,
+        "rule_metric_count": 5,
+        "llm_metric_count": 0,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "confirmed",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "confirmed",
+          "最高气温": "not_present_after_all_chunks_scanned",
+          "极大风速": "not_present_after_all_chunks_scanned",
+          "过程最大降水量": "confirmed",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "confirmed",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      },
+      "FST2025-5-std-case-001": {
+        "batch_size": 6,
+        "batch_count": 1,
+        "confirmed_metric_count": 8,
+        "rule_metric_count": 6,
+        "llm_metric_count": 2,
+        "status_by_metric": {
+          "最低气温": "not_present_after_all_chunks_scanned",
+          "最低能见度": "not_present_after_all_chunks_scanned",
+          "最大冰雹直径": "not_present_after_all_chunks_scanned",
+          "最大小时雨强": "not_present_after_all_chunks_scanned",
+          "最大积雪深度": "not_present_after_all_chunks_scanned",
+          "最大风速": "confirmed",
+          "最高气温": "not_present_after_all_chunks_scanned",
+          "极大风速": "confirmed",
+          "过程最大降水量": "not_present_after_all_chunks_scanned",
+          "过程最大降雪量": "not_present_after_all_chunks_scanned",
+          "过程降温幅度": "not_present_after_all_chunks_scanned",
+          "阵风风力": "confirmed",
+          "雷达回波强度": "not_present_after_all_chunks_scanned"
+        }
+      }
+    },
+    "case_prepare_seconds_total": 114.14,
+    "case_analysis_seconds_total": 47.39,
+    "report_pipeline_seconds": 15.953,
+    "pipeline_wall_seconds": 68.718,
+    "report_llm_status": "invalid_json",
+    "report_llm_used": false,
+    "answer_id": "case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5",
+    "image_count": 3,
+    "chart_count": 6,
+    "cache_path": "E:\\BaiduNetdiskDownload\\combineAndAllLocalData\\risk-master\\backend\\app\\services\\agent\\case_multidim_search\\runtime\\reports\\answers\\case_answer_0b4a7180b5dc44ecbdd5a6795a31efb5.json"
+  }
+}
