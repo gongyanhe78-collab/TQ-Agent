@@ -27,13 +27,14 @@ def _bootstrap_project_root() -> Path:
 
 PROJECT_ROOT = _bootstrap_project_root()
 
-from backend.app.config import settings
+from backend.app.core.config import get_settings
 from backend.app.models import DocumentChunk
 from backend.app.services.document_store import ChromaDocumentChunkStore
 from backend.app.services.model_client.embedding import get_embedding_client
 from backend.app.services.image_extraction import ImageEvidence, PdfImageEvidenceExtractor
 
 
+settings = get_settings()
 DATA_DIR = settings.data_dir
 DOCUMENT_COLLECTION_NAME = settings.document_collection_name
 DOCUMENT_INDEX_DIR = settings.document_index_dir

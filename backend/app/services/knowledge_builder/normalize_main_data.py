@@ -8,7 +8,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-from backend.app.config import settings
+from backend.app.core.config import get_settings
 from backend.app.models import DocumentChunk
 from backend.app.services.document_store import ChromaDocumentChunkStore
 
@@ -27,6 +27,7 @@ STANDARD_CASE_FIELDS = (
 
 def normalize_main_data() -> dict:
     """修正路径和图片关联，并用已有向量重建主 Chroma 集合。"""
+    settings = get_settings()
     chunks_data = _read_array(settings.document_index_dir / "chunks.json")
     cases_data = _read_array(settings.standard_cases_path)
     images_data = _read_array(settings.image_metadata_path)
@@ -113,7 +114,7 @@ def _build_manifest(chunks: list[dict], cases: list[dict], images: list[dict], l
     return {
         "build_id": f"smart-main-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}",
         "built_at": datetime.now(timezone.utc).isoformat(),
-        "source": "Smart_Case_Match natural-paragraph index",
+        "source": "smart_case_match natural-paragraph index",
         "collection_name": settings.document_collection_name,
         "embedding_model": settings.dashscope_embedding_model,
         "embedding_dimension": dimension,

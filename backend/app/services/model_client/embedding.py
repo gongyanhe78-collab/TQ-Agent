@@ -4,7 +4,7 @@ from __future__ import annotations
 from collections import OrderedDict
 from threading import Lock
 
-from backend.app.config import settings
+from backend.app.core.config import get_settings
 
 
 class DashScopeEmbeddingClient:
@@ -17,6 +17,7 @@ class DashScopeEmbeddingClient:
         model: str | None = None,
         batch_size: int = 4,
     ):
+        settings = get_settings()
         self.api_key = api_key or settings.dashscope_api_key
         self.base_url = base_url or settings.dashscope_base_url
         self.model = model or settings.dashscope_embedding_model
@@ -74,6 +75,7 @@ class DashScopeEmbeddingClient:
 
 def get_embedding_client() -> DashScopeEmbeddingClient:
     """返回项目唯一的云端向量客户端。"""
+    settings = get_settings()
     return DashScopeEmbeddingClient(
         api_key=settings.dashscope_api_key,
         base_url=settings.dashscope_base_url,

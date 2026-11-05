@@ -12,32 +12,32 @@ from pathlib import Path
 from unittest.mock import patch
 
 from backend.app.models import DocumentChunk, StandardCase
-from backend.app.services.agent.case_multidim_search import router
-from backend.app.services.agent.case_multidim_search.agent import CaseMultidimSearchAgent
-from backend.app.services.agent.case_multidim_search.reporting.chart_tool import ChartTool
-from backend.app.services.agent.case_multidim_search.retrieval.case_chunk_analyzer import CaseChunkAnalyzer
-from backend.app.services.agent.case_multidim_search.analysis.llm_intensity_extractor import LlmIntensityExtractor
-from backend.app.services.agent.case_multidim_search.analysis.intensity import IntensityExtractor
-from backend.app.services.agent.case_multidim_search.analysis.case_metric_pipeline import CaseMetricPipeline
-from backend.app.services.agent.case_multidim_search.core.natural_query import (
+from backend.app.api.routes import case_multidim as router
+from backend.app.agents.case_multidim_search.agent import CaseMultidimSearchAgent
+from backend.app.agents.case_multidim_search.reporting.chart_tool import ChartTool
+from backend.app.agents.case_multidim_search.retrieval.case_chunk_analyzer import CaseChunkAnalyzer
+from backend.app.agents.case_multidim_search.analysis.llm_intensity_extractor import LlmIntensityExtractor
+from backend.app.agents.case_multidim_search.analysis.intensity import IntensityExtractor
+from backend.app.agents.case_multidim_search.analysis.case_metric_pipeline import CaseMetricPipeline
+from backend.app.agents.case_multidim_search.core.natural_query import (
     NaturalCaseQueryParser,
     NaturalConversationStore,
 )
-from backend.app.services.agent.case_multidim_search.integrations.non_thinking_llm import NonThinkingLlmClient
-from backend.app.services.agent.case_multidim_search.analysis.report_analyzer import ReportAnalyzer
-from backend.app.services.agent.case_multidim_search.analysis.report_llm_enhancer import ReportLlmEnhancer
-from backend.app.services.agent.case_multidim_search.integrations.company_stores import (
+from backend.app.agents.case_multidim_search.integrations.non_thinking_llm import NonThinkingLlmClient
+from backend.app.agents.case_multidim_search.analysis.report_analyzer import ReportAnalyzer
+from backend.app.agents.case_multidim_search.analysis.report_llm_enhancer import ReportLlmEnhancer
+from backend.app.agents.case_multidim_search.integrations.company_stores import (
     CompanyDocumentChunkStore,
     CompanyImageEvidenceStore,
     CompanyStandardCaseStore,
 )
-from backend.app.services.agent.case_multidim_search.schemas import (
+from backend.app.agents.case_multidim_search.schemas import (
     CaseSearchHit,
     CaseSearchQuery,
     IntensityMetric,
     StructuredCaseSearchRequest,
 )
-from backend.app.services.agent.case_multidim_search.retrieval.structured_retriever import StructuredCaseRetriever
+from backend.app.agents.case_multidim_search.retrieval.structured_retriever import StructuredCaseRetriever
 
 
 class FakeCompanyKbClient:
@@ -719,7 +719,7 @@ class CaseMultidimCompanyApiTests(unittest.TestCase):
         """PDF 副标题按月份、灾种和地市分行展示检索条件。"""
         from types import SimpleNamespace
 
-        from backend.app.services.agent.case_multidim_search.reporting.pdf_report import PdfReportBuilder
+        from backend.app.agents.case_multidim_search.reporting.pdf_report import PdfReportBuilder
 
         response = SimpleNamespace(
             parsed_query=CaseSearchQuery(
@@ -1492,7 +1492,7 @@ class CaseMultidimCompanyApiTests(unittest.TestCase):
         """PDF逐例图片必须复用后端统一图注和编号，不再按PDF内部位置重新编号。"""
         from types import SimpleNamespace
 
-        from backend.app.services.agent.case_multidim_search.reporting.pdf_report import PdfReportBuilder
+        from backend.app.agents.case_multidim_search.reporting.pdf_report import PdfReportBuilder
 
         class FakeDocument:
             """记录PDF写入参数，避免单元测试真实渲染文件。"""

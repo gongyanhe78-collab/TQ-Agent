@@ -8,7 +8,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from backend.app.config import settings
+from backend.app.agents.query_intent import IntentRouteRequest, QueryIntentAgent
+from backend.app.core.config import get_settings
 
 
 def main() -> None:
@@ -19,14 +20,11 @@ def main() -> None:
         "查询2025年5月高温过程数量，列出各过程时间，并比较它们的持续时长",
         "统计2025年全年暴雨过程，列出每次过程并概括其影响区域和主要特征",
     ]
-    agent_module = importlib.import_module("backend.app.services.agent.query-intent-agent.agent")
-    request_type = importlib.import_module(
-        "backend.app.services.agent.query-intent-agent.schemas"
-    ).IntentRouteRequest
-    agent = agent_module.QueryIntentAgent(data_dir=settings.smart_case_data_dir)
+    settings = get_settings()
+    agent = QueryIntentAgent(data_dir=settings.smart_case_data_dir)
     results = []
     for question in questions:
-        response = agent.route(request_type(message=question))
+        response = agent.route(IntentRouteRequest(message=question))
         results.append({
             "question": question,
             "intent": response.intent,

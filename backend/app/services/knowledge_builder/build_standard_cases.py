@@ -26,11 +26,12 @@ def _bootstrap_project_root() -> Path:
 PROJECT_ROOT = _bootstrap_project_root()
 
 from backend.app.models import DocumentChunk
-from backend.app.config import settings
+from backend.app.core.config import get_settings
 from backend.app.services.image_extraction import ImageEvidenceStore
 from backend.app.services.model_client.chat import get_llm_client
 
 
+settings = get_settings()
 DOCUMENT_INDEX_DIR = settings.document_index_dir
 IMAGE_METADATA_PATH = settings.image_metadata_path
 STANDARD_CASES_PATH = settings.standard_cases_path

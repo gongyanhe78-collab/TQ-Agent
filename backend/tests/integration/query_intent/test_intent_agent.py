@@ -8,8 +8,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 
-agent_module = importlib.import_module("backend.app.services.agent.query-intent-agent.agent")
-schema_module = importlib.import_module("backend.app.services.agent.query-intent-agent.schemas")
+agent_module = importlib.import_module("backend.app.agents.query_intent.agent")
+schema_module = importlib.import_module("backend.app.agents.query_intent.schemas")
 
 JAN_11_ID = "山西省2025年1月天气过程总结-std-case-001"
 JAN_14_ID = "山西省2025年1月天气过程总结-std-case-002"

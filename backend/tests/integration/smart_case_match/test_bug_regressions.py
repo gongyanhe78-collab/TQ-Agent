@@ -8,12 +8,12 @@ from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
-from backend.app.services.agent.Smart_Case_Match.workflow import progress
-from backend.app.services.agent.Smart_Case_Match.infrastructure.data_store import LocalCaseDataStore
-from backend.app.services.agent.Smart_Case_Match.matching.enrichment import _case_start_date
-from backend.app.services.agent.Smart_Case_Match.matching.matching import _duration_from_text, _parse_range_end
-from backend.app.services.agent.Smart_Case_Match.matching.natural_query import _normalize_dates, normalize_natural_extraction
-from backend.app.services.agent.Smart_Case_Match.workflow.nodes import SmartCaseGraphNodes
+from backend.app.agents.smart_case_match.workflow import progress
+from backend.app.agents.smart_case_match.infrastructure.data_store import LocalCaseDataStore
+from backend.app.agents.smart_case_match.matching.enrichment import _case_start_date
+from backend.app.agents.smart_case_match.matching.matching import _duration_from_text, _parse_range_end
+from backend.app.agents.smart_case_match.matching.natural_query import _normalize_dates, normalize_natural_extraction
+from backend.app.agents.smart_case_match.workflow.nodes import SmartCaseGraphNodes
 
 
 class SmartCaseBugRegressionTests(unittest.TestCase):
@@ -46,7 +46,7 @@ class SmartCaseBugRegressionTests(unittest.TestCase):
     def test_rule_date_wins_and_model_conflict_is_audited(self):
         """模型给出错误精确日期时，规则结果覆盖模型并记录冲突。"""
         audit = {}
-        with patch("backend.app.services.agent.Smart_Case_Match.matching.natural_query._business_today", return_value=date(2026, 8, 18)):
+        with patch("backend.app.agents.smart_case_match.matching.natural_query._business_today", return_value=date(2026, 8, 18)):
             result = normalize_natural_extraction(
                 "昨天到今天太原出现暴雨",
                 {
@@ -66,7 +66,7 @@ class SmartCaseBugRegressionTests(unittest.TestCase):
     def test_fuzzy_date_never_accepts_model_generated_exact_dates(self):
         """前段时间等模糊表达只能保留原文，不能采用模型猜测的精确日期。"""
         audit = {}
-        with patch("backend.app.services.agent.Smart_Case_Match.matching.natural_query._business_today", return_value=date(2026, 8, 18)):
+        with patch("backend.app.agents.smart_case_match.matching.natural_query._business_today", return_value=date(2026, 8, 18)):
             result = normalize_natural_extraction(
                 "前段时间太原出现强降水",
                 {
@@ -84,7 +84,14 @@ class SmartCaseBugRegressionTests(unittest.TestCase):
 
     def test_conversation_page_displays_full_date_range(self):
         """自然语言解析结果应同时展示起止日期，避免范围被视觉上误认为单日。"""
-        page = (Path(__file__).resolve().parents[1] / "pages" / "conversation_page.html").read_text(encoding="utf-8")
+        page = (
+            Path(__file__).resolve().parents[3]
+            / "app"
+            / "agents"
+            / "smart_case_match"
+            / "pages"
+            / "conversation_page.html"
+        ).read_text(encoding="utf-8")
         self.assertIn("`${query.start_date} 至 ${query.end_date}`", page)
 
     def test_cross_year_range_end_is_next_year(self):

@@ -7,10 +7,10 @@ from pathlib import Path
 
 from pypdf import PdfWriter
 
-from backend.app.services.agent.case_multidim_search.reporting.report_preview import (
+from backend.app.agents.case_multidim_search.reporting.report_preview import (
     ensure_report_thumbnail,
 )
-from backend.app.services.agent.unified_chat.orchestrator import UnifiedChatOrchestrator
+from backend.app.agents.unified_chat.orchestrator import UnifiedChatOrchestrator
 
 
 class EvidenceAndReportPreviewTest(unittest.TestCase):

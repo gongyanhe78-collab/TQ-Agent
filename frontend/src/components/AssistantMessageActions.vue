@@ -1,121 +1,24 @@
 <template>
-  <div class="message-actions">
-    <div v-if="message.version_navigation?.total > 1" class="version-switcher" aria-label="回答版本切换">
-      <button
-        class="version-button"
-        type="button"
-        aria-label="查看上一版本"
-        :disabled="!message.version_navigation.can_previous"
-        @click="selectVersion(-1)"
-      >
-        <el-icon><ArrowLeft /></el-icon>
-      </button>
-      <span class="version-label">{{ message.version_navigation.current }} / {{ message.version_navigation.total }}</span>
-      <button
-        class="version-button"
-        type="button"
-        aria-label="查看下一版本"
-        :disabled="!message.version_navigation.can_next"
-        @click="selectVersion(1)"
-      >
-        <el-icon><ArrowRight /></el-icon>
-      </button>
-    </div>
+  <AssistantActionsToolbar
+    :message="message"
+    :feedback="feedback"
+    :pdf-exporting="pdfExporting"
+    @copy="copyResponse"
+    @share="createShareLink"
+    @toggle-love="toggleLoveFeedback"
+    @improve="openImprovementDialog"
+    @select-version="selectVersion"
+    @regenerate="emit('regenerate', $event)"
+    @more-command="handleMoreCommand"
+  />
 
-    <el-tooltip content="复制响应" placement="bottom">
-      <button class="action-button" type="button" aria-label="复制响应" @click="copyResponse">
-        <el-icon><CopyDocument /></el-icon>
-      </button>
-    </el-tooltip>
-    <el-tooltip content="创建共享链接" placement="bottom">
-      <button class="action-button" type="button" aria-label="创建共享链接" @click="createShareLink">
-        <el-icon><Share /></el-icon>
-      </button>
-    </el-tooltip>
-    <el-tooltip content="喜欢这个回答" placement="bottom">
-      <button
-        class="action-button"
-        :class="{ active: feedback === 'love' }"
-        type="button"
-        aria-label="喜欢这个回答"
-        :aria-pressed="feedback === 'love'"
-        @click="toggleLoveFeedback"
-      >
-        <el-icon><Star /></el-icon>
-      </button>
-    </el-tooltip>
-    <el-tooltip content="需要改进" placement="bottom">
-      <button
-        class="action-button"
-        :class="{ active: feedback === 'needs_improvement' }"
-        type="button"
-        aria-label="需要改进"
-        :aria-pressed="feedback === 'needs_improvement'"
-        @click="openImprovementDialog"
-      >
-        <el-icon><Warning /></el-icon>
-      </button>
-    </el-tooltip>
-    <el-tooltip content="重新生成" placement="bottom">
-      <button class="action-button" type="button" aria-label="重新生成" @click="emit('regenerate', message)">
-        <el-icon><RefreshRight /></el-icon>
-      </button>
-    </el-tooltip>
-
-    <el-dropdown trigger="click" @command="handleMoreCommand">
-      <button class="action-button" type="button" aria-label="更多操作">
-        <el-icon><MoreFilled /></el-icon>
-      </button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item command="issue">
-            <el-icon><ChatDotSquare /></el-icon>报告问题
-          </el-dropdown-item>
-          <el-dropdown-item command="pdf" :disabled="pdfExporting">
-            <el-icon><Download /></el-icon>{{ pdfExporting ? "正在导出" : "导出到 PDF" }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </div>
-
-  <el-dialog
-    v-model="improvementDialogVisible"
-    title="这条回答哪里需要改进？"
-    width="min(460px, calc(100vw - 32px))"
-    :close-on-click-modal="false"
-    append-to-body
-  >
-    <el-radio-group v-model="improvementCategory" class="feedback-reasons">
-      <el-radio-button
-        v-for="option in improvementOptions"
-        :key="option.value"
-        :value="option.value"
-      >
-        {{ option.label }}
-      </el-radio-button>
-    </el-radio-group>
-    <el-input
-      v-model="improvementDescription"
-      type="textarea"
-      :rows="3"
-      maxlength="300"
-      show-word-limit
-      placeholder="可补充具体问题，例如遗漏了哪项事实或哪部分证据不匹配"
-      class="feedback-description"
-    />
-    <template #footer>
-      <div class="feedback-dialog-actions">
-        <el-button @click="improvementDialogVisible = false">取消</el-button>
-        <el-button :loading="feedbackSubmitting" @click="submitImprovement(false)">
-          仅提交反馈
-        </el-button>
-        <el-button type="primary" :loading="feedbackSubmitting" @click="submitImprovement(true)">
-          按此原因重新生成
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <AssistantFeedbackDialog
+    v-model:visible="improvementDialogVisible"
+    v-model:category="improvementCategory"
+    v-model:description="improvementDescription"
+    :submitting="feedbackSubmitting"
+    @submit="submitImprovement"
+  />
 
   <Teleport to="body">
     <div v-if="pdfExporting" class="pdf-download-status" role="status" aria-live="polite">
@@ -128,19 +31,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ChatDotSquare,
-  CopyDocument,
-  Download,
-  Loading,
-  MoreFilled,
-  RefreshRight,
-  Share,
-  Star,
-  Warning,
-} from "@element-plus/icons-vue";
+import { Loading } from "@element-plus/icons-vue";
 import {
   API_ORIGIN,
   exportMessagePdf,
@@ -149,6 +40,8 @@ import {
   saveMessageFeedback,
   shareMessage,
 } from "../api";
+import AssistantActionsToolbar from "./chat/AssistantActionsToolbar.vue";
+import AssistantFeedbackDialog from "./chat/AssistantFeedbackDialog.vue";
 
 const props = defineProps({
   sessionId: { type: String, required: true },
@@ -162,15 +55,6 @@ const improvementCategory = ref("off_topic");
 const improvementDescription = ref("");
 const feedbackSubmitting = ref(false);
 const pdfExporting = ref(false);
-
-const improvementOptions = [
-  { value: "off_topic", label: "答非所问" },
-  { value: "fact_error", label: "事实错误" },
-  { value: "missing_information", label: "遗漏关键信息" },
-  { value: "evidence_mismatch", label: "证据不匹配" },
-  { value: "layout", label: "排版问题" },
-  { value: "other", label: "其他" },
-];
 
 // 切换回答版本或重新载入会话时，同步恢复该消息已保存的反馈状态。
 watch(
@@ -252,7 +136,15 @@ const openImprovementDialog = async () => {
 };
 
 const improvementReasonText = () => {
-  const label = improvementOptions.find((item) => item.value === improvementCategory.value)?.label || "其他";
+  const labels = {
+    off_topic: "答非所问",
+    fact_error: "事实错误",
+    missing_information: "遗漏关键信息",
+    evidence_mismatch: "证据不匹配",
+    layout: "排版问题",
+    other: "其他",
+  };
+  const label = labels[improvementCategory.value] || "其他";
   const description = improvementDescription.value.trim();
   return description ? `${label}：${description}` : label;
 };
@@ -328,104 +220,6 @@ const handleMoreCommand = (command) => {
 </script>
 
 <style scoped>
-.message-actions {
-  align-items: center;
-  display: flex;
-  gap: 2px;
-  margin-top: 12px;
-  min-height: 30px;
-}
-
-.action-button {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 5px;
-  color: #777771;
-  cursor: pointer;
-  display: inline-flex;
-  height: 30px;
-  justify-content: center;
-  padding: 0;
-  width: 30px;
-}
-
-.action-button:hover {
-  background: #ecece8;
-  color: #292927;
-}
-
-.action-button.active {
-  background: #292927;
-  color: #ffffff;
-  box-shadow: inset 0 0 0 1px #292927;
-}
-
-.action-button.active:hover {
-  background: #171715;
-  color: #ffffff;
-}
-
-.version-switcher {
-  align-items: center;
-  display: inline-flex;
-  gap: 2px;
-  margin-right: 6px;
-}
-
-.version-button {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 4px;
-  color: #555552;
-  cursor: pointer;
-  display: inline-flex;
-  height: 26px;
-  justify-content: center;
-  padding: 0;
-  width: 26px;
-}
-
-.version-button:hover:not(:disabled) {
-  background: #ecece8;
-}
-
-.version-button:disabled {
-  color: #c5c5c0;
-  cursor: default;
-}
-
-.version-label {
-  color: #777771;
-  font-size: 11px;
-  min-width: 34px;
-  text-align: center;
-}
-
-.feedback-reasons {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: 100%;
-}
-
-.feedback-reasons :deep(.el-radio-button),
-.feedback-reasons :deep(.el-radio-button__inner) {
-  width: 100%;
-}
-
-.feedback-description {
-  margin-top: 16px;
-}
-
-.feedback-dialog-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
 /* 消息级导出只在右下角显示轻量进度，不占用回答区域，也不创建报告缩略图。 */
 :global(.pdf-download-status) {
   align-items: center;
@@ -450,17 +244,5 @@ const handleMoreCommand = (command) => {
 
 @keyframes pdf-download-spin {
   to { transform: rotate(360deg); }
-}
-
-@media (max-width: 520px) {
-  .feedback-dialog-actions {
-    align-items: stretch;
-    flex-direction: column-reverse;
-  }
-
-  .feedback-dialog-actions .el-button {
-    margin-left: 0;
-    width: 100%;
-  }
 }
 </style>

@@ -6,8 +6,6 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
-
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -41,13 +39,21 @@ class SystemRouteTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
         self.data_dir = Path(self.temp_dir.name)
-        self.main = SimpleNamespace(
+        self.services = SimpleNamespace(
+            settings=SimpleNamespace(
+                data_dir=self.data_dir,
+                embedding_model="embedding-model",
+                rerank_model="rerank-model",
+                chat_model="chat-model",
+            ),
             document_store=_DocumentStore(),
             standard_case_store=_StandardCaseStore(),
             embedding_client=_AvailableClient(),
             llm_client=_AvailableClient(),
+            rerank_client=_AvailableClient(),
         )
         app = FastAPI()
+        app.state.services = self.services
         app.include_router(system.router)
         self.client = TestClient(app)
 
@@ -56,8 +62,7 @@ class SystemRouteTests(unittest.TestCase):
 
     def test_health_returns_vector_and_cloud_model_status(self) -> None:
         """健康接口应返回主向量库和云端模型可用性。"""
-        with patch.object(system, "_main", return_value=self.main):
-            response = self.client.get("/api/health")
+        response = self.client.get("/api/health")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["vector_keys"], 317)
@@ -72,12 +77,7 @@ class SystemRouteTests(unittest.TestCase):
             json.dumps(manifest, ensure_ascii=False),
             encoding="utf-8",
         )
-        with (
-            patch.object(system, "_main", return_value=self.main),
-            patch.object(system.settings, "data_dir", self.data_dir),
-            patch.object(system, "get_rerank_client", return_value=_AvailableClient()),
-        ):
-            response = self.client.get("/api/knowledge/status")
+        response = self.client.get("/api/knowledge/status")
 
         payload = response.json()
         self.assertEqual(response.status_code, 200)
@@ -89,12 +89,7 @@ class SystemRouteTests(unittest.TestCase):
 
     def test_knowledge_status_reports_missing_manifest(self) -> None:
         """构建清单缺失时接口应返回诊断信息而不是抛出异常。"""
-        with (
-            patch.object(system, "_main", return_value=self.main),
-            patch.object(system.settings, "data_dir", self.data_dir),
-            patch.object(system, "get_rerank_client", return_value=_AvailableClient()),
-        ):
-            response = self.client.get("/api/knowledge/status")
+        response = self.client.get("/api/knowledge/status")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["build"]["status"], "missing")

@@ -4,16 +4,16 @@ from __future__ import annotations
 import json
 import unittest
 
-from backend.app.services.agent.Smart_Case_Match.infrastructure.data_store import LocalCaseDataStore
-from backend.app.services.agent.Smart_Case_Match.matching.dimension_profiles import terminology_profile_context
-from backend.app.services.agent.Smart_Case_Match.llm.llm_service import (
+from backend.app.agents.smart_case_match.infrastructure.data_store import LocalCaseDataStore
+from backend.app.agents.smart_case_match.matching.dimension_profiles import terminology_profile_context
+from backend.app.agents.smart_case_match.llm.llm_service import (
     SmartCaseLlmService,
     _find_terminology_violations,
     _is_data_inspection_error,
     _payload_diagnostics,
 )
-from backend.app.services.agent.Smart_Case_Match.matching.semantic_rerank import rerank_semantic_hits
-from backend.app.services.agent.Smart_Case_Match.matching.selection import apply_llm_tie_break
+from backend.app.agents.smart_case_match.matching.semantic_rerank import rerank_semantic_hits
+from backend.app.agents.smart_case_match.matching.selection import apply_llm_tie_break
 
 
 class RecordingLlmClient:

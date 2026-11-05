@@ -6,9 +6,9 @@ import unittest
 from pathlib import Path
 
 from backend.app.models import DocumentChunk, StandardCase
-from backend.app.services.agent.case_multidim_search.retrieval.structured_retriever import StructuredCaseRetriever
-from backend.app.services.agent.case_multidim_search.schemas import CaseSearchQuery
-from backend.app.services.agent.unified_chat.metric_aggregation import aggregate_metric_facts
+from backend.app.agents.case_multidim_search.retrieval.structured_retriever import StructuredCaseRetriever
+from backend.app.agents.case_multidim_search.schemas import CaseSearchQuery
+from backend.app.agents.unified_chat.metric_aggregation import aggregate_metric_facts
 
 
 class MetricAggregationTests(unittest.TestCase):

@@ -6,14 +6,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.app.services.agent.Smart_Case_Match.infrastructure.data_store import LocalCaseDataStore
-from backend.app.services.agent.case_multidim_search.integrations.local_stores import (
+from backend.app.agents.smart_case_match.infrastructure.data_store import LocalCaseDataStore
+from backend.app.agents.case_multidim_search.integrations.local_stores import (
     LocalDocumentChunkStore,
     LocalImageEvidenceStore,
     LocalStandardCaseStore,
 )
-from backend.app.services.agent.case_multidim_search.retrieval.structured_retriever import StructuredCaseRetriever
-from backend.app.services.agent.case_multidim_search.schemas import CaseSearchQuery
+from backend.app.agents.case_multidim_search.retrieval.structured_retriever import StructuredCaseRetriever
+from backend.app.agents.case_multidim_search.schemas import CaseSearchQuery
 
 
 class LocalKnowledgeBaseStoreTests(unittest.TestCase):

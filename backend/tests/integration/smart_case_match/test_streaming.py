@@ -7,12 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.app.services.agent.Smart_Case_Match.agent import SmartCaseMatchAgent
-from backend.app.services.agent.Smart_Case_Match.infrastructure.data_store import LocalCaseDataStore
-from backend.app.services.agent.Smart_Case_Match.matching.matching import normalize_query, structured_recall
-from backend.app.services.agent.Smart_Case_Match.matching.natural_query import normalize_natural_extraction
-from backend.app.services.agent.Smart_Case_Match.schemas import NaturalLanguageMatchRequest
-from backend.app.services.agent.Smart_Case_Match.infrastructure.stream_events import encode_sse
+from backend.app.agents.smart_case_match.agent import SmartCaseMatchAgent
+from backend.app.agents.smart_case_match.infrastructure.data_store import LocalCaseDataStore
+from backend.app.agents.smart_case_match.matching.matching import normalize_query, structured_recall
+from backend.app.agents.smart_case_match.matching.natural_query import normalize_natural_extraction
+from backend.app.agents.smart_case_match.schemas import NaturalLanguageMatchRequest
+from backend.app.agents.smart_case_match.infrastructure.stream_events import encode_sse
 
 
 class UnavailableModelClient:
@@ -157,14 +157,28 @@ class StreamingMatchTests(unittest.TestCase):
 
     def test_selected_phase_hides_rule_reasons_behind_loading_state(self):
         """逐例LLM尚未完成时，页面应显示提取中，不能先展示容易误解的结构化通用理由。"""
-        page = (Path(__file__).resolve().parents[1] / "pages" / "conversation_page.html").read_text(encoding="utf-8")
+        page = (
+            Path(__file__).resolve().parents[3]
+            / "app"
+            / "agents"
+            / "smart_case_match"
+            / "pages"
+            / "conversation_page.html"
+        ).read_text(encoding="utf-8")
         self.assertIn("正在提取匹配理由", page)
         self.assertIn("<h4>匹配理由</h4>${matchReasons}", page)
         self.assertIn("匹配理由与参考经验生成中", page)
 
     def test_forecast_support_ids_are_mapped_to_case_names_in_page(self):
         """综合研判页面必须显示历史个例名称，不能直接暴露内部case_id。"""
-        page = (Path(__file__).resolve().parents[1] / "pages" / "conversation_page.html").read_text(encoding="utf-8")
+        page = (
+            Path(__file__).resolve().parents[3]
+            / "app"
+            / "agents"
+            / "smart_case_match"
+            / "pages"
+            / "conversation_page.html"
+        ).read_text(encoding="utf-8")
         self.assertIn("turn.caseDisplayNames", page)
         self.assertIn("supportNames.join", page)
         self.assertIn('|| "相关历史个例"', page)
@@ -250,7 +264,14 @@ class StreamingMatchTests(unittest.TestCase):
 
     def test_conversation_page_only_uses_clickable_image_references(self):
         """聊天页面不能平铺证据图片或补充图片区，但必须保留图片点击入口。"""
-        html = (Path(__file__).resolve().parents[1] / "pages" / "conversation_page.html").read_text(encoding="utf-8")
+        html = (
+            Path(__file__).resolve().parents[3]
+            / "app"
+            / "agents"
+            / "smart_case_match"
+            / "pages"
+            / "conversation_page.html"
+        ).read_text(encoding="utf-8")
         self.assertIn('data-image-id', html)
         self.assertNotIn("补充资料图片（", html)
         self.assertNotIn("<h4>证据图片</h4>", html)

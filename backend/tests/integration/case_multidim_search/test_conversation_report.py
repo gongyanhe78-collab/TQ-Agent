@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 
 from pypdf import PdfReader
 
-from backend.app.services.agent.case_multidim_search.reporting.conversation_report import ConversationReportBuilder
+from backend.app.agents.case_multidim_search.reporting.conversation_report import ConversationReportBuilder
 
 
 class ConversationReportBuilderTests(unittest.TestCase):
@@ -32,11 +32,12 @@ class ConversationReportBuilderTests(unittest.TestCase):
                 "2025年5月至7月气象灾害分析报告",
             )
             reader = PdfReader(str(output))
-            # Chromium 的 CJK 字体可能返回兼容表意码位，归一化后再校验真实文本。
+            # Chromium 的 CJK 字体可能把“风”等汉字提取为康熙部首码位，
+            # NFKC 不会折叠这类码位，因此先做兼容映射再校验页面可见文本。
             text = unicodedata.normalize(
                 "NFKC",
                 "\n".join(page.extract_text() or "" for page in reader.pages),
-            )
+            ).replace("\u2edb", "风")
             page_width = float(reader.pages[0].mediabox.width)
             page_height = float(reader.pages[0].mediabox.height)
 

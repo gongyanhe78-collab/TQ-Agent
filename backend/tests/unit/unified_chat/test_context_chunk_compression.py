@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import unittest
 
-from backend.app.main import _compress_context_chunk_group
+from backend.app.services.query.document_retrieval import compress_context_chunk_group
 from backend.app.models import DocumentChunk
 
 
@@ -27,7 +27,7 @@ class ContextChunkCompressionTests(unittest.TestCase):
         chunks[8].content = "过程影响农业、交通和电力服务，需关注人体健康风险。"
         chunks[11].content = "数值预报与预报效果复盘显示EC模式存在局地漏报。"
 
-        selected = _compress_context_chunk_group("详细分析实况、成因、影响和预报效果", chunks, limit=12)
+        selected = compress_context_chunk_group("详细分析实况、成因、影响和预报效果", chunks, limit=12)
         selected_ids = [item.chunk_id for item in selected]
 
         self.assertLessEqual(len(selected), 12)
@@ -42,7 +42,7 @@ class ContextChunkCompressionTests(unittest.TestCase):
     def test_short_case_keeps_all_chunks(self) -> None:
         chunks = [_chunk(2, "第二段"), _chunk(1, "第一段")]
 
-        selected = _compress_context_chunk_group("分析这个个例", chunks, limit=12)
+        selected = compress_context_chunk_group("分析这个个例", chunks, limit=12)
 
         self.assertEqual([item.chunk_id for item in selected], ["chunk-01", "chunk-02"])
 

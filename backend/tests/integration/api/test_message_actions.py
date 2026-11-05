@@ -6,12 +6,11 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
-
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from backend.app.api.routes import sessions
+from backend.app.services.feedback_tasks import FeedbackTaskService
 from backend.app.services.session_store import SessionStore
 
 
@@ -73,12 +72,23 @@ class MessageActionTests(unittest.TestCase):
                 "status": "completed",
             },
         )
-        self.main = SimpleNamespace(session_store=self.store)
+        self.feedback_tasks = FeedbackTaskService(
+            session_store=self.store,
+            llm_client=_FeedbackNormalizer(),
+        )
+        self.services = SimpleNamespace(
+            session_store=self.store,
+            multidim_agent=_PdfAgent(self.root / "reports"),
+            feedback_tasks=self.feedback_tasks,
+        )
         app = FastAPI()
+        app.state.services = self.services
         app.include_router(sessions.router)
         self.client = TestClient(app)
 
     def tearDown(self) -> None:
+        for task in self.feedback_tasks.tasks:
+            task.cancel()
         self.temp_dir.cleanup()
 
     def test_message_lookup_and_metadata_update_are_session_scoped(self) -> None:
@@ -138,11 +148,10 @@ class MessageActionTests(unittest.TestCase):
             "love",
         )
 
-        with patch.object(sessions, "_main", return_value=self.main):
-            response = self.client.get(
-                f"/api/sessions/{self.session_id}/messages",
-                params={"client_id": "browser-1"},
-            )
+        response = self.client.get(
+            f"/api/sessions/{self.session_id}/messages",
+            params={"client_id": "browser-1"},
+        )
 
         self.assertEqual(response.status_code, 200)
         assistant = next(item for item in response.json()["messages"] if item["role"] == "assistant")
@@ -178,16 +187,11 @@ class MessageActionTests(unittest.TestCase):
 
     def test_pdf_endpoint_uses_only_visible_answer_and_merges_report(self) -> None:
         """消息级 PDF 只能消费正文，并保存直接下载记录且不生成缩略图。"""
-        fake_agent = _PdfAgent(self.root / "reports")
-
-        with (
-            patch.object(sessions, "_main", return_value=self.main),
-            patch("backend.app.services.agent.case_multidim_search.router._agent", return_value=fake_agent),
-        ):
-            response = self.client.post(
-                f"/api/sessions/{self.session_id}/messages/"
-                f"{self.assistant_message['message_id']}/export-pdf"
-            )
+        fake_agent = self.services.multidim_agent
+        response = self.client.post(
+            f"/api/sessions/{self.session_id}/messages/"
+            f"{self.assistant_message['message_id']}/export-pdf"
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(fake_agent.previous_result, {"answer": "页面可见的分析正文。"})
@@ -203,10 +207,9 @@ class MessageActionTests(unittest.TestCase):
     def test_message_action_endpoints_reject_cross_session_access(self) -> None:
         """不同会话不能凭全局消息编号导出、反馈或分享回答。"""
         message_id = self.assistant_message["message_id"]
-        with patch.object(sessions, "_main", return_value=self.main):
-            response = self.client.post(
-                f"/api/sessions/{self.other_session_id}/messages/{message_id}/share"
-            )
+        response = self.client.post(
+            f"/api/sessions/{self.other_session_id}/messages/{message_id}/share"
+        )
         self.assertEqual(response.status_code, 404)
 
 class FeedbackGuidanceEndpointTests(unittest.IsolatedAsyncioTestCase):
@@ -223,30 +226,42 @@ class FeedbackGuidanceEndpointTests(unittest.IsolatedAsyncioTestCase):
             "上一条回答。",
             metadata={"agent_type": "document_rag", "status": "completed"},
         )
-        self.main = SimpleNamespace(
+        self.feedback_tasks = FeedbackTaskService(
             session_store=self.store,
             llm_client=_FeedbackNormalizer(),
         )
+        self.services = SimpleNamespace(
+            session_store=self.store,
+            multidim_agent=None,
+            feedback_tasks=self.feedback_tasks,
+        )
+        app = FastAPI()
+        app.state.services = self.services
+        app.include_router(sessions.router)
+        self.client = TestClient(app)
 
     async def asyncTearDown(self) -> None:
-        for task in list(getattr(self.main, "_feedback_guidance_tasks", set())):
-            await task
+        tasks = list(self.feedback_tasks.tasks)
+        if tasks:
+            await asyncio.gather(*tasks, return_exceptions=True)
         self.temp_dir.cleanup()
 
     async def test_feedback_is_normalized_asynchronously_and_new_session_is_empty(self) -> None:
-        with patch.object(sessions, "_main", return_value=self.main):
-            response = await sessions.save_message_feedback(
-                self.session_id,
-                self.assistant["message_id"],
-                sessions.MessageFeedbackRequest(
-                    rating="needs_improvement",
-                    client_id="browser-1",
-                    reason="遗漏关键信息：请补充影响范围",
-                ),
-            )
+        response = await sessions.save_message_feedback(
+            self.session_id,
+            self.assistant["message_id"],
+            sessions.MessageFeedbackRequest(
+                rating="needs_improvement",
+                client_id="browser-1",
+                reason="遗漏关键信息：请补充影响范围",
+            ),
+            self.services,
+        )
         self.assertEqual(response["guidance_status"], "pending")
         # 等待后台线程完成；提交接口本身没有等待模型调用。
-        await asyncio.sleep(0.05)
+        tasks = list(self.feedback_tasks.tasks)
+        if tasks:
+            await asyncio.gather(*tasks)
         active = self.store.list_feedback_guidances(self.session_id)
         self.assertEqual(len(active), 1)
         self.assertEqual(active[0]["status"], "active")

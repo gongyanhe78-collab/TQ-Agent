@@ -6,7 +6,7 @@ import json
 from collections import OrderedDict
 from threading import Lock
 
-from backend.app.config import settings
+from backend.app.core.config import get_settings
 
 
 def _rerank_document_text(hit) -> str:
@@ -51,6 +51,7 @@ class DashScopeRerankClient:
         timeout: float = 60.0,
         http_client=None,
     ):
+        settings = get_settings()
         self.api_key = api_key or settings.dashscope_api_key
         self.base_url = base_url or settings.dashscope_base_url
         self.model = model or settings.dashscope_rerank_model
@@ -170,6 +171,7 @@ class ModelFirstReranker:
 
 def get_rerank_client() -> DashScopeRerankClient:
     """返回项目唯一的云端重排序客户端。"""
+    settings = get_settings()
     return DashScopeRerankClient(
         api_key=settings.dashscope_api_key,
         base_url=settings.dashscope_base_url,

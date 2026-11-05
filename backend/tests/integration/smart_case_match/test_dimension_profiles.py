@@ -4,15 +4,15 @@ from __future__ import annotations
 import unittest
 import json
 
-from backend.app.services.agent.Smart_Case_Match.matching.dimension_profiles import (
+from backend.app.agents.smart_case_match.matching.dimension_profiles import (
     calculate_dimension_compatibility,
     calculate_dimension_coverage,
     effective_dimension_compatibility,
     resolve_dimension_profile,
 )
-from backend.app.services.agent.Smart_Case_Match.llm.llm_service import SmartCaseLlmService
-from backend.app.services.agent.Smart_Case_Match.matching.matching import structured_recall
-from backend.app.services.agent.Smart_Case_Match.matching.selection import apply_llm_tie_break
+from backend.app.agents.smart_case_match.llm.llm_service import SmartCaseLlmService
+from backend.app.agents.smart_case_match.matching.matching import structured_recall
+from backend.app.agents.smart_case_match.matching.selection import apply_llm_tie_break
 
 
 class DynamicDimensionTests(unittest.TestCase):

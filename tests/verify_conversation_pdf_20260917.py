@@ -11,7 +11,9 @@ from pypdf import PdfReader
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from backend.app.services.agent.case_multidim_search.reporting.conversation_report import ConversationReportBuilder
+from backend.app.agents.case_multidim_search.reporting.conversation_report import (
+    ConversationReportBuilder,
+)
 
 
 OUTPUT_DIR = ROOT / "tests" / "outputs" / "conversation_pdf_20260917"

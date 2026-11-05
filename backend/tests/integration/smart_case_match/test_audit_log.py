@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.app.services.agent.Smart_Case_Match.infrastructure.audit_log import MatchAuditLogWriter
+from backend.app.agents.smart_case_match.infrastructure.audit_log import MatchAuditLogWriter
 
 
 class MatchAuditLogTests(unittest.TestCase):

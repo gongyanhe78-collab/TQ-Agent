@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.app.services.agent.unified_chat.conversation_memory import ConversationMemoryManager
+from backend.app.agents.unified_chat.conversation_memory import ConversationMemoryManager
 from backend.app.services.session_store import SessionStore
 
 

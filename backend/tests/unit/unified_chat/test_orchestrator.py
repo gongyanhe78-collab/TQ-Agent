@@ -9,10 +9,14 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from backend.app.models import DocumentChunk, StandardCase
-from backend.app.services.agent.case_multidim_search.core.natural_query import NaturalConversationStore
-from backend.app.services.agent.case_multidim_search.schemas import CaseSearchQuery
-from backend.app.services.agent.unified_chat.orchestrator import UnifiedChatOrchestrator, UnifiedRouteDecision
-from backend.app.services.agent.query_intent_compat import QueryIntentAgent
+from backend.app.agents.case_multidim_search.core.natural_query import NaturalConversationStore
+from backend.app.agents.case_multidim_search.schemas import CaseSearchQuery
+from backend.app.agents.unified_chat.orchestrator import (
+    OrchestratorDependencies,
+    UnifiedChatOrchestrator,
+    UnifiedRouteDecision,
+)
+from backend.app.agents.query_intent import QueryIntentAgent
 from backend.app.services.session_store import SessionStore
 
 
@@ -165,7 +169,7 @@ class _StandardCaseStore:
 
 
 class _MainModule:
-    """模拟主应用依赖，避免测试调用外部模型和真实知识库。"""
+    """模拟编排器依赖背后的测试数据源，避免调用外部模型和真实知识库。"""
 
     AgentIntentAnalyzer = _IntentAnalyzer
     AgentPlanner = _Planner
@@ -175,7 +179,6 @@ class _MainModule:
         self.document_store = document_store
         self.standard_case_store = _StandardCaseStore()
         self.llm_client = _UnavailableLlm()
-        self.followup_llm_client = _UnavailableLlm()
         self.last_retrieval = {}
 
     def _context_case_ids_from_messages(self, _history, _question):
@@ -238,6 +241,79 @@ class _MainModule:
 
     def _structured_result_needs_metric_documents(self, _result):
         return False
+
+
+class _DocumentQAFake:
+    """把测试数据源适配为编排器所需的文档问答服务。"""
+
+    def __init__(self, fixture: _MainModule) -> None:
+        self.fixture = fixture
+        self.document_store = fixture.document_store
+
+    def retrieve(self, question, top_k=5, top_n=3, context_case_ids=None):
+        """记录检索参数并返回固定证据。"""
+        return self.fixture._retrieve_document_chunks(
+            question,
+            top_k=top_k,
+            top_n=top_n,
+            context_case_ids=context_case_ids,
+        )
+
+    def context_blocks(self, hits):
+        """把命中片段转换为回答上下文。"""
+        return self.fixture._context_blocks_from_document_hits(hits)
+
+    def fallback_answer(self, question, hits):
+        """返回固定的本地兜底回答。"""
+        return self.fixture._document_answer_fallback(question, hits)
+
+
+class _StructuredQueryFake:
+    """把测试数据源适配为结构化查询服务。"""
+
+    def __init__(self, fixture: _MainModule) -> None:
+        self.fixture = fixture
+
+    def answer(self, question, context_case_ids=None):
+        """返回简单计数夹具结果。"""
+        return self.fixture._answer_structured_question(
+            question,
+            context_case_ids=context_case_ids,
+        )
+
+    def needs_metric_documents(self, result):
+        """当前夹具不触发文档指标补查。"""
+        return self.fixture._structured_result_needs_metric_documents(result)
+
+    def metric_document_result(self, *_args, **_kwargs):
+        """当前夹具没有独立的文档指标补查结果。"""
+        return None
+
+
+class _ContextCasesFake:
+    """把测试数据源适配为会话个例范围解析服务。"""
+
+    def __init__(self, fixture: _MainModule) -> None:
+        self.fixture = fixture
+
+    def from_messages(self, messages, question):
+        """解析承接问题涉及的个例编号。"""
+        return self.fixture._context_case_ids_from_messages(messages, question)
+
+
+class _PresenterFake:
+    """把测试数据源适配为对外结果转换服务。"""
+
+    def __init__(self, fixture: _MainModule) -> None:
+        self.fixture = fixture
+
+    def document_hit_to_response(self, hit):
+        """把检索命中转换为统一证据结构。"""
+        return self.fixture._document_hit_to_response(hit)
+
+    def standard_case_to_response(self, case):
+        """把标准个例转换为会话证据结构。"""
+        return self.fixture._standard_case_to_response(case)
 
 
 class _MultidimAgent:
@@ -370,14 +446,35 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
         self.main = _MainModule(self.session_store, self.document_store)
         self.multidim_store = NaturalConversationStore(session_store=self.session_store)
         self.smart_agent = _SmartAgent()
-        self.orchestrator = UnifiedChatOrchestrator(
-            self.main,
+        self.dependencies = self._dependencies(
             _MultidimAgent(root / "reports"),
             self.multidim_store,
-            self.smart_agent,
-            QueryIntentAgent(
+            audit_path=root / "intent-audit.jsonl",
+        )
+        self.orchestrator = UnifiedChatOrchestrator(self.dependencies)
+
+    def _dependencies(
+        self,
+        multidim_agent: _MultidimAgent,
+        multidim_store: NaturalConversationStore,
+        *,
+        audit_path: Path,
+    ) -> OrchestratorDependencies:
+        """按当前显式依赖契约构造测试编排器。"""
+        return OrchestratorDependencies(
+            session_store=self.session_store,
+            document_qa=_DocumentQAFake(self.main),
+            structured_query=_StructuredQueryFake(self.main),
+            context_cases=_ContextCasesFake(self.main),
+            presenter=_PresenterFake(self.main),
+            standard_case_store=self.main.standard_case_store,
+            llm_client=self.main.llm_client,
+            multidim_agent=multidim_agent,
+            multidim_store=multidim_store,
+            smart_agent=self.smart_agent,
+            intent_agent=QueryIntentAgent(
                 llm_client=_UnavailableLlm(),
-                audit_path=root / "intent-audit.jsonl",
+                audit_path=audit_path,
                 case_provider=self.main.standard_case_store.list_cases,
             ),
         )
@@ -398,17 +495,12 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
 
     def _new_orchestrator(self) -> UnifiedChatOrchestrator:
         """用相同主会话存储创建新的编排器，模拟服务重载或多请求实例。"""
-        return UnifiedChatOrchestrator(
-            self.main,
+        dependencies = self._dependencies(
             _MultidimAgent(Path(self.temp_dir.name) / "reports-reloaded"),
             NaturalConversationStore(session_store=self.session_store),
-            self.smart_agent,
-            QueryIntentAgent(
-                llm_client=_UnavailableLlm(),
-                audit_path=Path(self.temp_dir.name) / "intent-audit-reloaded.jsonl",
-                case_provider=self.main.standard_case_store.list_cases,
-            ),
+            audit_path=Path(self.temp_dir.name) / "intent-audit-reloaded.jsonl",
         )
+        return UnifiedChatOrchestrator(dependencies)
 
     @staticmethod
     def _agent_metadata(events: list[dict], agent_type: str) -> dict:
@@ -470,8 +562,8 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_completed_answer_does_not_start_follow_up_model(self):
         """回答完成后不再启动独立后续建议模型，避免额外请求和后台告警。"""
-        self.main.followup_llm_client = _SuggestingLlm()
-        self.orchestrator.followup_llm_client = self.main.followup_llm_client
+        llm = _SuggestingLlm()
+        self.dependencies.llm_client = llm
         session_id = self.session_store.create_session()["session_id"]
 
         events = await self._collect("介绍一下山西天气过程", session_id)
@@ -484,7 +576,7 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(done["follow_up_status"], "none")
         self.assertEqual(saved["follow_up_suggestions"], [])
         self.assertEqual(saved["follow_up_status"], "none")
-        self.assertFalse(hasattr(self.main.followup_llm_client, "last_suggestion_input"))
+        self.assertFalse(hasattr(llm, "last_suggestion_input"))
         completion_metadata = events[-2]
         self.assertEqual(completion_metadata["type"], "metadata")
         self.assertEqual(completion_metadata["status"], "completed")
@@ -560,7 +652,7 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
             metadata={"agent_type": "document_rag", "status": "completed", "version": 1},
         )
         llm = _StreamingLlm()
-        self.main.llm_client = llm
+        self.dependencies.llm_client = llm
         payload = SimpleNamespace(
             question="重新生成原回答",
             session_id=session_id,
@@ -608,7 +700,7 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
             },
         )
         llm = _GuidedStreamingLlm()
-        self.main.llm_client = llm
+        self.dependencies.llm_client = llm
 
         events = await self._collect("介绍历史暴雨过程", session_id)
 
@@ -657,7 +749,7 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
             },
         )
         llm = _GuidedStreamingLlm()
-        self.main.llm_client = llm
+        self.dependencies.llm_client = llm
         decision = UnifiedRouteDecision(
             "rag",
             "structured",
@@ -1104,7 +1196,7 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_rag_forwards_first_delta_before_stream_finishes(self):
         """主 RAG 应在第二段生成完成前就把第一段交给 SSE 消费者。"""
-        self.main.llm_client = _StreamingLlm()
+        self.dependencies.llm_client = _StreamingLlm()
         session_id = self.session_store.create_session()["session_id"]
         payload = SimpleNamespace(question="介绍天气过程", session_id=session_id, top_k=5, top_n=3)
         started = time.perf_counter()

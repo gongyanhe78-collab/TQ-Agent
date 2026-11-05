@@ -8,11 +8,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from backend.app.services.agent.Smart_Case_Match.agent import SmartCaseMatchAgent
-from backend.app.services.agent.Smart_Case_Match.infrastructure.data_store import LocalCaseDataStore
-from backend.app.services.agent.Smart_Case_Match.matching.matching import normalize_query, structured_recall
-from backend.app.services.agent.Smart_Case_Match.workflow.nodes import SmartCaseGraphNodes
-from backend.app.services.agent.Smart_Case_Match.schemas import SmartCaseMatchRequest
+from backend.app.agents.smart_case_match.agent import SmartCaseMatchAgent
+from backend.app.agents.smart_case_match.infrastructure.data_store import LocalCaseDataStore
+from backend.app.agents.smart_case_match.matching.matching import normalize_query, structured_recall
+from backend.app.agents.smart_case_match.workflow.nodes import SmartCaseGraphNodes
+from backend.app.agents.smart_case_match.schemas import SmartCaseMatchRequest
 
 
 class UnavailableEmbeddingClient:
@@ -143,7 +143,7 @@ class SmartCaseMatchTests(unittest.TestCase):
         llm_service = ConcurrentReferenceLlmService()
         nodes = SmartCaseGraphNodes(self.store, None, None, llm_service)
         # 本测试只验证并发行为，关闭最终重试退避以避免无证据测试数据增加等待时间。
-        with patch("backend.app.services.agent.Smart_Case_Match.workflow.nodes.CASE_REFERENCE_FINAL_RETRY_DELAY_SECONDS", 0):
+        with patch("backend.app.agents.smart_case_match.workflow.nodes.CASE_REFERENCE_FINAL_RETRY_DELAY_SECONDS", 0):
             result = nodes.extract_case_references({
                 "run_id": "",
                 "query": {},
@@ -221,7 +221,7 @@ class SmartCaseMatchTests(unittest.TestCase):
         service = RetryReferenceService()
         nodes = SmartCaseGraphNodes(self.store, None, None, service)
         nodes._validate_reference_evidence = lambda query, reference, case: reference
-        with patch("backend.app.services.agent.Smart_Case_Match.workflow.nodes.CASE_REFERENCE_FINAL_RETRY_DELAY_SECONDS", 0):
+        with patch("backend.app.agents.smart_case_match.workflow.nodes.CASE_REFERENCE_FINAL_RETRY_DELAY_SECONDS", 0):
             result = nodes.extract_case_references({
                 "run_id": "",
                 "query": {},

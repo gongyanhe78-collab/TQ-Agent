@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import unittest
 
-from backend.app.services.agent.Smart_Case_Match.llm.llm_service import _clean_summary, _prioritize_forecast_tips
-from backend.app.services.agent.Smart_Case_Match.matching.matching import normalize_query, structured_recall
-from backend.app.services.agent.Smart_Case_Match.llm.text_quality import (
+from backend.app.agents.smart_case_match.llm.llm_service import _clean_summary, _prioritize_forecast_tips
+from backend.app.agents.smart_case_match.matching.matching import normalize_query, structured_recall
+from backend.app.agents.smart_case_match.llm.text_quality import (
     build_action_tip,
     clean_reference_text,
     filter_specific_match_reasons,

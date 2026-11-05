@@ -6,7 +6,7 @@ from threading import Lock
 from dataclasses import dataclass
 from typing import Iterable
 
-from backend.app.config import settings
+from backend.app.core.config import get_settings
 from backend.app.models import ExtractedCase
 
 
@@ -39,6 +39,7 @@ class DashScopeChatClient:
         enable_thinking: bool | None = None,
         max_retries: int | None = None,
     ):
+        settings = get_settings()
         self.api_key = api_key or settings.dashscope_api_key
         self.base_url = base_url or settings.dashscope_base_url
         self.model = model or settings.dashscope_chat_model
@@ -352,6 +353,7 @@ class DashScopeChatClient:
 
 def get_llm_client() -> DashScopeChatClient:
     """返回项目唯一的云端聊天模型客户端。"""
+    settings = get_settings()
     return DashScopeChatClient(
         api_key=settings.dashscope_api_key,
         base_url=settings.dashscope_base_url,
@@ -361,6 +363,7 @@ def get_llm_client() -> DashScopeChatClient:
 
 def get_intent_llm_client() -> DashScopeChatClient:
     """返回意图理解专用的轻量云端聊天客户端。"""
+    settings = get_settings()
     return DashScopeChatClient(
         api_key=settings.dashscope_api_key,
         base_url=settings.dashscope_base_url,
@@ -372,6 +375,7 @@ def get_intent_llm_client() -> DashScopeChatClient:
 
 def get_followup_llm_client() -> DashScopeChatClient:
     """返回兼容旧部署的后续问题客户端；当前统一聊天流程不再初始化它。"""
+    settings = get_settings()
     return DashScopeChatClient(
         api_key=settings.dashscope_api_key,
         base_url=settings.dashscope_base_url,

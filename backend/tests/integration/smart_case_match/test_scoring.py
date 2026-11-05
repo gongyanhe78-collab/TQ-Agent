@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import unittest
 
-from backend.app.services.agent.Smart_Case_Match.infrastructure.data_store import LocalCaseDataStore
-from backend.app.services.agent.Smart_Case_Match.matching.matching import normalize_query, structured_recall
+from backend.app.agents.smart_case_match.infrastructure.data_store import LocalCaseDataStore
+from backend.app.agents.smart_case_match.matching.matching import normalize_query, structured_recall
 
 
 class StructuredScoringTests(unittest.TestCase):
