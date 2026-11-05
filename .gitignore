@@ -17,6 +17,8 @@ __pycache__/
 # 环境变量
 .env
 .env.local
+.env.*
+!.env.example
 
 # 数据库文件
 *.sqlite3
@@ -47,3 +49,24 @@ frontend/dist/
 weather_qa_results.json
 *.tmp
 *.bak
+
+# 运行数据与日志
+runtime/
+**/runtime/
+logs/
+**/logs/
+.codex_tmp/
+
+# 本地演示截图和测试输出
+tmp/
+backend/tests/outputs/
+backend/tests/**/artifacts/
+backend/tests/**/*.png
+backend/tests/**/*.pdf
+
+# 数据库与缓存
+*.sqlite3
+*.sqlite3-*
+*.db
+*.sqlite
+data/numba_cache/
