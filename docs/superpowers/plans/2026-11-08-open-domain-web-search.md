@@ -32,7 +32,7 @@
   - `Settings.rag_empty_upgrade_web_search: bool`（环境变量 `RAG_EMPTY_UPGRADE_WEB_SEARCH`，默认 true）
   - `Settings.rag_min_score: float`（环境变量 `RAG_MIN_SCORE`，默认 0，本次仅作为预留配置，不参与逻辑）
 
-- [ ] **Step 1: 写失败测试**
+- [x] **Step 1: 写失败测试**
 
 ```python
 """Settings 新增开放域联网搜索配置的默认值测试。"""
@@ -54,12 +54,12 @@ class SettingsWebSearchTests(unittest.TestCase):
         self.assertEqual(settings.rag_min_score, 0.0)
 ```
 
-- [ ] **Step 2: 运行测试确认失败**
+- [x] **Step 2: 运行测试确认失败**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/core/test_settings.py -q`
 Expected: FAIL（AttributeError: web_search_enabled 不存在）
 
-- [ ] **Step 3: 实现配置字段**
+- [x] **Step 3: 实现配置字段**
 
 `backend/app/core/config.py` 的 `Settings` dataclass 中、`dashscope_rerank_endpoint` 字段之后新增：
 
@@ -88,7 +88,7 @@ Expected: FAIL（AttributeError: web_search_enabled 不存在）
     )
 ```
 
-- [ ] **Step 4: 同步环境文件**
+- [x] **Step 4: 同步环境文件**
 
 `.env.example` 的"模型服务配置"区块末尾追加：
 
@@ -111,12 +111,12 @@ RAG_MIN_SCORE=0
   RAG_MIN_SCORE: ${RAG_MIN_SCORE:-0}
 ```
 
-- [ ] **Step 5: 运行测试确认通过**
+- [x] **Step 5: 运行测试确认通过**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/core/test_settings.py -q`
 Expected: PASS
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add backend/app/core/config.py backend/tests/unit/core/test_settings.py .env.example compose.yaml
@@ -139,7 +139,7 @@ git commit -m "feat: 新增开放域联网搜索与RAG升级配置项"
   - `DashScopeChatClient.stream_general_chat(question, *, system_prompt="", enable_search=True, forced_search=True)`
   - `general_chat_system_prompt() -> str`
 
-- [ ] **Step 1: 写失败测试**
+- [x] **Step 1: 写失败测试**
 
 创建 `backend/tests/unit/model_client/test_web_search.py`：
 
@@ -269,12 +269,12 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: 运行测试确认失败**
+- [x] **Step 2: 运行测试确认失败**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/model_client/test_web_search.py -q`
 Expected: FAIL（AttributeError: stream_general_chat 不存在 / enable_search 未写入）
 
-- [ ] **Step 3: 实现客户端能力**
+- [x] **Step 3: 实现客户端能力**
 
 `backend/app/services/model_client/chat.py`：
 
@@ -358,17 +358,17 @@ d) 新增 `stream_general_chat`（放在 `stream_answer_with_context` 之后）�
 
 注意：若实际文件中的 `answer_with_context` 结构与本计划不同，以实际代码为准，保证 `enable_thinking`、`response_format`、`enable_search` 三个键共存且默认行为不变。
 
-- [ ] **Step 4: 运行测试确认通过**
+- [x] **Step 4: 运行测试确认通过**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/model_client/test_web_search.py -q`
 Expected: PASS
 
-- [ ] **Step 5: 回归相关客户端测试**
+- [x] **Step 5: 回归相关客户端测试**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/model_client/ -q`
 Expected: PASS
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```bash
 git add backend/app/services/model_client/chat.py backend/tests/unit/model_client/test_web_search.py
@@ -390,7 +390,7 @@ git commit -m "feat: DashScope聊天客户端支持联网搜索与开放域流�
   - `IntentName` 增加 `"general_chat"`；`TaskRoute` 增加 `"general_chat"`；`TaskType` 增加 `"general_chat"`。
   - 意图 Agent 对开放域问题返回 `intent="general_chat"`（模型高置信 ≥0.85 时覆盖默认 rag）。
 
-- [ ] **Step 1: 写失败测试**
+- [x] **Step 1: 写失败测试**
 
 在 `backend/tests/integration/query_intent/test_intent_agent.py` 中新增 mock 类：
 
@@ -435,12 +435,12 @@ class GeneralChatLlm:
         self.assertEqual(result.intent, "general_chat")
 ```
 
-- [ ] **Step 2: 运行测试确认失败**
+- [x] **Step 2: 运行测试确认失败**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/integration/query_intent/test_intent_agent.py -q`
 Expected: FAIL（模型返回 general_chat 被校验集合拒绝，实际落入默认 rag）
 
-- [ ] **Step 3: 实现意图扩展**
+- [x] **Step 3: 实现意图扩展**
 
 `backend/app/agents/query_intent/schemas.py`：
 
@@ -530,12 +530,12 @@ g) 新增开放域粗判辅助方法（放在 `_rule_decision` 附近），并�
             return None
 ```
 
-- [ ] **Step 4: 运行测试确认通过**
+- [x] **Step 4: 运行测试确认通过**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/integration/query_intent/test_intent_agent.py -q`
 Expected: PASS（既有用例 + 新增 1 个）
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add backend/app/agents/query_intent/schemas.py backend/app/agents/query_intent/agent.py backend/tests/integration/query_intent/test_intent_agent.py
@@ -557,7 +557,7 @@ git commit -m "feat: 意图路由新增开放域普通聊天分支"
   - `GeneralChatStreamMixin._stream_general_chat(question, session_id, *, run_id="", performance) -> AsyncIterator[dict]`（SSE：metadata → delta → done）
   - `UnifiedChatOrchestrator` 对 `decision.intent == "general_chat"` 分发到该方法。
 
-- [ ] **Step 1: 写失败测试**
+- [x] **Step 1: 写失败测试**
 
 在 `backend/tests/unit/unified_chat/test_orchestrator.py` 中新增两个 mock 类：
 
@@ -649,12 +649,12 @@ class _GeneralChatIntentAgent:
         ))
 ```
 
-- [ ] **Step 2: 运行测试确认失败**
+- [x] **Step 2: 运行测试确认失败**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/unified_chat/test_orchestrator.py -q`
 Expected: FAIL（ImportError / AttributeError: _stream_general_chat 不存在）
 
-- [ ] **Step 3: 实现普通聊天流式链路**
+- [x] **Step 3: 实现普通聊天流式链路**
 
 创建 `backend/app/agents/unified_chat/general_chat_stream.py`：
 
@@ -801,12 +801,12 @@ d) 分发分支：在 `if decision.intent == "clarify":` 分支之后、`async f
                 return
 ```
 
-- [ ] **Step 4: 运行测试确认通过**
+- [x] **Step 4: 运行测试确认通过**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/unified_chat/test_orchestrator.py -q`
 Expected: PASS（既有用例 + 新增 1 个）
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add backend/app/agents/unified_chat/general_chat_stream.py backend/app/agents/unified_chat/orchestrator.py backend/tests/unit/unified_chat/test_orchestrator.py
@@ -825,7 +825,7 @@ git commit -m "feat: 编排器接入开放域联网搜索流式链路"
 - Consumes: `_stream_general_chat`（Task 4）、`Settings.rag_empty_upgrade_web_search / web_search_enabled`（Task 1）
 - Produces: `RagStreamMixin._should_upgrade_to_web_search() -> bool`
 
-- [ ] **Step 1: 写失败测试**
+- [x] **Step 1: 写失败测试**
 
 在 `backend/tests/unit/unified_chat/test_orchestrator.py` 的 `UnifiedChatOrchestratorTests` 类内新增：
 
@@ -859,12 +859,12 @@ git commit -m "feat: 编排器接入开放域联网搜索流式链路"
         self.assertEqual(done["status"], "completed")
 ```
 
-- [ ] **Step 2: 运行测试确认失败**
+- [x] **Step 2: 运行测试确认失败**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/unified_chat/test_orchestrator.py -q`
 Expected: FAIL（空检索仍输出"未检索到相关证据片段"）
 
-- [ ] **Step 3: 实现升级逻辑**
+- [x] **Step 3: 实现升级逻辑**
 
 `backend/app/agents/unified_chat/rag_stream.py`：
 
@@ -940,12 +940,12 @@ c) 在 `_stream_rag` 中检索完成、`yield self._progress_metadata(..., f"已
             return
 ```
 
-- [ ] **Step 4: 运行测试确认通过**
+- [x] **Step 4: 运行测试确认通过**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests/unit/unified_chat/test_orchestrator.py -q`
 Expected: PASS
 
-- [ ] **Step 5: 提交**
+- [x] **Step 5: 提交**
 
 ```bash
 git add backend/app/agents/unified_chat/rag_stream.py backend/tests/unit/unified_chat/test_orchestrator.py
@@ -958,17 +958,17 @@ git commit -m "feat: 本地知识库检索为空时自动升级联网搜索"
 
 **Files:** 无新增（验证与部署）
 
-- [ ] **Step 1: 全量单元与集成测试**
+- [x] **Step 1: 全量单元与集成测试**
 
 Run: `D:\miniconda3\envs\riskMe\python.exe -m pytest backend/tests -q`
 Expected: 全部 PASS（原 424 passed / 3 skipped，新增用例后总数增加且无失败）
 
-- [ ] **Step 2: 确认改动清单与 git 状态**
+- [x] **Step 2: 确认改动清单与 git 状态**
 
 Run: `git status --short`
 Expected: 仅包含本次 6 个任务修改的文件，无意外改动。
 
-- [ ] **Step 3: 重建并重启 API 容器（Docker 更新）**
+- [x] **Step 3: 重建并重启 API 容器（Docker 更新）**
 
 ```bash
 docker compose build api
@@ -978,11 +978,11 @@ docker compose ps
 
 Expected: `api` 容器重建并 healthy；`docker compose ps` 显示 api healthy。注意 `compose.yaml` 的 api 服务为镜像构建，代码改动必须通过 `docker compose build api` 进入镜像。
 
-- [ ] **Step 4: 冒烟验证容器内健康检查**
+- [x] **Step 4: 冒烟验证容器内健康检查**
 
 Run: `docker compose ps`
 Expected: api healthy；必要时 `docker logs risk-master-api-1 --tail 30` 确认启动无异常。
 
-- [ ] **Step 5: 最终提交（若 Task 1-5 已逐个提交则本任务仅验证，无需额外提交）**
+- [x] **Step 5: 最终提交（若 Task 1-5 已逐个提交则本任务仅验证，无需额外提交）**
 
 如果仍有未提交改动：`git status` 检查后统一提交并说明。
