@@ -33,7 +33,7 @@ import { reactive, ref, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Loading } from "@element-plus/icons-vue";
 import {
-  API_ORIGIN,
+  downloadAuthenticatedFile,
   exportMessagePdf,
   getFeedbackClientId,
   reportMessageIssue,
@@ -199,13 +199,8 @@ const exportPdf = async () => {
   pdfExporting.value = true;
   try {
     const report = await exportMessagePdf(props.sessionId, props.message.message_id);
-    // 消息级报告只下载当前可见版本，不挂载缩略图卡片，也不新增聊天消息。
-    const anchor = document.createElement("a");
-    anchor.href = `${API_ORIGIN}${report.url.startsWith("/") ? report.url : `/${report.url}`}`;
-    anchor.download = report.filename || "气象灾害分析报告.pdf";
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    // 消息级报告通过带访问令牌的请求下载，避免裸 <a> 标签不带凭证触发 401。
+    await downloadAuthenticatedFile(report.url, report.filename || "气象灾害分析报告.pdf");
     ElMessage.success("PDF 已生成并开始下载");
   } catch (error) {
     ElMessage.error(`PDF 导出失败：${error.response?.data?.detail || error.message}`);
