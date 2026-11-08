@@ -9,7 +9,7 @@ import json
 import sqlite3
 import uuid
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -623,32 +623,86 @@ class SessionStore:
         question: str,
         answer: str,
         title: str,
+        expires_at=None,
     ) -> dict:
         """创建不可变的公开快照，只保存用户可见问题和回答。"""
         token = uuid.uuid4().hex + uuid.uuid4().hex
         now = self._now()
+        expires_value = (
+            expires_at.isoformat() if expires_at is not None else ""
+        )
         with self._connect() as conn:
             conn.execute(
                 (
                     "INSERT INTO shared_message_snapshots "
-                    "(token, session_id, message_id, title, question, answer, created_at, revoked_at) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, '')"
+                    "(token, session_id, message_id, title, question, answer, "
+                    "created_at, expires_at, revoked_at) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, '')"
                 ),
-                (token, session_id, int(message_id), title, question, answer, now),
+                (
+                    token,
+                    session_id,
+                    int(message_id),
+                    title,
+                    question,
+                    answer,
+                    now,
+                    expires_value,
+                ),
             )
-        return {"token": token, "title": title, "created_at": now}
+        return {
+            "token": token,
+            "title": title,
+            "created_at": now,
+            "expires_at": expires_value,
+        }
 
     def get_shared_snapshot(self, token: str) -> dict | None:
-        """读取仍有效的共享快照，不返回原会话内部元数据。"""
+        """读取仍有效且未过期的共享快照，不返回原会话内部元数据。"""
         with self._connect() as conn:
             row = conn.execute(
                 (
-                    "SELECT token, title, question, answer, created_at "
-                    "FROM shared_message_snapshots WHERE token = ? AND revoked_at = ''"
+                    "SELECT token, title, question, answer, created_at, expires_at "
+                    "FROM shared_message_snapshots "
+                    "WHERE token = ? AND revoked_at = ''"
+                ),
+                (token,),
+            ).fetchone()
+        snapshot = dict(row) if row else None
+        if snapshot is None:
+            return None
+        expires_at = snapshot.get("expires_at") or ""
+        if expires_at and expires_at <= self._now():
+            return None
+        return snapshot
+
+    def shared_snapshot_meta(self, token: str) -> dict | None:
+        """返回分享快照的存在状态，用于区分 404 与过期/撤销 403。"""
+        with self._connect() as conn:
+            row = conn.execute(
+                (
+                    "SELECT token, expires_at, revoked_at "
+                    "FROM shared_message_snapshots WHERE token = ?"
                 ),
                 (token,),
             ).fetchone()
         return dict(row) if row else None
+
+    def revoke_shared_snapshot(
+        self,
+        session_id: str,
+        message_id: int,
+    ) -> bool:
+        """撤销会话内某条消息的公开分享，返回是否找到并撤销。"""
+        with self._connect() as conn:
+            cursor = conn.execute(
+                (
+                    "UPDATE shared_message_snapshots SET revoked_at = ? "
+                    "WHERE session_id = ? AND message_id = ? AND revoked_at = ''"
+                ),
+                (self._now(), session_id, int(message_id)),
+            )
+            return cursor.rowcount > 0
 
     def list_messages_after(self, session_id: str, message_id: int = 0) -> list[dict]:
         """只读取指定消息之后的增量，供后台会话记忆刷新使用。"""
@@ -676,16 +730,16 @@ class SessionStore:
         """
         with self._connect() as conn:
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS sessions ("
                     "session_id TEXT PRIMARY KEY, "
                     "title TEXT NOT NULL, "
                     "created_at TEXT NOT NULL, "
                     "updated_at TEXT NOT NULL)"
-                )
+                
             )
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS messages ("
                     "message_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     "session_id TEXT NOT NULL, "
@@ -693,7 +747,7 @@ class SessionStore:
                     "content TEXT NOT NULL, "
                     "created_at TEXT NOT NULL, "
                     "metadata TEXT NOT NULL DEFAULT '{}')"
-                )
+                
             )
             columns = {
                 row["name"]
@@ -703,7 +757,7 @@ class SessionStore:
                 conn.execute("ALTER TABLE messages ADD COLUMN metadata TEXT NOT NULL DEFAULT '{}'")
             # Agent 运行结果独立成表，避免把大块证据挤进会话主表。
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS agent_runs ("
                     "run_id TEXT PRIMARY KEY, "
                     "session_id TEXT NOT NULL, "
@@ -719,7 +773,7 @@ class SessionStore:
                     "metadata TEXT NOT NULL DEFAULT '{}', "
                     "created_at TEXT NOT NULL, "
                     "updated_at TEXT NOT NULL)"
-                )
+                
             )
             agent_run_columns = {
                 row["name"]
@@ -741,28 +795,28 @@ class SessionStore:
             )
             # 每个主会话为每种 Agent 保存一份状态，多维检索提案不再落单独 JSON 文件。
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS session_agent_states ("
                     "session_id TEXT NOT NULL, "
                     "agent_type TEXT NOT NULL, "
                     "state TEXT NOT NULL DEFAULT '{}', "
                     "updated_at TEXT NOT NULL, "
                     "PRIMARY KEY(session_id, agent_type))"
-                )
+                
             )
             # 用户反馈与问题上报独立存储，避免污染回答展示元数据。
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS message_feedback ("
                     "session_id TEXT NOT NULL, message_id INTEGER NOT NULL, client_id TEXT NOT NULL, "
                     "rating TEXT NOT NULL, reason TEXT NOT NULL DEFAULT '', "
                     "created_at TEXT NOT NULL, updated_at TEXT NOT NULL, "
                     "PRIMARY KEY(session_id, message_id, client_id))"
-                )
+                
             )
             # 会话级临时反馈要求独立存储，不进入长期记忆、用户问题或回答正文。
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS session_feedback_guidance ("
                     "guidance_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, source_message_id INTEGER NOT NULL, "
                     "client_id TEXT NOT NULL, raw_feedback TEXT NOT NULL DEFAULT '', status TEXT NOT NULL, "
@@ -771,28 +825,40 @@ class SessionStore:
                     "scope_change INTEGER NOT NULL DEFAULT 0, confidence REAL NOT NULL DEFAULT 0, "
                     "error TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, updated_at TEXT NOT NULL, "
                     "UNIQUE(session_id, source_message_id, client_id))"
-                )
+                
             )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_feedback_guidance_session ON session_feedback_guidance(session_id, status, updated_at)"
             )
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS message_issue_reports ("
                     "report_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, message_id INTEGER NOT NULL, "
                     "client_id TEXT NOT NULL, category TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', "
                     "created_at TEXT NOT NULL)"
-                )
+                
             )
             # 共享链接只保存可见快照，不暴露证据、审计和本地路径。
             conn.execute(
-                (
+                
                     "CREATE TABLE IF NOT EXISTS shared_message_snapshots ("
                     "token TEXT PRIMARY KEY, session_id TEXT NOT NULL, message_id INTEGER NOT NULL, "
                     "title TEXT NOT NULL, question TEXT NOT NULL, answer TEXT NOT NULL, "
-                    "created_at TEXT NOT NULL, revoked_at TEXT NOT NULL DEFAULT '')"
-                )
+                    "created_at TEXT NOT NULL, expires_at TEXT NOT NULL DEFAULT '', "
+                    "revoked_at TEXT NOT NULL DEFAULT '')"
+                
             )
+            snapshot_columns = {
+                row["name"]
+                for row in conn.execute(
+                    "PRAGMA table_info(shared_message_snapshots)"
+                ).fetchall()
+            }
+            if "expires_at" not in snapshot_columns:
+                conn.execute(
+                    "ALTER TABLE shared_message_snapshots "
+                    "ADD COLUMN expires_at TEXT NOT NULL DEFAULT ''"
+                )
 
     @contextmanager
     def _connect(self):
@@ -837,4 +903,4 @@ class SessionStore:
         Returns:
             ISO8601 格式的时间字符串（带时区）
         """
-        return datetime.now(timezone.utc).isoformat()
+        return datetime.now(UTC).isoformat()

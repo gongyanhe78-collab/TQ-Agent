@@ -24,6 +24,7 @@ from backend.app.api.routes import (
 from backend.app.core.lifecycle import lifespan
 from backend.app.observability.middleware import ObservabilityMiddleware
 from backend.app.observability.tracing import shutdown_tracing
+from backend.app.security.rate_limit import RateLimitMiddleware
 
 if TYPE_CHECKING:
     from backend.app.services.container import AppServices
@@ -63,7 +64,7 @@ def register_routes(app: FastAPI) -> None:
 
 
 def create_app(
-    services_factory: Callable[[], "AppServices"] | None = None,
+    services_factory: Callable[[], AppServices] | None = None,
 ) -> FastAPI:
     """创建应用；服务仅在真实生命周期启动时构造。"""
 
@@ -92,6 +93,8 @@ def create_app(
         allow_headers=["*"],
     )
     app.add_middleware(ObservabilityMiddleware)
+    # 登录与查询限流放在最外层，超限时在进入业务前直接返回 429。
+    app.add_middleware(RateLimitMiddleware)
     register_routes(app)
     return app
 

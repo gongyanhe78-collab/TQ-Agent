@@ -200,7 +200,7 @@ class MessageActionTests(unittest.TestCase):
         self.assertTrue(issue["report_id"].startswith("issue_"))
         self.assertEqual(
             set(restored or {}),
-            {"token", "title", "question", "answer", "created_at"},
+            {"token", "title", "question", "answer", "created_at", "expires_at"},
         )
         self.assertNotIn("secret-chunk", str(restored))
         self.assertNotIn("internal", str(restored))

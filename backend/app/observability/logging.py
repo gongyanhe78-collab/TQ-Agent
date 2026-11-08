@@ -4,11 +4,10 @@ from __future__ import annotations
 import json
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from backend.app.observability.context import current_context
-
 
 _SECRET_PATTERNS = (
     re.compile(
@@ -24,12 +23,15 @@ _LOG_LOGGER_NAME = "backend.app"
 
 
 def sanitize_text(value: Any) -> str:
-    """把日志文本压缩为单行并脱敏常见凭据字段。"""
+    """把日志文本压缩为单行并脱敏常见凭据字段，超长内容截取前段。"""
     text = str(value if value is not None else "")
     text = text.replace("\r", " ").replace("\n", " ")
     for pattern in _SECRET_PATTERNS:
         text = pattern.sub(r"\1[已脱敏]", text)
-    return re.sub(r" +", " ", text).strip()
+    text = re.sub(r" +", " ", text).strip()
+    if len(text) > 200:
+        text = text[:200] + "…[已截断]"
+    return text
 
 
 def _exception_payload(record: logging.LogRecord) -> dict[str, str] | None:
@@ -68,7 +70,7 @@ class JsonContextFormatter(logging.Formatter):
         payload: dict[str, Any] = {
             "timestamp": datetime.fromtimestamp(
                 record.created,
-                timezone.utc,
+                UTC,
             ).isoformat(),
             "level": record.levelname,
             "logger": record.name,

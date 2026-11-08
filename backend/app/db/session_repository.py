@@ -1,8 +1,7 @@
 """按用户隔离的 SQLAlchemy 会话仓储，兼容旧 SessionStore 接口。"""
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from typing import Any, Iterable
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from sqlalchemy import Engine, delete, select
@@ -26,7 +25,7 @@ def _as_utc(value: datetime | None) -> datetime | None:
     """把数据库返回的无时区时间按 UTC 解释。"""
     if value is None:
         return None
-    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    return value if value.tzinfo else value.replace(tzinfo=UTC)
 
 
 def _iso(value: datetime | None) -> str | None:
@@ -61,6 +60,18 @@ class SharedMessageRepository:
                 "question": row.question,
                 "answer": row.answer,
                 "created_at": _iso(row.created_at),
+            }
+
+    def shared_snapshot_meta(self, token: str) -> dict | None:
+        """返回分享快照存在状态，用于区分 404 与过期/撤销 403。"""
+        with Session(self.engine) as db:
+            row = db.get(SharedMessageSnapshot, token)
+            if row is None:
+                return None
+            return {
+                "token": row.token,
+                "expires_at": _iso(row.expires_at),
+                "revoked_at": _iso(row.revoked_at),
             }
 
 
@@ -673,6 +684,7 @@ class SqlAlchemySessionStore:
         question: str,
         answer: str,
         title: str,
+        expires_at=None,
     ) -> dict:
         """创建不含内部元数据的公开分享快照。"""
         if self.get_message(session_id, message_id) is None:
@@ -690,10 +702,16 @@ class SqlAlchemySessionStore:
                     question=str(question or ""),
                     answer=str(answer or ""),
                     created_at=now,
+                    expires_at=expires_at,
                 )
             )
             db.commit()
-        return {"token": token, "title": title, "created_at": _iso(now)}
+        return {
+            "token": token,
+            "title": title,
+            "created_at": _iso(now),
+            "expires_at": _iso(expires_at),
+        }
 
     def get_shared_snapshot(self, token: str) -> dict | None:
         """公开读取未撤销、未过期的分享快照。"""
@@ -716,6 +734,39 @@ class SqlAlchemySessionStore:
                 "answer": row.answer,
                 "created_at": _iso(row.created_at),
             }
+
+    def shared_snapshot_meta(self, token: str) -> dict | None:
+        """返回分享快照存在状态，用于区分 404 与过期/撤销 403。"""
+        with Session(self.engine) as db:
+            row = db.get(SharedMessageSnapshot, token)
+            if row is None:
+                return None
+            return {
+                "token": row.token,
+                "expires_at": _iso(row.expires_at),
+                "revoked_at": _iso(row.revoked_at),
+            }
+
+    def revoke_shared_snapshot(
+        self,
+        session_id: str,
+        message_id: int,
+    ) -> bool:
+        """撤销会话内某条消息的公开分享，返回是否撤销成功。"""
+        now = utc_now()
+        with Session(self.engine) as db:
+            row = db.scalars(
+                select(SharedMessageSnapshot).where(
+                    SharedMessageSnapshot.session_id == session_id,
+                    SharedMessageSnapshot.message_id == int(message_id),
+                    SharedMessageSnapshot.revoked_at.is_(None),
+                )
+            ).first()
+            if row is None:
+                return False
+            row.revoked_at = now
+            db.commit()
+            return True
 
     @staticmethod
     def _session_dict(row: ChatSession) -> dict:

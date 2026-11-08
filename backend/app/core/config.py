@@ -232,6 +232,37 @@ class Settings:
         )
     )
 
+    # 安全边界：登录与查询限流参数，以及公开分享快照默认有效期。
+    rate_limit_enabled: bool = field(
+        default_factory=lambda: _env_value("RATE_LIMIT_ENABLED", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    rate_limit_login_max: int = field(
+        default_factory=lambda: int(
+            _env_value("RATE_LIMIT_LOGIN_MAX", "10")
+        )
+    )
+    rate_limit_login_window_seconds: int = field(
+        default_factory=lambda: int(
+            _env_value("RATE_LIMIT_LOGIN_WINDOW_SECONDS", "60")
+        )
+    )
+    rate_limit_query_max: int = field(
+        default_factory=lambda: int(
+            _env_value("RATE_LIMIT_QUERY_MAX", "60")
+        )
+    )
+    rate_limit_query_window_seconds: int = field(
+        default_factory=lambda: int(
+            _env_value("RATE_LIMIT_QUERY_WINDOW_SECONDS", "60")
+        )
+    )
+    share_ttl_days: int = field(
+        default_factory=lambda: max(
+            1, int(_env_value("SHARE_TTL_DAYS", "30"))
+        )
+    )
+
     # 查询幂等：同一幂等键的重复请求直接返回首次结果，不重复写入消息与运行。
     idempotency_ttl_seconds: int = field(
         default_factory=lambda: int(

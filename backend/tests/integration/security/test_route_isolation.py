@@ -153,6 +153,7 @@ class _IsolatedServices:
             auth_cookie_samesite="lax",
             auth_refresh_cookie_name="refresh_token",
             case_multidim_runtime_dir=runtime_root,
+            share_ttl_days=30,
         )
         self.shared_store = SharedMessageRepository(engine)
         self.knowledge_service = _KnowledgeService()

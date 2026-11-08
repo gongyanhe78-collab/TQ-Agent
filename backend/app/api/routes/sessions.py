@@ -1,6 +1,7 @@
 """聊天会话、消息操作、导出与公开分享接口。"""
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Request
@@ -13,7 +14,6 @@ from backend.app.api.schemas import (
     MessageIssueRequest,
 )
 from backend.app.services.session_exports import render_shared_message, report_title
-
 
 router = APIRouter()
 
@@ -254,32 +254,60 @@ def share_message(
     question = str((source_user or {}).get("content") or "")
     answer = str(message.get("content") or "")
     title = report_title(question, answer).removesuffix("报告")
+    expires_at = (
+        datetime.now(UTC)
+        + timedelta(days=max(1, int(services.settings.share_ttl_days)))
+    )
     snapshot = session_store.create_shared_snapshot(
         session_id,
         message_id,
         question,
         answer,
         title,
+        expires_at=expires_at,
     )
+    snapshot["expires_at"] = expires_at.isoformat()
     snapshot["share_url"] = (
         f"{str(request.base_url).rstrip('/')}/share/{snapshot['token']}"
     )
     return snapshot
 
 
+@router.delete("/api/sessions/{session_id}/messages/{message_id}/share")
+def revoke_message_share(
+    session_id: str,
+    message_id: int,
+    session_store: SessionStoreDep,
+):
+    """撤销当前会话内某条消息的公开分享，只允许消息所属会话操作。"""
+    revoked = session_store.revoke_shared_snapshot(
+        session_id,
+        int(message_id),
+    )
+    if not revoked:
+        raise HTTPException(status_code=404, detail="Shared message not found")
+    return {"revoked": True}
+
+
 @router.get("/api/shared-messages/{token}")
 def get_shared_message(token: str, services: ServicesDep):
     """返回公开快照，不包含原消息元数据和会话内其他内容。"""
+    meta = services.shared_store.shared_snapshot_meta(token)
+    if meta is None:
+        raise HTTPException(status_code=404, detail="Shared message not found")
     snapshot = services.shared_store.get_shared_snapshot(token)
     if snapshot is None:
-        raise HTTPException(status_code=404, detail="Shared message not found")
+        raise HTTPException(status_code=403, detail="Shared message expired or revoked")
     return snapshot
 
 
 @router.get("/share/{token}", response_class=HTMLResponse)
 def shared_message_page(token: str, services: ServicesDep):
     """提供最小只读共享页，所有用户文本均先做 HTML 转义。"""
+    meta = services.shared_store.shared_snapshot_meta(token)
+    if meta is None:
+        raise HTTPException(status_code=404, detail="Shared message not found")
     snapshot = services.shared_store.get_shared_snapshot(token)
     if snapshot is None:
-        raise HTTPException(status_code=404, detail="Shared message not found")
+        raise HTTPException(status_code=403, detail="Shared message expired or revoked")
     return HTMLResponse(render_shared_message(snapshot))
