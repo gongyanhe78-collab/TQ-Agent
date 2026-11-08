@@ -7,6 +7,9 @@ from collections.abc import AsyncIterator
 from typing import Any
 from uuid import uuid4
 
+from backend.app.agents.unified_chat.orchestration_models import (
+    BudgetTermination,
+)
 from backend.app.agents.unified_chat.performance import PerformanceTrace
 
 
@@ -110,7 +113,7 @@ class ReportStreamMixin:
                 "message": "简易报告必须先创建主页面会话",
             }
             return
-        self.session_store.start_agent_run(
+        self._start_persisted_run(
             run_id,
             session_id,
             "conversation_report",
@@ -154,14 +157,20 @@ class ReportStreamMixin:
             )
             yield self._done(common, status="completed")
             self._schedule_memory_refresh(session_id)
-        except Exception as exc:
-            self.session_store.finish_agent_run(
-                run_id,
+        except BudgetTermination as exc:
+            self._finish_active_run(
                 status="failed",
-                metadata={"error": str(exc)},
+                error=str(exc),
+            )
+            raise
+        except Exception as exc:
+            self._finish_active_run(
+                status="failed",
+                error=str(exc),
             )
             yield {
                 "type": "error",
                 "message": f"简易 PDF 生成失败：{exc}",
                 "run_id": run_id,
+                **self._runtime_fields(),
             }

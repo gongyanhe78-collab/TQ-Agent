@@ -13,7 +13,7 @@ from backend.app.agents.smart_case_match.schemas import (
     SmartCaseMatchResponse,
 )
 from backend.app.agents.smart_case_match.workflow import progress
-from backend.app.api.dependencies import ServicesDep
+from backend.app.api.dependencies import CurrentUserDep, ServicesDep
 
 
 router = APIRouter(prefix="/api/smart-case-match", tags=["smart-case-match"])
@@ -51,19 +51,23 @@ def conversation_page():
 
 
 @router.get("/progress/{progress_id}")
-def match_progress(progress_id: str):
+def match_progress(progress_id: str, user: CurrentUserDep):
     """返回轻量任务进度，不包含业务正文和模型输入。"""
-    state = progress.get(progress_id)
+    state = progress.get(progress_id, owner_id=str(user["user_id"]))
     if state is None:
         raise HTTPException(status_code=404, detail="匹配进度不存在")
     return state
 
 
 @router.post("/search", response_model=SmartCaseMatchResponse)
-def search(payload: SmartCaseMatchRequest, services: ServicesDep):
+def search(
+    payload: SmartCaseMatchRequest,
+    services: ServicesDep,
+    user: CurrentUserDep,
+):
     """执行召回、语义补充、重排、逐例提炼和综合提示生成。"""
     try:
-        return services.smart_agent.run(payload)
+        return services.smart_agent.run(payload, owner_id=str(user["user_id"]))
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"相似个例匹配失败：{exc}") from exc
 
@@ -73,6 +77,7 @@ async def stream_conversation(
     payload: NaturalLanguageMatchRequest,
     request: Request,
     services: ServicesDep,
+    user: CurrentUserDep,
 ):
     """按 SSE 事件返回自然语言解析、匹配个例和综合研判。"""
 
@@ -81,6 +86,7 @@ async def stream_conversation(
         async for event, data in services.smart_agent.stream_natural_match(
             payload,
             request.is_disconnected,
+            owner_id=str(user["user_id"]),
         ):
             yield encode_sse(event, data)
 
@@ -95,7 +101,11 @@ async def stream_conversation(
 
 
 @router.get("/assets/chunks/{chunk_id}")
-def chunk_asset(chunk_id: str, services: ServicesDep):
+def chunk_asset(
+    chunk_id: str,
+    services: ServicesDep,
+    user: CurrentUserDep,
+):
     """按 chunk_id 返回文字证据正文。"""
     try:
         return services.smart_agent.chunk_detail(chunk_id)
@@ -104,7 +114,11 @@ def chunk_asset(chunk_id: str, services: ServicesDep):
 
 
 @router.get("/assets/images/{image_id}")
-def image_asset(image_id: str, services: ServicesDep):
+def image_asset(
+    image_id: str,
+    services: ServicesDep,
+    user: CurrentUserDep,
+):
     """按 image_id 读取本地图片。"""
     try:
         return FileResponse(services.smart_agent.image_path(image_id))

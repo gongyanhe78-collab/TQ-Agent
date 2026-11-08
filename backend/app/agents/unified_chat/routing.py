@@ -6,6 +6,7 @@ from typing import Any
 
 from backend.app.agents.query_intent import IntentRouteRequest
 from backend.app.agents.unified_chat.orchestration_models import (
+    BudgetTermination,
     UnifiedRouteDecision,
 )
 
@@ -102,6 +103,9 @@ class RoutingMixin:
                 trace,
                 tasks,
             )
+        except BudgetTermination:
+            # 取消和预算终止必须穿透规则兜底，交给统一编排器收口。
+            raise
         except Exception:
             # 意图 Agent 暂不可用时保留规则兜底。
             text = str(question or "")

@@ -182,8 +182,8 @@ class SessionStore:
                 (
                     "INSERT INTO agent_runs ("
                     "run_id, session_id, agent_type, status, question, answer, evidence_cases, "
-                    "evidence_chunks, images, reports, metadata, created_at, updated_at"
-                    ") VALUES (?, ?, ?, ?, ?, '', '[]', '[]', '[]', '[]', ?, ?, ?)"
+                    "evidence_chunks, images, reports, trace_id, metadata, created_at, updated_at"
+                    ") VALUES (?, ?, ?, ?, ?, '', '[]', '[]', '[]', '[]', ?, ?, ?, ?)"
                 ),
                 (
                     run_id,
@@ -191,6 +191,7 @@ class SessionStore:
                     agent_type,
                     status,
                     question,
+                    str((metadata or {}).get("trace_id") or ""),
                     json.dumps(metadata or {}, ensure_ascii=False),
                     now,
                     now,
@@ -216,7 +217,9 @@ class SessionStore:
             conn.execute(
                 (
                     "UPDATE agent_runs SET status = ?, answer = ?, evidence_cases = ?, "
-                    "evidence_chunks = ?, images = ?, reports = ?, metadata = ?, updated_at = ? "
+                    "evidence_chunks = ?, images = ?, reports = ?, "
+                    "trace_id = COALESCE(NULLIF(?, ''), trace_id), "
+                    "metadata = ?, updated_at = ? "
                     "WHERE run_id = ?"
                 ),
                 (
@@ -226,6 +229,7 @@ class SessionStore:
                     json.dumps(evidence_chunks or [], ensure_ascii=False),
                     json.dumps(images or [], ensure_ascii=False),
                     json.dumps(reports or [], ensure_ascii=False),
+                    str((metadata or {}).get("trace_id") or ""),
                     json.dumps(metadata or {}, ensure_ascii=False),
                     now,
                     run_id,
@@ -711,13 +715,29 @@ class SessionStore:
                     "evidence_chunks TEXT NOT NULL DEFAULT '[]', "
                     "images TEXT NOT NULL DEFAULT '[]', "
                     "reports TEXT NOT NULL DEFAULT '[]', "
+                    "trace_id TEXT NOT NULL DEFAULT '', "
                     "metadata TEXT NOT NULL DEFAULT '{}', "
                     "created_at TEXT NOT NULL, "
                     "updated_at TEXT NOT NULL)"
                 )
             )
+            agent_run_columns = {
+                row["name"]
+                for row in conn.execute(
+                    "PRAGMA table_info(agent_runs)"
+                ).fetchall()
+            }
+            if "trace_id" not in agent_run_columns:
+                # 兼容第一阶段已经创建、但没有独立 Trace 列的 SQLite 文件。
+                conn.execute(
+                    "ALTER TABLE agent_runs "
+                    "ADD COLUMN trace_id TEXT NOT NULL DEFAULT ''"
+                )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_agent_runs_session ON agent_runs(session_id, created_at)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_agent_runs_trace ON agent_runs(trace_id)"
             )
             # 每个主会话为每种 Agent 保存一份状态，多维检索提案不再落单独 JSON 文件。
             conn.execute(

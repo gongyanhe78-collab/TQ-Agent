@@ -1,0 +1,55 @@
+# 版本控制与本地开发环境
+.git
+.gitignore
+.github
+.idea
+.vscode
+.agents
+.claude
+.superpowers
+.codex_tmp
+.env
+.env.*
+!.env.example
+
+# Python 缓存与虚拟环境
+.venv
+venv
+env
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+
+# 前端依赖与构建产物
+frontend/node_modules
+frontend/dist
+
+# 测试和临时产物
+backend/tests
+tests
+tmp
+logs
+**/logs
+backend/tests/outputs
+backend/tests/**/artifacts
+
+# 本地数据库、缓存和日志
+**/*.sqlite3
+**/*.sqlite3-*
+**/*.db
+**/*.sqlite
+data/numba_cache
+**/*.log
+
+# 知识库与待入库 PDF 通过挂载或一次性初始化进入容器，不打入应用镜像
+data
+resource
+
+# 文档和无关压缩包
+**/*.md
+*.whl
+.DS_Store

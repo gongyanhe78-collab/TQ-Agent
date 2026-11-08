@@ -19,7 +19,12 @@ from backend.app.agents.case_multidim_search.schemas import (
     NaturalConversationResetRequest,
     StructuredCaseSearchRequest,
 )
-from backend.app.api.dependencies import ServicesDep
+from backend.app.api.dependencies import (
+    CurrentUserDep,
+    MultidimAgentDep,
+    MultidimPageStoreDep,
+    ServicesDep,
+)
 
 
 router = APIRouter(prefix="/api/case-multidim", tags=["case-multidim-search"])
@@ -47,10 +52,14 @@ def natural_chat_page():
 
 
 @router.post("/natural/parse", response_model=NaturalCaseQueryParseResponse)
-def natural_query_parse(payload: NaturalCaseQueryParseRequest, services: ServicesDep):
+def natural_query_parse(
+    payload: NaturalCaseQueryParseRequest,
+    services: ServicesDep,
+    page_store: MultidimPageStoreDep,
+):
     """解析自然语言并返回待确认条件，不执行检索。"""
     try:
-        return services.multidim_page_store.propose(
+        return page_store.propose(
             payload.conversation_id,
             payload.message,
             services.natural_query_parser,
@@ -63,10 +72,15 @@ def natural_query_parse(payload: NaturalCaseQueryParseRequest, services: Service
 
 
 @router.post("/natural/search", response_model=CaseAnalysisResponse)
-def natural_search(payload: NaturalCaseSearchRequest, services: ServicesDep):
+def natural_search(
+    payload: NaturalCaseSearchRequest,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
+    page_store: MultidimPageStoreDep,
+):
     """确认当前条件提案后，复用结构化检索与报告生成流程。"""
     try:
-        request, original_message = services.multidim_page_store.confirm(
+        request, original_message = page_store.confirm(
             payload.conversation_id,
             payload.proposal_id,
             payload.progress_id,
@@ -74,9 +88,12 @@ def natural_search(payload: NaturalCaseSearchRequest, services: ServicesDep):
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
-    search_progress.start(request.progress_id)
+    search_progress.start(
+        request.progress_id,
+        owner_id=str(user["user_id"]),
+    )
     try:
-        result = services.multidim_agent.analyze_structured(request)
+        result = agent.analyze_structured(request)
         result.question = original_message or result.question
         result.audit.update(
             {
@@ -104,31 +121,36 @@ def natural_search(payload: NaturalCaseSearchRequest, services: ServicesDep):
 @router.post("/natural/reset")
 def natural_conversation_reset(
     payload: NaturalConversationResetRequest,
-    services: ServicesDep,
+    page_store: MultidimPageStoreDep,
 ):
     """清空当前已确认上下文并创建全新聊天会话。"""
     return {
-        "conversation_id": services.multidim_page_store.reset(
-            payload.conversation_id
-        )
+        "conversation_id": page_store.reset(payload.conversation_id)
     }
 
 
 @router.get("/search/progress/{progress_id}")
-def structured_search_progress(progress_id: str):
+def structured_search_progress(progress_id: str, user: CurrentUserDep):
     """返回当前检索请求的轻量进度。"""
-    state = search_progress.get(progress_id)
+    state = search_progress.get(progress_id, owner_id=str(user["user_id"]))
     if state is None:
         raise HTTPException(status_code=404, detail="检索进度不存在")
     return state
 
 
 @router.post("/search", response_model=CaseAnalysisResponse)
-def structured_search(payload: StructuredCaseSearchRequest, services: ServicesDep):
+def structured_search(
+    payload: StructuredCaseSearchRequest,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
+):
     """按结构化表单条件执行全量检索分析。"""
-    search_progress.start(payload.progress_id)
+    search_progress.start(
+        payload.progress_id,
+        owner_id=str(user["user_id"]),
+    )
     try:
-        result = services.multidim_agent.analyze_structured(payload)
+        result = agent.analyze_structured(payload)
         search_progress.complete(payload.progress_id)
         return result
     except Exception as exc:
@@ -142,11 +164,12 @@ def structured_search(payload: StructuredCaseSearchRequest, services: ServicesDe
 @router.post("/search/export/csv")
 def structured_export_csv(
     payload: StructuredCaseSearchRequest,
-    services: ServicesDep,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
 ):
     """按结构化条件导出完整命中个例 CSV 表格。"""
     try:
-        path = services.multidim_agent.export_structured_csv(payload)
+        path = agent.export_structured_csv(payload)
         return FileResponse(path, media_type="text/csv", filename="case-search.csv")
     except Exception as exc:
         raise HTTPException(
@@ -156,20 +179,24 @@ def structured_export_csv(
 
 
 @router.get("/export-pdf/progress/{progress_id}")
-def export_pdf_progress(progress_id: str):
+def export_pdf_progress(progress_id: str, user: CurrentUserDep):
     """读取 PDF 导出的实时进度。"""
-    state = search_progress.get(progress_id)
+    state = search_progress.get(progress_id, owner_id=str(user["user_id"]))
     if state is None:
         raise HTTPException(status_code=404, detail="PDF 导出进度不存在")
     return state
 
 
 @router.post("/export-pdf")
-def export_pdf(payload: CasePdfExportRequest, services: ServicesDep):
+def export_pdf(
+    payload: CasePdfExportRequest,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
+):
     """根据已缓存的 answer_id 导出 PDF 并回传导出进度。"""
     progress_id = payload.progress_id or ""
     if progress_id:
-        search_progress.start(progress_id)
+        search_progress.start(progress_id, owner_id=str(user["user_id"]))
         search_progress.update(
             progress_id,
             stage="pdf_prepare",
@@ -188,7 +215,7 @@ def export_pdf(payload: CasePdfExportRequest, services: ServicesDep):
                 percent=percent,
             )
 
-        path = services.multidim_agent.export_pdf_from_answer(
+        path = agent.export_pdf_from_answer(
             payload.answer_id,
             filename=filename,
             report_title=payload.report_title,
@@ -206,7 +233,11 @@ def export_pdf(payload: CasePdfExportRequest, services: ServicesDep):
 
 
 @router.get("/assets/images/{image_id}")
-def get_image_asset(image_id: str, services: ServicesDep):
+def get_image_asset(
+    image_id: str,
+    services: ServicesDep,
+    user: CurrentUserDep,
+):
     """读取共享知识库图片，供网页预览和 PDF 复用。"""
     try:
         return FileResponse(services.multidim_agent.image_asset_path(image_id))
@@ -215,24 +246,32 @@ def get_image_asset(image_id: str, services: ServicesDep):
 
 
 @router.get("/reports/{filename}")
-def get_report(filename: str, services: ServicesDep):
+def get_report(
+    filename: str,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
+):
     """安全读取统一聊天页生成的 PDF 报告。"""
     safe_name = Path(filename).name
     if safe_name != filename or not safe_name.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="报告文件名不合法")
-    path = services.settings.case_multidim_runtime_dir / "reports" / safe_name
+    path = agent.output_dir / safe_name
     if not path.is_file():
         raise HTTPException(status_code=404, detail="报告不存在")
     return FileResponse(path, media_type="application/pdf", filename=safe_name)
 
 
 @router.get("/report-thumbnails/{filename}")
-def get_report_thumbnail(filename: str, services: ServicesDep):
+def get_report_thumbnail(
+    filename: str,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
+):
     """返回持久化的 PDF 第一页缩略图，并兼容历史报告。"""
     safe_name = Path(filename).name
     if safe_name != filename or not safe_name.lower().endswith(".png"):
         raise HTTPException(status_code=400, detail="缩略图文件名不合法")
-    reports_dir = services.settings.case_multidim_runtime_dir / "reports"
+    reports_dir = agent.output_dir
     suffix = ".thumbnail.png"
     if not safe_name.endswith(suffix):
         raise HTTPException(status_code=404, detail="报告缩略图不存在")
@@ -250,10 +289,14 @@ def get_report_thumbnail(filename: str, services: ServicesDep):
 
 
 @router.get("/assets/{filename}")
-def get_asset(filename: str, services: ServicesDep):
+def get_asset(
+    filename: str,
+    user: CurrentUserDep,
+    agent: MultidimAgentDep,
+):
     """读取分析阶段生成的图表资源。"""
     safe_name = Path(filename).name
-    path = services.multidim_agent.output_dir / "charts" / safe_name
+    path = agent.output_dir / "charts" / safe_name
     if not path.is_file():
         raise HTTPException(status_code=404, detail="图表资源不存在")
     return FileResponse(path)

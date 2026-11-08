@@ -15,6 +15,9 @@ from backend.app.agents.case_multidim_search.core.natural_query import (
 from backend.app.agents.case_multidim_search.integrations.non_thinking_llm import (
     ensure_non_thinking_client,
 )
+from backend.app.agents.unified_chat.orchestration_models import (
+    BudgetTermination,
+)
 from backend.app.agents.unified_chat.performance import PerformanceTrace
 from backend.app.agents.unified_chat.result_adapter import (
     adapt_multidim_result,
@@ -158,7 +161,7 @@ class MultidimStreamMixin:
             str(pending.get("proposal_id") or ""),
             run_id,
         )
-        self.session_store.start_agent_run(
+        self._start_persisted_run(
             run_id,
             session_id,
             "case_multidim_search",
@@ -175,6 +178,7 @@ class MultidimStreamMixin:
                 "percent": 5,
                 "message": "正在执行多维检索与统计分析",
             },
+            **self._runtime_fields(),
         }
         multidim_progress.start(run_id)
         try:
@@ -300,11 +304,17 @@ class MultidimStreamMixin:
             )
             yield self._done(common, status="completed")
             self._schedule_memory_refresh(session_id)
+        except BudgetTermination as exc:
+            multidim_progress.fail(run_id, f"检索失败：{exc}")
+            self._finish_active_run(
+                status="failed",
+                error=str(exc),
+            )
+            raise
         except Exception as exc:
             multidim_progress.fail(run_id, f"检索失败：{exc}")
-            self.session_store.finish_agent_run(
-                run_id,
+            self._finish_active_run(
                 status="failed",
-                metadata={"error": str(exc)},
+                error=str(exc),
             )
             raise

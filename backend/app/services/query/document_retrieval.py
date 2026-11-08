@@ -1,10 +1,15 @@
 """文档片段检索、个例范围读取和上下文压缩。"""
 from __future__ import annotations
 
+import inspect
 import re
 from typing import Any
 
 from backend.app.models import DocumentChunk, DocumentRetrievalHit
+from backend.app.observability.context import current_context
+from backend.app.observability import metrics
+from backend.app.services.vector.contracts import VectorHit, VectorQuery
+from backend.app.services.vector.json_document_store import lexical_terms
 
 
 _CONTEXT_EVIDENCE_SECTIONS: tuple[tuple[str, ...], ...] = (
@@ -73,6 +78,7 @@ class DocumentRetriever:
         self.embedding_client = embedding_client
         self.document_store = document_store
         self.standard_case_store = standard_case_store
+        self.last_retrieval_diagnostics: dict[str, str] | None = None
 
     def retrieve(
         self,
@@ -82,7 +88,7 @@ class DocumentRetriever:
         context_case_ids: list[str] | None = None,
     ) -> tuple[str, list[DocumentRetrievalHit]]:
         """召回与问题相关的文档片段，保持原检索和排序规则。"""
-        retrieval_mode = "document_vector"
+        self.last_retrieval_diagnostics = None
         scoped_chunks = self._document_chunks_for_context_cases(context_case_ids)
         if scoped_chunks:
             return "document_context_cases", self._rank_context_document_chunks(
@@ -92,13 +98,53 @@ class DocumentRetriever:
                 top_n,
             )
         try:
+            if not self.embedding_client.is_available():
+                diagnostics = {
+                    "category": "embedding_unavailable",
+                    "backend": self._store_backend(),
+                    "reason": "embedding client is unavailable",
+                    "exception_type": "",
+                }
+                self.last_retrieval_diagnostics = diagnostics
+                metrics.record_fallback(
+                    "vector",
+                    backend=diagnostics["backend"],
+                    reason=diagnostics["category"],
+                )
+                return self._lexical_result(
+                    question,
+                    top_k,
+                    top_n,
+                    fallback_diagnostics=diagnostics,
+                )
             self._ensure_document_index_compatible()
             query_embedding = self.embedding_client.embed_query(question)
-            hits = self.document_store.query(query_embedding, top_k=top_k)
+            hits = self._query_store(
+                query_embedding,
+                top_k,
+                self._vector_query(question, query_embedding, top_k),
+            )
+            mode, normalized = self._normalize_hits(
+                hits,
+                "vector",
+                question,
+                top_k,
+            )
         except Exception as exc:
-            retrieval_mode = f"document_vector_error_fallback: {exc}"
-            hits = self._lexical_recall(question, top_k=top_k)
-        return retrieval_mode, hits[:top_n]
+            diagnostics = self._retrieval_diagnostics(exc)
+            self.last_retrieval_diagnostics = diagnostics
+            metrics.record_fallback(
+                "vector",
+                backend=diagnostics["backend"],
+                reason=diagnostics["category"],
+            )
+            return self._lexical_result(
+                question,
+                top_k,
+                top_n,
+                fallback_diagnostics=diagnostics,
+            )
+        return mode, normalized[:top_n]
 
     def _document_chunks_for_context_cases(self, context_case_ids: list[str] | None = None) -> list:
         if not context_case_ids:
@@ -130,7 +176,7 @@ class DocumentRetriever:
         chunks: list,
         context_case_ids: list[str],
         top_n: int,
-    ) -> list[DocumentRetrievalHit]:
+    ) -> list[VectorHit]:
         cases_by_id = {
             case.case_id: case
             for case in self.standard_case_store.list_cases()
@@ -138,13 +184,34 @@ class DocumentRetriever:
         }
         chunk_by_id = {chunk.chunk_id: chunk for chunk in chunks}
         tokens = [part for part in re.split(r"[\s，。！？、；：,.!?;:（）()]+", question) if part]
+        context = current_context()
+        backend = self._store_backend()
+        collection = self._store_collection()
+        applied_filters = {"context_case_ids": list(context_case_ids)}
 
-        def make_hit(chunk: DocumentChunk) -> DocumentRetrievalHit:
+        def make_hit(chunk: DocumentChunk) -> VectorHit:
             normalized = chunk.content.replace(" ", "")
             score = sum(
                 max(1, len(token)) for token in tokens if token.replace(" ", "") in normalized
             )
-            return DocumentRetrievalHit(chunk=chunk, score=float(score))
+            return VectorHit(
+                chunk_id=chunk.chunk_id,
+                content=chunk.content,
+                raw_score=float(score),
+                fused_score=float(score),
+                metadata={
+                    "source_pdf": chunk.source_pdf,
+                    "chunk_no": int(chunk.chunk_no),
+                    "file_path": chunk.file_path or "",
+                    "text_length": len(chunk.content),
+                    "applied_filters": applied_filters,
+                },
+                backend=backend,
+                collection=collection,
+                retrieval_mode="lexical/context_cases",
+                request_id=context.request_id,
+                trace_id=context.trace_id,
+            )
 
         ordered_groups: list[list[DocumentChunk]] = []
         seen_chunk_ids: set[str] = set()
@@ -207,15 +274,211 @@ class DocumentRetriever:
                 "rebuild document_index"
             )
 
+    def _vector_query(
+        self,
+        question: str,
+        embedding: list[float],
+        top_k: int,
+    ) -> VectorQuery:
+        """合并当前请求追踪字段，构造统一向量查询。"""
+        context = current_context()
+        return VectorQuery(
+            query_text=str(question or ""),
+            embedding=[float(value) for value in embedding],
+            top_k=max(0, int(top_k)),
+            request_id=context.request_id,
+            trace_id=context.trace_id,
+            user_id=context.user_id,
+        )
+
+    def _lexical_result(
+        self,
+        question: str,
+        top_k: int,
+        top_n: int,
+        *,
+        fallback_diagnostics: dict[str, str] | None = None,
+    ) -> tuple[str, list[VectorHit]]:
+        """优先让统一存储产生诚实的 JSON 词面命中，再回退本地词面扫描。"""
+        query = self._vector_query(question, [], top_k)
+        try:
+            hits = self._query_store([], top_k, query)
+            mode, normalized = self._normalize_hits(
+                hits,
+                "lexical",
+                question,
+                top_k,
+                backend_override="json",
+                metadata_extra=(
+                    {"retrieval_fallback": fallback_diagnostics}
+                    if fallback_diagnostics
+                    else None
+                ),
+            )
+        except Exception:
+            mode, normalized = self._normalize_hits(
+                self._lexical_recall(question, top_k),
+                "lexical",
+                question,
+                top_k,
+                backend_override="json",
+                metadata_extra=(
+                    {"retrieval_fallback": fallback_diagnostics}
+                    if fallback_diagnostics
+                    else None
+                ),
+            )
+        return mode, normalized[:top_n]
+
+    def _query_store(
+        self,
+        embedding: list[float],
+        top_k: int,
+        query: VectorQuery,
+    ) -> list[Any]:
+        """调用统一查询签名，同时兼容只接受两个参数的既有存储。"""
+        if self._store_supports_vector_query():
+            return self.document_store.query(
+                embedding,
+                top_k=top_k,
+                query=query,
+            )
+        return self.document_store.query(embedding, top_k)
+
+    def _store_supports_vector_query(self) -> bool:
+        """检查旧存储是否已实现可选的统一查询参数。"""
+        try:
+            parameters = inspect.signature(self.document_store.query).parameters
+        except (TypeError, ValueError):
+            return True
+        return "query" in parameters or any(
+            parameter.kind == inspect.Parameter.VAR_KEYWORD
+            for parameter in parameters.values()
+        )
+
+    def _normalize_hits(
+        self,
+        hits: list[Any],
+        default_mode: str,
+        question: str,
+        top_k: int,
+        *,
+        backend_override: str = "",
+        metadata_extra: dict[str, Any] | None = None,
+    ) -> tuple[str, list[VectorHit]]:
+        """把旧命中补齐为真实后端、集合、模式和追踪字段。"""
+        context = current_context()
+        backend = backend_override or self._store_backend()
+        collection = self._store_collection()
+        normalized: list[VectorHit] = []
+        for hit in hits:
+            chunk = getattr(hit, "chunk", None)
+            if chunk is None:
+                continue
+            score = float(getattr(hit, "score", 0.0) or 0.0)
+            raw_score = float(getattr(hit, "raw_score", score) or 0.0)
+            fused_score = getattr(hit, "fused_score", score)
+            metadata = dict(getattr(hit, "metadata", {}) or {})
+            metadata.setdefault("source_pdf", chunk.source_pdf)
+            metadata.setdefault("chunk_no", int(chunk.chunk_no))
+            metadata.setdefault("file_path", chunk.file_path or "")
+            metadata.setdefault("text_length", len(chunk.content))
+            metadata.setdefault("applied_filters", {})
+            for key, value in (metadata_extra or {}).items():
+                metadata[key] = (
+                    dict(value)
+                    if isinstance(value, dict)
+                    else list(value)
+                    if isinstance(value, list)
+                    else value
+                )
+            normalized.append(
+                VectorHit(
+                    chunk_id=chunk.chunk_id,
+                    content=chunk.content,
+                    raw_score=raw_score,
+                    fused_score=(
+                        float(fused_score)
+                        if fused_score is not None
+                        else None
+                    ),
+                    metadata=metadata,
+                    backend=str(getattr(hit, "backend", "") or backend),
+                    collection=str(
+                        getattr(hit, "collection", "") or collection
+                    ),
+                    retrieval_mode=str(
+                        getattr(hit, "retrieval_mode", "")
+                        or self._mode_name(default_mode, backend)
+                    ),
+                    request_id=str(
+                        getattr(hit, "request_id", "") or context.request_id
+                    ),
+                    trace_id=str(
+                        getattr(hit, "trace_id", "") or context.trace_id
+                    ),
+                )
+            )
+        mode = (
+            normalized[0].retrieval_mode
+            if normalized
+            else self._mode_name(default_mode, backend)
+        )
+        return mode, normalized
+
+    def _retrieval_diagnostics(self, exc: Exception) -> dict[str, str]:
+        """生成可观测且不进入指标标签的真实降级诊断。"""
+        reason = str(exc) or type(exc).__name__
+        category = (
+            "dimension_mismatch"
+            if "dimension mismatch" in reason.lower()
+            else "backend_error"
+        )
+        return {
+            "category": category,
+            "backend": self._store_backend(),
+            "reason": reason,
+            "exception_type": type(exc).__name__,
+        }
+
+    def _store_backend(self) -> str:
+        """读取活动存储的真实后端名称。"""
+        backend = str(getattr(self.document_store, "backend", "") or "")
+        if backend:
+            return backend
+        try:
+            return str(self.document_store.collection_info().get("backend") or "")
+        except Exception:
+            return "document"
+
+    def _store_collection(self) -> str:
+        """读取活动存储的真实集合名称。"""
+        collection = str(
+            getattr(self.document_store, "collection_name", "") or ""
+        )
+        if collection:
+            return collection
+        try:
+            info = self.document_store.collection_info()
+            return str(info.get("collection") or info.get("name") or "")
+        except Exception:
+            return ""
+
+    @staticmethod
+    def _mode_name(category: str, backend: str) -> str:
+        """按真实检索类别和后端拼装稳定模式名。"""
+        return f"{category}/{backend}" if backend else category
+
     def _lexical_recall(self, question: str, top_k: int) -> list[DocumentRetrievalHit]:
-        tokens = [part for part in re.split(r"[\s，。！？、；：,.!?;:（）()]+", question) if part]
+        tokens = lexical_terms(question)
         hits = []
         for chunk in self.document_store.list_chunks():
             normalized = chunk.content.replace(" ", "")
             score = sum(
                 max(1, len(token)) for token in tokens if token and token.replace(" ", "") in normalized
             )
-            hits.append(DocumentRetrievalHit(chunk=chunk, score=float(score)))
+            if score > 0:
+                hits.append(DocumentRetrievalHit(chunk=chunk, score=float(score)))
         hits.sort(key=lambda item: item.score, reverse=True)
         return hits[:top_k]
 

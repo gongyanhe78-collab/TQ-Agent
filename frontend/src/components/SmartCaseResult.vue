@@ -51,8 +51,12 @@
               </div>
             </div>
             <div v-if="expandedImageId && expandedImageId.scope === 'reference' && expandedImageId.caseId === item.case_id && referenceImageIds(reference).includes(expandedImageId.imageId)" class="image-detail">
-              <img :src="assetUrl(expandedImageId.url)" :alt="expandedImageId.caption || expandedImageId.imageId" />
-              <span>{{ expandedImageId.caption || expandedImageId.imageId }}</span>
+              <span v-if="expandedImageId.loading">正在读取图片证据…</span>
+              <span v-else-if="expandedImageId.error" class="error-text">{{ expandedImageId.error }}</span>
+              <template v-else>
+                <img :src="expandedImageId.objectUrl" :alt="expandedImageId.caption || expandedImageId.imageId" />
+                <span>{{ expandedImageId.caption || expandedImageId.imageId }}</span>
+              </template>
             </div>
           </article>
         </div>
@@ -72,8 +76,12 @@
           </button>
           </div>
           <div v-if="expandedImageId && expandedImageId.scope === 'supplemental' && expandedImageId.caseId === item.case_id" class="image-detail">
-            <img :src="assetUrl(expandedImageId.url)" :alt="expandedImageId.caption || expandedImageId.imageId" />
-            <span>{{ expandedImageId.caption || expandedImageId.imageId }}</span>
+            <span v-if="expandedImageId.loading">正在读取图片证据…</span>
+            <span v-else-if="expandedImageId.error" class="error-text">{{ expandedImageId.error }}</span>
+            <template v-else>
+              <img :src="expandedImageId.objectUrl" :alt="expandedImageId.caption || expandedImageId.imageId" />
+              <span>{{ expandedImageId.caption || expandedImageId.imageId }}</span>
+            </template>
           </div>
         </details>
       </article>
@@ -104,8 +112,12 @@
 </template>
 
 <script setup>
-import { computed, defineComponent, h, reactive, ref } from "vue";
-import { API_ORIGIN } from "../api";
+import { computed, defineComponent, h, onBeforeUnmount, reactive, ref } from "vue";
+import {
+  fetchAuthenticatedBlob,
+  fetchSmartCaseChunk,
+  getApiErrorMessage,
+} from "../api";
 
 const props = defineProps({ result: { type: Object, required: true } });
 const queryTitle = computed(() => String(props.result.query_summary?.process_name || "").trim());
@@ -185,38 +197,62 @@ const toggleChunk = async (chunkId) => {
   if (chunkDetails[chunkId] || chunkErrors[chunkId]) return;
   loadingChunkId.value = chunkId;
   try {
-    const response = await fetch(`${API_ORIGIN}/api/smart-case-match/assets/chunks/${encodeURIComponent(chunkId)}`);
-    if (!response.ok) throw new Error(`证据读取失败（${response.status}）`);
-    const data = await response.json();
+    const data = await fetchSmartCaseChunk(chunkId);
     chunkDetails[chunkId] = data.content || data.text || "暂无文字证据正文";
   } catch (error) {
-    chunkErrors[chunkId] = error.message || "文字证据读取失败";
+    chunkErrors[chunkId] = getApiErrorMessage(error, "文字证据读取失败");
   } finally {
     loadingChunkId.value = "";
   }
 };
 
 // 图片同样只在用户点击证据编号时展开，并按当前个例保留关联关系。
-const toggleImage = (imageRef, item) => {
+const releaseExpandedImage = () => {
+  if (expandedImageId.value?.objectUrl) {
+    URL.revokeObjectURL(expandedImageId.value.objectUrl);
+  }
+  expandedImageId.value = null;
+};
+
+const toggleImage = async (imageRef, item) => {
   const imageId = String(imageRef?.image_id || "");
   if (!imageId) return;
   if (expandedImageId.value?.imageId === imageId && expandedImageId.value?.caseId === item.case_id) {
-    expandedImageId.value = null;
+    releaseExpandedImage();
     return;
   }
+  releaseExpandedImage();
   const image = [...(item.evidence_images || []), ...(item.supplemental_images || [])]
     .find((candidate) => String(candidate.image_id || "") === imageId);
-  expandedImageId.value = {
+  const target = {
     scope: (item.key_references || []).some((reference) => referenceImageIds(reference).includes(imageId))
       ? "reference"
       : "supplemental",
     caseId: item.case_id,
     imageId,
-    url: image?.url || `/api/smart-case-match/assets/images/${encodeURIComponent(imageId)}`,
     caption: imageRef.caption || image?.caption || imageId,
+    loading: true,
+    error: "",
+    objectUrl: "",
   };
+  expandedImageId.value = target;
+  try {
+    const blob = await fetchAuthenticatedBlob(
+      image?.url || `/api/smart-case-match/assets/images/${encodeURIComponent(imageId)}`,
+    );
+    if (expandedImageId.value !== target) return;
+    target.objectUrl = URL.createObjectURL(blob);
+  } catch (error) {
+    if (expandedImageId.value !== target) return;
+    target.error = getApiErrorMessage(error, "图片证据读取失败");
+  } finally {
+    if (expandedImageId.value === target) target.loading = false;
+  }
 };
-const assetUrl = (url) => /^https?:\/\//i.test(url || "") ? url : `${API_ORIGIN}${String(url || "").startsWith("/") ? url : `/${url}`}`;
+
+onBeforeUnmount(() => {
+  releaseExpandedImage();
+});
 </script>
 
 <style scoped>

@@ -5,7 +5,9 @@
   <img src="https://img.shields.io/badge/FastAPI-0.115%2B-009688?logo=fastapi&logoColor=white" alt="FastAPI">
   <img src="https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue 3">
   <img src="https://img.shields.io/badge/ChromaDB-向量检索-F2C94C" alt="ChromaDB">
-  <img src="https://img.shields.io/badge/SQLite-会话持久化-003B57?logo=sqlite&logoColor=white" alt="SQLite">
+  <img src="https://img.shields.io/badge/Milvus-2.5.18-00A1EA" alt="Milvus 2.5.18">
+  <img src="https://img.shields.io/badge/PostgreSQL-16.4-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL 16.4">
+  <img src="https://img.shields.io/badge/Redis-7.2.5-DC382D?logo=redis&logoColor=white" alt="Redis 7.2.5">
   <img src="https://img.shields.io/badge/状态-持续迭代-2E8B57" alt="持续迭代">
 </p>
 
@@ -13,7 +15,7 @@
 
 基于大语言模型、向量检索和结构化个例数据的气象灾害问答与分析平台。系统面向气象业务人员，将 PDF 个例材料整理为可检索、可分析、可追溯的知识库，用户通过一个聊天入口即可完成统计汇总、过程复盘、区域分析、相似个例匹配、图片证据查看和报告导出。
 
-> 当前版本：统一聊天主链路与模块化应用架构（2026 年 11 月）
+> 当前版本：第二阶段企业化运行时 —— 黄金评测、Agent 预算、可观测性、Milvus 混合检索与长期记忆（2026 年 11 月）
 
 ## 🧩 项目简介
 
@@ -36,6 +38,9 @@
 - 🗂️ **会话上下文**：保存消息、个例范围、证据、图片、图表、报告和 Agent 运行信息。
 - 🔁 **重生成与版本切换**：可附带本次重生成要求，并保留、切换查看历史回答版本。
 - 💬 **消息操作**：支持复制、分享、反馈、问题上报、重新生成和 PDF 导出。
+- 🧠 **长期记忆**：按用户持久化偏好与事实，回答前自动注入记忆上下文，支持按用户读取与软删除。
+- 🧪 **确定性评测**：60 条黄金用例与固定 Harness，路由与检索指标可重复复现，可选 RAGAS 评测。
+- 🔭 **可观测性**：OpenTelemetry 链路追踪、Prometheus 指标与 Jaeger 可视化，请求级 Agent 预算与终止原因。
 
 ### 🧠 代码功能简要说明
 
@@ -51,7 +56,15 @@
 | 🧩 `backend/app/agents/query_intent/` | 对复合问题进行意图识别、任务拆分和路由规划 |
 | 📐 `backend/app/services/structured_qa.py` | 基于标准化个例回答统计、对比和证据清单等结构化问题 |
 | 🏗️ `backend/app/services/knowledge_builder/` | 构建文档段向量、图片索引和标准化个例数据 |
-| 💾 `backend/app/services/session_store.py` | 使用 SQLite 持久化会话、消息、Agent 运行记录、反馈、分享和回答版本 |
+| 🔐 `backend/app/api/routes/auth.py` | 提供注册、登录、刷新令牌、登出和当前用户接口 |
+| 💾 `backend/app/db/session_repository.py` | 使用 PostgreSQL 持久化会话、消息、Agent 运行记录、反馈、分享和回答版本 |
+| ⚡ `backend/app/cache/context_cache.py` | 使用 Redis 缓存短期会话上下文，未命中或故障时回退 PostgreSQL |
+| 🔭 `backend/app/observability/` | OTel 延迟初始化、日志关联与 Prometheus 文本指标导出 |
+| 🧠 `backend/app/services/memory_service.py` | 长期记忆候选抽取、结构化降级、Redis 缓存与删除联动 |
+| 🗂️ `backend/app/repositories/memory_repository.py` | PostgreSQL 长期记忆权威仓储与软删除 |
+| 📐 `backend/app/services/vector/` | Milvus / Chroma / JSON 统一契约与固定降级链 |
+| 🧪 `backend/evals/` | 60 条黄金数据集、确定性指标与评测 Harness |
+| 🛠️ `scripts/rebuild_vector_index.py` | 向量索引重建与权威 JSON 对账（支持 dry-run） |
 | 💬 `frontend/src/components/` | Vue 3 聊天界面、会话列表、处理进度、证据预览、报告卡和消息操作 |
 
 ## 🏗️ 系统架构
@@ -81,10 +94,14 @@ flowchart TD
     end
 
     subgraph DATA["数据与外部服务"]
-        CHROMA["ChromaDB<br/>文档片段"]
+        MILVUS["Milvus 2.5.18<br/>混合检索（稠密 + BM25 稀疏）"]
+        CHROMA["Chroma / JSON<br/>固定降级链"]
         CASES["标准化个例 JSON"]
         IMAGES["图片证据与元数据"]
-        SESSIONS["SQLite<br/>会话 · 消息 · 反馈 · 版本"]
+        SESSIONS[("PostgreSQL 16.4<br/>用户 · 会话 · 消息 · 反馈 · 版本 · 记忆")]
+        CACHE[("Redis 7.2.5<br/>短期上下文缓存")]
+        MEMORY["长期记忆<br/>按用户召回 · 权威在 PostgreSQL"]
+        TRACE["Jaeger / OTel<br/>链路追踪与指标"]
         MODELS["DashScope<br/>Chat · Embedding · Rerank"]
         RUNTIME["runtime/<br/>报告 · 审计 · 临时产物"]
     end
@@ -100,13 +117,19 @@ flowchart TD
     INTENT --> MULTI
     INTENT --> SMART
     INTENT --> CONTROL
-    RAG --> CHROMA
+    RAG --> MILVUS
+    MILVUS -.->|停机降级| CHROMA
+    ORCH --> MEMORY
+    MEMORY --> SESSIONS
+    ORCH --> TRACE
     RAG --> MODELS
     MULTI --> CASES
     MULTI --> IMAGES
     SMART --> CASES
     SMART --> IMAGES
     ORCH --> SESSIONS
+    ORCH --> CACHE
+    CACHE -.->|未命中或故障回退| SESSIONS
     MULTI --> RUNTIME
     SMART --> RUNTIME
 ```
@@ -119,7 +142,7 @@ flowchart TD
 | 应用装配层 | `backend/app/main.py`、`backend/app/core/` | 创建 FastAPI 应用、管理生命周期、加载配置 |
 | 业务服务层 | `backend/app/services/query/` | 文档问答、结构化查询、上下文解析、结果适配和统一门面 |
 | Agent 层 | `backend/app/agents/` | 意图路由、统一编排、多维分析、相似匹配和领域处理 |
-| 基础设施层 | `backend/app/services/` | 存储、模型客户端、知识库构建、会话与导出 |
+| 基础设施层 | `backend/app/db/`、`backend/app/cache/`、`backend/app/services/` | PostgreSQL 仓储、Redis 缓存、模型客户端、知识库构建与导出 |
 
 依赖方向保持为“接口 → 应用服务 → Agent / 基础设施”。Router 通过 `ServicesDep` 获取 `AppServices`，不会反向导入 `main.py` 或持有应用全局状态。导入应用模块不会自动创建数据库、连接向量库或调用模型，这些动作只在 FastAPI `lifespan` 启动阶段执行。
 
@@ -155,7 +178,7 @@ Vue 统一聊天页
 2. 编排器读取当前会话历史、结构化上下文和上一轮可复用结果。
 3. 意图 Agent 识别问题并规划文档 RAG、多维检索、Smart 匹配或澄清链路。
 4. 后端持续推送检索、分析、生成和保存阶段的进度与回答增量。
-5. 结果写入 SQLite，会话保存回答、证据、图片、图表、报告和版本信息。
+5. 结果先写入 PostgreSQL，再刷新或失效 Redis 上下文缓存，保存回答、证据、图片、图表、报告和版本信息。
 6. 用户可以继续追问、反馈、重新生成、分享或导出 PDF。
 
 ## 📁 项目结构
@@ -165,19 +188,31 @@ Vue 统一聊天页
 │   ├── app/
 │   │   ├── main.py                       # 应用工厂：CORS、生命周期和路由装配
 │   │   ├── api/
-│   │   │   ├── dependencies.py           # ServicesDep 依赖注入
+│   │   │   ├── dependencies.py           # 认证、用户级仓储和服务依赖注入
 │   │   │   ├── schemas.py                # 请求数据模型
 │   │   │   └── routes/
+│   │   │       ├── auth.py               # 注册、登录、刷新、登出和当前用户
 │   │   │       ├── agent.py              # 三个公开查询入口
 │   │   │       ├── sessions.py           # 会话、消息、反馈、分享和导出
 │   │   │       ├── system.py             # 健康检查与知识库状态
 │   │   │       ├── vectors.py            # 知识库重建与图片证据
 │   │   │       ├── case_multidim.py      # 多维个例专用接口
 │   │   │       ├── smart_case_match.py   # Smart 匹配专用接口
-│   │   │       └── query_intent.py       # 意图路由专用接口
+│   │   │       ├── query_intent.py       # 意图路由专用接口
+│   │   │       ├── memories.py           # 长期记忆读取与软删除
+│   │   │       └── observability.py      # /metrics 文本指标
+│   │   ├── cache/
+│   │   │   └── context_cache.py          # Redis 优先、PostgreSQL 回退的上下文缓存
+│   │   ├── observability/               # OTel 追踪、日志关联与 Prometheus 指标
 │   │   ├── core/
 │   │   │   ├── config.py                 # 环境变量、目录与模型配置
 │   │   │   └── lifecycle.py              # 服务容器生命周期
+│   │   ├── db/
+│   │   │   ├── models.py                 # 用户、会话、消息、记忆和审计模型
+│   │   │   ├── repositories.py           # 认证数据访问
+│   │   │   ├── session_repository.py     # PostgreSQL 会话与消息仓储
+│   │   │   └── memory_repository.py      # 长期记忆权威仓储与软删除
+│   │   ├── security/                     # 密码哈希、令牌和鉴权依赖
 │   │   ├── agents/
 │   │   │   ├── unified_chat/             # 统一编排、路由、流式处理和持久化
 │   │   │   ├── query_intent/             # 意图识别与任务拆分
@@ -188,11 +223,28 @@ Vue 统一聊天页
 │   │       ├── query/                    # 统一查询门面及查询业务服务
 │   │       ├── model_client/             # Chat、Embedding、Rerank 客户端
 │   │       ├── knowledge_builder/        # 文档、图片和标准化个例构建
-│   │       ├── session_store.py          # SQLite 会话持久化
 │   │       ├── document_store.py         # ChromaDB 文档片段存储
+│   │       ├── memory_service.py         # 长期记忆服务（候选抽取与删除联动）
+│   │       ├── vector/                   # Milvus / Chroma / JSON 契约与降级链
 │   │       ├── image_extraction.py       # 图片证据存储
 │   │       └── structured_qa.py          # 结构化问题回答
+│   ├── alembic/
+│   │   └── versions/                     # PostgreSQL 与测试库结构迁移
+│   ├── evals/                            # 60 条黄金数据集、确定性指标与 Harness
 │   └── tests/                            # 后端单元、集成和架构测试
+├── docker/
+│   ├── backend.Dockerfile                # 固定 Python 版本的后端镜像
+│   ├── frontend.Dockerfile               # 固定 Node 与 Nginx 版本的前端镜像
+│   ├── migrate_entrypoint.py             # Alembic、历史迁移和管理员初始化入口
+│   └── nginx.conf                        # 静态资源、API 和分享页同源代理
+├── scripts/
+│   ├── bootstrap_admin.py                # 幂等初始化首个管理员
+│   ├── init_api_data.py                  # 把本机知识库幂等同步到 API 数据卷
+│   ├── migrate_sqlite_to_postgres.py     # 旧 SQLite 数据一次性导入 PostgreSQL
+│   ├── rebuild_vector_index.py           # Milvus 向量重建与权威 JSON 对账
+│   ├── compare_vector_backends.py        # Chroma 与 Milvus 检索对比
+│   └── run_evaluation.py                 # 黄金数据集确定性评测入口
+├── compose.yaml                          # 一条命令启动全部核心服务
 ├── frontend/
 │   ├── src/
 │   │   ├── App.vue                       # 页面状态、SSE 和会话协同
@@ -208,7 +260,7 @@ Vue 统一聊天页
 │   └── package.json
 ├── docs/                                 # 架构与设计说明
 ├── resource/                             # 待入库 PDF（不提交）
-├── data/                                 # 知识库、图片和会话数据（不提交）
+├── data/                                 # 知识库、图片和历史 SQLite 迁移来源（不提交）
 ├── tests/                                # 场景验证脚本和本地验证产物
 ├── tmp/                                  # 本地运行截图（不提交）
 ├── requirements.txt
@@ -253,73 +305,216 @@ Vue 统一聊天页
 
 ## 🚀 快速开始
 
-### 🧰 环境要求
+### 🐳 推荐启动方式：Docker Compose
 
-- Python 3.10 或更高版本
-- Node.js 18 或更高版本和 npm
-- 可访问 DashScope OpenAI 兼容接口的 API Key
-- 构建知识库时预留足够的磁盘空间和模型调用配额
-
-### 1️⃣ 创建虚拟环境并安装后端依赖
-
-Windows PowerShell：
+`compose.yaml` 已把前端、API、迁移任务、PostgreSQL、Redis 和 Milvus 放在同一个 Compose 项目内；Jaeger 属于可选 profile。Docker Desktop 启动后，在项目根目录执行一条命令即可构建并启动全部核心服务：
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+docker compose up -d --build
 ```
 
-Linux/macOS：
+首次运行会自动拉取并构建缺失镜像；PostgreSQL 和 Redis 也可以提前单独拉取：
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
+```powershell
+docker compose pull postgres redis
 ```
 
-### 2️⃣ 配置环境变量
+后续代码或配置未变化时，直接执行下面的命令即可重新启动整个项目：
 
-在项目根目录创建 `.env`：
+```powershell
+docker compose up -d
+```
+
+打开 <http://127.0.0.1:8080>。API、PostgreSQL、Redis 和 Milvus 默认只在 Compose 内网暴露，浏览器通过前端的 Nginx 同源代理访问 `/api` 和 `/share`。
+
+Milvus 由 `vector` profile 控制，`.env.example` 默认通过 `COMPOSE_PROFILES=vector` 启用。如需额外启动 Jaeger 链路追踪，执行：
+
+```powershell
+docker compose --profile observability up -d jaeger
+```
+
+### 1️⃣ 准备环境变量
+
+首次启动前，从示例文件创建本机 `.env`：
+
+```powershell
+Copy-Item .env.example .env
+```
+
+至少修改以下配置：
 
 ```env
-# 必填：DashScope API Key，也兼容 ALIYUN_API_KEY
+# 本地数据库凭据；部署前必须替换为强密码
+POSTGRES_PASSWORD=请替换为强密码
+
+# JWT 签名密钥；请替换为至少 32 字节的随机字符串
+AUTH_JWT_SECRET=请替换为随机密钥
+
+# 首个管理员；两项都填写，或都留空跳过
+BOOTSTRAP_ADMIN_USERNAME=admin
+BOOTSTRAP_ADMIN_PASSWORD=请替换为管理员强密码
+
+# 模型服务密钥；留空时本地结构化能力仍可启动，但模型能力不可用
 DASHSCOPE_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# DashScope OpenAI 兼容接口
-DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
-
-# 模型配置，可按部署环境覆盖
-DASHSCOPE_CHAT_MODEL=qwen-plus
-DASHSCOPE_INTENT_MODEL=qwen-plus
-DASHSCOPE_FOLLOWUP_MODEL=qwen-plus
-DASHSCOPE_EMBEDDING_MODEL=text-embedding-v4
-DASHSCOPE_RERANK_MODEL=qwen3-rerank
-
-# 可选：重排序服务的独立地址
-# DASHSCOPE_RERANK_ENDPOINT=
-
-# 可选：多维分析报告和审计输出目录
-# CASE_MULTIDIM_RUNTIME_DIR=backend/app/agents/case_multidim_search/runtime
 ```
 
-代码会优先读取 `DASHSCOPE_API_KEY`，同时兼容旧配置名 `ALIYUN_API_KEY` 和 `ALiYunAPI`。
+`.env` 已被 `.gitignore` 排除，真实密码和 API Key 不能提交到版本库。`BOOTSTRAP_ADMIN_PASSWORD` 只用于第一次创建管理员，不会写入日志；管理员已存在时，重复执行迁移不会覆盖现有密码。如果同名账号已经以普通用户身份存在，迁移会明确失败而不会自动提权。
 
-`.env` 已被 `.gitignore` 排除，请勿提交真实密钥。
+### 2️⃣ 固定镜像版本
 
-### 3️⃣ 启动后端
+Compose 和 Dockerfile 已避免使用 `latest`，当前固定组合如下：
+
+| 组件 | 固定版本 | 选择原因 |
+|------|----------|----------|
+| PostgreSQL | `public.ecr.aws/docker/library/postgres:16.4-alpine3.20` | 与项目 `SQLAlchemy 2.0.36`、`psycopg 3.2.3` 和 Alembic 迁移兼容；使用同补丁版本的轻量 Alpine 层降低下载和磁盘占用。 |
+| Redis | `public.ecr.aws/docker/library/redis:7.2.5-alpine` | 与 `redis-py 5.2.1` 使用的协议兼容，7.2 的 AOF 和过期键能力满足短期上下文缓存需求。 |
+| Milvus | `milvusdb/milvus:v2.5.18` | 提供稠密 + BM25 稀疏混合检索；Python 客户端固定 `pymilvus==2.5.18`，不使用 Milvus v3 或本地 Embedding 模型。 |
+| Jaeger | `jaegertracing/all-in-one:1.60.0` | 可选 `observability` profile，接收 OTLP 链路并在 Web UI 展示。 |
+| Python | `public.ecr.aws/docker/library/python:3.12.7-slim-bookworm` | 与当前 FastAPI、SQLAlchemy、ChromaDB 和 PDF 处理依赖的可安装范围匹配，同时固定 Python 补丁版本保证构建可复现。 |
+| Node.js | `public.ecr.aws/docker/library/node:22.11.0-alpine3.20` | 满足 Vite 5 和 Vue 3 构建要求，结合 `npm ci` 与锁文件保证前端依赖可重复安装。 |
+| Nginx | `public.ecr.aws/docker/library/nginx:1.27.3-alpine` | 使用固定 Alpine 运行时提供静态文件和同源反向代理，配置与本项目 `/api`、`/share` 路由匹配。 |
+
+后端构建默认使用 `mirrors.aliyun.com` 提供 Debian 系统包，避免国内网络访问默认软件源时长时间等待或下载失败。如需在其他网络环境构建，可显式传入兼容的软件源地址：
 
 ```powershell
-.\.venv\Scripts\uvicorn.exe backend.app.main:app --reload --host 127.0.0.1 --port 8000
+docker compose build --build-arg DEBIAN_MIRROR=deb.debian.org
 ```
 
-后端地址：
+PDF 知识库使用 `pypdf` 读取逐页文本，并使用 `pdfplumber` 分析图片版面和图注，不引入 `unstructured[pdf]`、PyTorch、CUDA、OCR 或大型视觉模型。该路径适合项目当前的文本型气象 PDF，镜像体积和首次构建时间明显更小。
 
-- Swagger：<http://127.0.0.1:8000/docs>
-- 健康检查：<http://127.0.0.1:8000/api/health>
-- 知识库状态：<http://127.0.0.1:8000/api/knowledge/status>
+知识库图片、索引和历史 SQLite 不进入 API 镜像。`data-init` 一次性服务只把 `data/` 中非运行态文件同步到 `risk-master-api-data` 卷，排除旧 SQLite 与 Numba 缓存；重复启动只刷新有变化的文件。`resource/` 以只读方式挂载，避免把待入库 PDF 复制进每一层镜像。
 
-### 4️⃣ 安装前端依赖并启动前端
+升级任何一个固定版本时，都应同步执行 Compose 配置检查、后端全量回归、前端构建和容器端到端验收，不能只修改标签后直接投产。
+
+### 3️⃣ 检查启动与迁移结果
+
+```powershell
+docker compose ps
+docker compose logs data-init --no-color
+docker compose logs migrate --no-color
+docker compose logs api --no-color
+docker compose logs frontend --no-color
+```
+
+预期结果是 `postgres`、`redis`、`milvus`、`api`、`frontend` 为健康状态，`data-init` 与 `migrate` 执行成功并已退出；Jaeger 仅在 `observability` profile 下启动。启动顺序固定为：
+
+1. PostgreSQL 和 Redis 通过健康检查。
+2. `data-init` 把本机知识库同步到 API 数据卷。
+3. `migrate` 执行 Alembic 升级到 `head`。
+4. 按需执行旧 SQLite 数据迁移。
+5. 按环境变量幂等初始化管理员。
+6. API 启动并通过健康检查。
+7. 前端启动并通过健康检查。
+
+向量检索按 `Milvus -> Chroma -> JSON` 固定降级：Milvus 不可用时自动回退 Chroma，Chroma 再不可用时回退权威 JSON 索引。Redis 与 Milvus 均不保存唯一事实，PostgreSQL 始终是长期记忆与业务数据的权威事实源。
+
+容器内健康检查地址：
+
+- 前端：<http://127.0.0.1:8080/healthz>
+- API（经同源代理）：<http://127.0.0.1:8080/api/health>
+- 知识库状态：<http://127.0.0.1:8080/api/knowledge/status>
+
+### 4️⃣ 数据持久化与重启
+
+Compose 使用以下命名卷：
+
+| 卷 | 内容 |
+|----|------|
+| `risk-master-postgres-data` | 用户、会话、消息、运行记录、反馈、分享和记忆等权威数据 |
+| `risk-master-redis-data` | Redis AOF 缓存数据，可重建，不属于业务事实源 |
+| `risk-master-api-data` | 知识库、图片和模型运行数据 |
+| `risk-master-api-runtime` | 多维分析报告和临时运行产物 |
+| `risk-master-milvus-data` | Milvus 本地存储（etcd、元数据与对象存储），可重建，不属于业务事实源 |
+
+普通停止不会删除数据：
+
+```powershell
+docker compose stop
+docker compose start
+```
+
+重建容器但保留卷：
+
+```powershell
+docker compose down
+docker compose up -d --build
+```
+
+只有明确需要清空本地环境时才使用 `docker compose down -v`，该命令会删除所有命名卷和其中的历史会话。
+
+### 5️⃣ 导入旧 SQLite 数据
+
+PostgreSQL 是权威数据源，旧 SQLite 只作为一次性迁移来源。默认 `RUN_LEGACY_MIGRATION=false`，不会读取或修改旧库。
+
+首次迁移建议先 dry-run：
+
+```env
+RUN_LEGACY_MIGRATION=true
+LEGACY_MIGRATION_DRY_RUN=true
+LEGACY_SQLITE_PATH=/legacy/sessions.sqlite3
+```
+
+将旧库放到 `data/sessions.sqlite3` 后执行：
+
+```powershell
+docker compose up migrate
+docker compose logs migrate --no-color
+```
+
+确认日志中的源表、目标表和行数对账无误后，把 `LEGACY_MIGRATION_DRY_RUN` 改为 `false`，再次执行 `docker compose up migrate` 完成事务提交。脚本会保留旧 SQLite 文件、维护主键映射，并对重复执行做幂等处理。
+
+迁移完成后将 `RUN_LEGACY_MIGRATION` 恢复为 `false`，避免后续每次启动重复扫描历史库。
+
+### 6️⃣ 构建知识库
+
+将气象灾害 PDF 放入 `resource/`，确认模型配置可用并登录管理员账号后，可以调用知识库重建接口：
+
+```powershell
+$body = @{ username = "admin"; password = "管理员密码" } | ConvertTo-Json
+$login = Invoke-RestMethod `
+  -Method Post `
+  -Uri "http://127.0.0.1:8080/api/auth/login" `
+  -ContentType "application/json" `
+  -Body $body
+
+Invoke-RestMethod `
+  -Method Post `
+  -Uri "http://127.0.0.1:8080/api/documents/index" `
+  -Headers @{ Authorization = "Bearer $($login.access_token)" }
+```
+
+该接口只允许管理员调用，会重建自然段文档向量、图片证据索引和标准化个例数据。首次构建的耗时取决于 PDF 数量、图片数量和模型服务速度。
+
+### 7️⃣ 常用运维命令
+
+```powershell
+# 查看服务状态和健康检查
+docker compose ps
+
+# 持续查看 API 日志
+docker compose logs -f --tail=200 api
+
+# 重启单个服务
+docker compose restart api
+
+# 停止 Redis 验证 PostgreSQL 回退，随后恢复
+docker compose stop redis
+docker compose start redis
+
+# 校验 Compose 配置
+docker compose config --quiet
+docker compose --env-file .env.example config --quiet
+```
+
+### 🧪 本地可选的源码开发方式
+
+需要直接调试 Python 或 Vue 源码时，可以继续使用本机 Conda 和 Node 环境：
+
+```powershell
+conda create -n riskMe python=3.11 -y
+conda activate riskMe
+python -m pip install -r requirements.txt
+```
 
 ```powershell
 cd frontend
@@ -327,23 +522,7 @@ npm install
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-打开 <http://127.0.0.1:5173>。前端默认访问 `http://127.0.0.1:8000`；如后端地址不同，在 `frontend/.env.local` 中配置：
-
-```env
-VITE_API_ORIGIN=http://127.0.0.1:8000
-```
-
-### 5️⃣ 构建知识库
-
-1. 将气象灾害 PDF 放入 `resource/`。
-2. 确认后端和模型配置可用。
-3. 调用知识库重建接口：
-
-```powershell
-Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8000/api/documents/index'
-```
-
-该接口会重建自然段文档向量、图片证据索引和标准化个例数据。数据默认写入 `data/`，首次构建的耗时取决于 PDF 数量、图片数量和模型服务速度。
+本地源码开发应通过 `DATABASE_URL` 和 `REDIS_URL` 明确连接可用的 PostgreSQL 与 Redis。未配置这两个变量时，历史测试和旧脚本可能仍使用兼容的 SQLite 路径，但 Docker Compose 才是第一阶段推荐的完整运行方式。
 
 ## 📖 使用说明
 
@@ -391,20 +570,45 @@ Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8000/api/documents/index'
 
 ## 🔌 API 接口概览
 
+除健康检查和带随机 token 的公开分享页外，用户数据接口都需要在请求头中携带访问令牌：
+
+```http
+Authorization: Bearer <access_token>
+```
+
+### 🔐 认证接口
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `POST` | `/api/auth/register` | 注册普通用户并签发首组令牌 |
+| `POST` | `/api/auth/login` | 校验用户名和密码 |
+| `POST` | `/api/auth/refresh` | 使用 HttpOnly 刷新 Cookie 轮换令牌 |
+| `POST` | `/api/auth/logout` | 撤销刷新令牌族并清除 Cookie |
+| `GET` | `/api/auth/me` | 获取当前登录用户信息 |
+
+刷新令牌只保存在路径为 `/api/auth` 的 HttpOnly Cookie 中，访问令牌由前端保存在内存并通过 `Authorization` 头传递。
+
 ### 🤖 查询接口
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| `POST` | `/api/query/stream` | ✅ 统一流式问答主入口 |
-| `POST` | `/api/query` | 兼容旧客户端的非流式文档查询 |
-| `POST` | `/api/agent/query` | 兼容旧智能体协议的结构化查询 |
+| `POST` | `/api/query/stream` | ✅ 统一流式问答主入口，需要登录 |
+| `POST` | `/api/query` | 兼容旧客户端的非流式文档查询，需要登录 |
+| `POST` | `/api/agent/query` | 兼容旧智能体协议的结构化查询，需要登录 |
 
 流式入口示例：
 
 ```powershell
+$login = Invoke-RestMethod `
+  -Method Post `
+  -Uri 'http://127.0.0.1:8080/api/auth/login' `
+  -ContentType 'application/json' `
+  -Body '{"username":"demo","password":"demo-password"}'
+
 Invoke-RestMethod `
   -Method Post `
-  -Uri 'http://127.0.0.1:8000/api/query/stream' `
+  -Uri 'http://127.0.0.1:8080/api/query/stream' `
+  -Headers @{ Authorization = "Bearer $($login.access_token)" } `
   -ContentType 'application/json' `
   -Body '{"question":"2025年7月份发生了几次灾害","session_id":"your-session-id"}'
 ```
@@ -413,10 +617,11 @@ Invoke-RestMethod `
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| `GET` | `/api/health` | 应用、向量库和模型基础状态 |
+| `GET` | `/api/health` | 匿名健康检查，返回应用、向量库和模型基础状态 |
 | `GET` | `/api/knowledge/status` | 个例数量、向量数量、模型和构建清单 |
-| `POST` | `/api/documents/index` | 从 `resource/` 重建文档、图片和标准个例索引 |
-| `GET` | `/api/image-evidence/{image_id}` | 获取聊天图片证据文件 |
+| `POST` | `/api/documents/index` | 管理员从 `resource/` 重建文档、图片和标准个例索引 |
+| `GET` | `/api/image-evidence/{image_id}` | 登录后获取聊天图片证据文件 |
+| `GET` | `/metrics` | Prometheus 文本格式指标，无需登录 |
 
 ### 💬 会话与消息接口
 
@@ -433,7 +638,18 @@ Invoke-RestMethod `
 | `POST` | `/api/sessions/{session_id}/messages/{message_id}/report` | 上报回答质量问题 |
 | `POST` | `/api/sessions/{session_id}/messages/{message_id}/share` | 创建分享链接 |
 | `POST` | `/api/sessions/{session_id}/messages/{message_id}/export-pdf` | 导出单条回答 PDF |
-| `GET` | `/api/shared-messages/{token}` | 获取分享内容 |
+| `GET` | `/api/shared-messages/{token}` | 匿名获取不可变分享快照 |
+
+### 🧠 长期记忆接口
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/memories` | 返回当前用户可见的长期记忆（不含向量字段） |
+| `DELETE` | `/api/memories/{memory_id}` | 软删除当前用户的一条长期记忆，保留审计行 |
+
+长期记忆的读取、删除和召回全部绑定 `user_id`，跨用户访问统一返回 `404`。
+
+所有会话、消息、运行记录、反馈和分享创建操作都会按当前用户校验父资源属主。非所有者访问统一返回 `404`，不会暴露资源是否存在。
 
 ### 🤖 专用 Agent 接口
 
@@ -441,24 +657,48 @@ Invoke-RestMethod `
 - `/api/smart-case-match`：相似匹配、自然语言流式会话、进度和证据资源。
 - `/api/query-intent`：意图路由和知识库日期范围查询。
 
-完整请求体和响应字段以运行中的 Swagger (`/docs`) 为准。根目录的 `API接口文档.md` 属于历史补充资料，如与当前路由不一致，请优先使用 OpenAPI。
+完整请求体和响应字段以应用 OpenAPI 定义和 `backend/app/api/schemas.py` 为准。根目录的 `API接口文档.md` 属于历史补充资料，如与当前路由不一致，请优先使用 OpenAPI。
 
 ## 🧪 开发与测试
 
 ### 后端
 
 ```powershell
-.\.venv\Scripts\python.exe -m compileall backend/app backend/tests
-.\.venv\Scripts\python.exe -m pytest backend/tests -q
+conda activate riskMe
+python -m pip install "pytest>=8,<10"
+python -m compileall backend/app backend/tests scripts docker
+python -m pytest backend/tests -q
 ```
 
-重点验证应用架构：
+### 评测与向量索引
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest backend/tests/integration/api/test_architecture.py -q
+# 黄金数据集确定性评测（60 条用例，固定 seed）
+python scripts/run_evaluation.py --dataset backend/evals/datasets/golden_v1.json --max-concurrency 1 --output-dir .tmp/eval-run-1
+
+# 向量索引重建对账（dry-run 不写库）
+python scripts/rebuild_vector_index.py --collection documents --dry-run
+
+# Chroma 与 Milvus 检索结果对比
+python scripts/compare_vector_backends.py
 ```
 
-架构测试覆盖应用工厂、路由依赖、Agent 包导入、服务生命周期和三个查询入口的统一委托关系。
+评测使用固定夹具与固定 seed，两次运行的确定性路由与检索指标应完全一致；向量重建后 chunk 数量与 ID 集合应和权威 JSON 索引一致。
+
+`pytest` 只用于开发测试；如果 `riskMe` 中已经安装，可以跳过安装命令。
+
+重点验证认证、隔离、迁移和 Redis 降级：
+
+```powershell
+python -m pytest `
+  backend/tests/integration/auth `
+  backend/tests/integration/security `
+  backend/tests/integration/storage `
+  backend/tests/integration/api/test_architecture.py `
+  -q
+```
+
+这些测试覆盖注册登录、刷新令牌轮换、管理员初始化、跨用户资源隔离、Alembic 迁移、用户级 Agent 工厂和 Redis 故障回退。
 
 ### 前端
 
@@ -467,14 +707,26 @@ cd frontend
 npm run build
 ```
 
-### 双端口联调
+### Compose 回归
 
-分别启动后检查：
+```powershell
+docker compose config --quiet
+docker compose --env-file .env.example config --quiet
+docker compose up -d --build
+docker compose ps
+docker compose logs data-init --no-color
+```
 
-- 后端健康接口：`http://127.0.0.1:8000/api/health`
-- 知识库状态：`http://127.0.0.1:8000/api/knowledge/status`
-- 前端聊天页：`http://127.0.0.1:5173`
-- 统一 SSE 冒烟：向 `/api/query/stream` 提交一条轻量问题，确认收到 `data:` 事件。
+容器端到端验收至少检查：
+
+- 前端健康检查：`http://127.0.0.1:8080/healthz`
+- API 健康检查：`http://127.0.0.1:8080/api/health`
+- 注册、登录、刷新、登出和 `/api/auth/me`
+- 用户 A 与用户 B 的会话、消息、运行、反馈、报告和分享隔离
+- 匿名公开分享页可读，其他用户访问原会话返回 `404`
+- 停止 Redis 后历史会话仍可从 PostgreSQL 读取
+- 重启 API、PostgreSQL 和 Redis 后历史数据仍存在
+- 前端登录、会话列表、聊天页面和静态资源可正常加载
 
 根目录 `tests/` 还保留了历史场景验证脚本和本地验证产物，适合按需运行，不计入后端核心回归测试。
 
@@ -484,9 +736,25 @@ npm run build
 
 可以启动服务和查看部分本地接口，但涉及意图解析、Embedding、Rerank 或回答生成时可能无法调用云端模型。系统会在可用范围内退回规则、结构化数据或本地文档证据。
 
+### 为什么接口返回 401？
+
+除健康检查和公开分享页外，用户数据接口都需要登录。请确认前端已登录，且请求携带有效的 `Authorization: Bearer <access_token>`；访问令牌默认 15 分钟过期，前端会通过 `/api/auth/refresh` 自动轮换。
+
+### 管理员密码如何修改或重置？
+
+`BOOTSTRAP_ADMIN_*` 只在管理员不存在时创建账号，重启和重复执行不会覆盖已有密码。需要重置时，应在受控运维流程中更新数据库中的密码哈希，不能通过删除用户后重新执行初始化来绕过现有数据归属。
+
+### 停止 Redis 会丢失历史会话吗？
+
+不会。PostgreSQL 是用户、会话、消息、运行、反馈和分享的权威事实源。Redis 只保存可重建的短期上下文缓存；停止 Redis 后缓存读写会记录降级并直接读取 PostgreSQL，恢复后重新填充。
+
+### 如何彻底重建本地环境？
+
+普通重启使用 `docker compose down` 后再次 `docker compose up -d --build` 会保留命名卷。只有确定不再需要历史数据时才执行 `docker compose down -v`，该命令会删除 PostgreSQL、Redis、知识库和报告卷。
+
 ### 如何更新知识库？
 
-把新 PDF 放入 `resource/` 后重新调用 `POST /api/documents/index`。该接口面向管理员使用，普通用户只需在聊天页提问。
+把新 PDF 放入 `resource/` 后，使用管理员访问令牌重新调用 `POST /api/documents/index`。普通用户只需在聊天页提问，不能重建共享知识库。
 
 ### 为什么回答中有图片 ID 而没有图片？
 
@@ -503,6 +771,10 @@ npm run build
 ### 为什么 README 截图在远端看不到？
 
 演示图链接指向本机 `tmp/`，该目录按运行产物和截图策略被 `.gitignore` 排除。本地预览不受影响；发布仓库前需要把选定截图放入受版本管理的资源目录并更新链接。
+
+### Milvus 未启动时系统能否正常工作？
+
+可以。向量检索按 `Milvus -> Chroma -> JSON` 固定降级：Milvus 不可用时自动回退 Chroma，再不可用时回退权威 JSON 索引；长期记忆等业务数据始终以 PostgreSQL 为权威事实源，Redis 与 Milvus 只保存可重建的缓存数据。
 
 ### 旧查询接口还能继续使用吗？
 

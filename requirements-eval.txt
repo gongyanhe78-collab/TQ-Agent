@@ -1,0 +1,2 @@
+ragas==0.2.15
+langchain-openai==0.3.7

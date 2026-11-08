@@ -76,15 +76,35 @@ class MessageActionTests(unittest.TestCase):
             session_store=self.store,
             llm_client=_FeedbackNormalizer(),
         )
+        self.pdf_agent = _PdfAgent(
+            self.root / "users" / "message-action-user" / "reports"
+        )
+        self.pdf_agent_users: list[str] = []
         self.services = SimpleNamespace(
             session_store=self.store,
-            multidim_agent=_PdfAgent(self.root / "reports"),
+            multidim_agent=None,
             feedback_tasks=self.feedback_tasks,
+            auth_service=self,
+            session_store_for=lambda _user_id: self.store,
+            feedback_tasks_for=lambda _user_id: self.feedback_tasks,
+            multidim_agent_for=self._multidim_agent_for,
         )
         app = FastAPI()
         app.state.services = self.services
         app.include_router(sessions.router)
-        self.client = TestClient(app)
+        self.client = TestClient(
+            app,
+            headers={"Authorization": "Bearer message-action-token"},
+        )
+
+    def get_current_user(self, token: str) -> dict:
+        """为旧会话业务回归提供稳定的认证用户。"""
+        return {"user_id": "message-action-user", "role": "user", "token": token}
+
+    def _multidim_agent_for(self, user_id: str) -> _PdfAgent:
+        """记录消息 PDF 导出实际绑定的用户。"""
+        self.pdf_agent_users.append(user_id)
+        return self.pdf_agent
 
     def tearDown(self) -> None:
         for task in self.feedback_tasks.tasks:
@@ -187,19 +207,24 @@ class MessageActionTests(unittest.TestCase):
 
     def test_pdf_endpoint_uses_only_visible_answer_and_merges_report(self) -> None:
         """消息级 PDF 只能消费正文，并保存直接下载记录且不生成缩略图。"""
-        fake_agent = self.services.multidim_agent
+        fake_agent = self.pdf_agent
         response = self.client.post(
             f"/api/sessions/{self.session_id}/messages/"
             f"{self.assistant_message['message_id']}/export-pdf"
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.pdf_agent_users, ["message-action-user"])
         self.assertEqual(fake_agent.previous_result, {"answer": "页面可见的分析正文。"})
         self.assertNotIn("secret-chunk", str(fake_agent.previous_result))
         report = response.json()
         self.assertTrue(report["download_only"])
         self.assertEqual(report["report_mode"], "message_export")
         self.assertNotIn("thumbnail_url", report)
+        self.assertEqual(
+            (fake_agent.output_dir / report["filename"]).parent,
+            self.root / "users" / "message-action-user" / "reports",
+        )
         restored = self.store.get_message(self.session_id, self.assistant_message["message_id"])
         self.assertEqual(restored["run_id"], "run-visible")
         self.assertEqual(restored["reports"], [report])
@@ -234,11 +259,21 @@ class FeedbackGuidanceEndpointTests(unittest.IsolatedAsyncioTestCase):
             session_store=self.store,
             multidim_agent=None,
             feedback_tasks=self.feedback_tasks,
+            auth_service=self,
+            session_store_for=lambda _user_id: self.store,
+            feedback_tasks_for=lambda _user_id: self.feedback_tasks,
         )
         app = FastAPI()
         app.state.services = self.services
         app.include_router(sessions.router)
-        self.client = TestClient(app)
+        self.client = TestClient(
+            app,
+            headers={"Authorization": "Bearer feedback-token"},
+        )
+
+    def get_current_user(self, token: str) -> dict:
+        """为反馈接口测试提供稳定的认证用户。"""
+        return {"user_id": "feedback-user", "role": "user", "token": token}
 
     async def asyncTearDown(self) -> None:
         tasks = list(self.feedback_tasks.tasks)
@@ -255,7 +290,9 @@ class FeedbackGuidanceEndpointTests(unittest.IsolatedAsyncioTestCase):
                 client_id="browser-1",
                 reason="遗漏关键信息：请补充影响范围",
             ),
-            self.services,
+            services=self.services,
+            user=self.get_current_user("feedback-token"),
+            session_store=self.store,
         )
         self.assertEqual(response["guidance_status"], "pending")
         # 等待后台线程完成；提交接口本身没有等待模型调用。

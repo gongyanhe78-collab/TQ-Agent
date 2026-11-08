@@ -34,8 +34,10 @@ class SmartCaseLifecycleTests(unittest.TestCase):
         smart_agent = _ClosableResource()
         services = SimpleNamespace(
             _closed=False,
-            feedback_tasks=feedback_tasks,
+            _feedback_tasks={"test-user": feedback_tasks},
             smart_agent=smart_agent,
+            intent_agent=SimpleNamespace(),
+            engine=SimpleNamespace(dispose=lambda: None),
         )
 
         AppServices.close(services)

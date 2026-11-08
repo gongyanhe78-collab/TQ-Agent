@@ -14,6 +14,80 @@ LOGGER = logging.getLogger("uvicorn.error")
 class ResultPersistenceMixin:
     """把统一结果写入 Agent 运行表、消息元数据和证据字段。"""
 
+    def _start_persisted_run(
+        self,
+        run_id: str,
+        session_id: str,
+        agent_type: str,
+        question: str,
+        *,
+        status: str = "running",
+        metadata: dict[str, Any] | None = None,
+    ) -> dict:
+        """创建运行记录，并登记当前请求正在持久化的运行编号。"""
+        enriched = self._merge_runtime_metadata(metadata)
+        run = self.session_store.start_agent_run(
+            run_id,
+            session_id,
+            agent_type,
+            question,
+            status=status,
+            metadata=enriched,
+        )
+        self._active_run_id = run_id
+        self._active_run_session_id = session_id
+        return run
+
+    def _finish_persisted_run(
+        self,
+        run_id: str,
+        *,
+        status: str,
+        answer: str = "",
+        evidence_cases: list[dict] | None = None,
+        evidence_chunks: list[dict] | None = None,
+        images: list[dict] | None = None,
+        reports: list[dict] | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> dict:
+        """完成运行记录，并在成功后清除当前运行编号。"""
+        enriched = self._merge_runtime_metadata(metadata)
+        run = self.session_store.finish_agent_run(
+            run_id,
+            status=status,
+            answer=answer,
+            evidence_cases=evidence_cases,
+            evidence_chunks=evidence_chunks,
+            images=images,
+            reports=reports,
+            metadata=enriched,
+        )
+        if getattr(self, "_active_run_id", "") == run_id:
+            self._active_run_id = ""
+            self._active_run_session_id = ""
+        return run
+
+    def _finish_active_run(
+        self,
+        *,
+        status: str,
+        error: str = "",
+    ) -> dict:
+        """终止尚未完成的当前运行，避免异常后留下 running 记录。"""
+        metadata = (
+            self._runtime_failure_metadata(error)
+            if error
+            else self._merge_runtime_metadata()
+        )
+        run_id = str(getattr(self, "_active_run_id", "") or "")
+        if not run_id:
+            return {}
+        return self._finish_persisted_run(
+            run_id,
+            status=status,
+            metadata=metadata,
+        )
+
     def _persist_complete(
         self,
         session_id: str,
@@ -24,17 +98,20 @@ class ResultPersistenceMixin:
         performance: PerformanceTrace | None = None,
     ) -> dict:
         """把统一结果同时写入 Agent 运行表和消息元数据。"""
+        # 完成快照必须先收口当前路由子任务，再写入运行表。
+        self._finalize_runtime_status(status)
         if performance:
             performance.start("persist_ms")
             common["performance"] = performance.snapshot()
         run_id = str(common.get("run_id") or f"agent_run_{uuid4().hex}")
         if not already_started:
-            self.session_store.start_agent_run(
+            self._start_persisted_run(
                 run_id,
                 session_id,
                 str(common.get("agent_type") or "unknown"),
                 str(common.get("question") or ""),
                 status=status,
+                metadata=self._runtime_metadata(),
             )
         common.update(self._regeneration_context)
         if not common.get("source_user_message_id"):
@@ -58,8 +135,10 @@ class ResultPersistenceMixin:
                 if source_user_message_id
                 else ""
             )
-        metadata = self._message_metadata(common, status)
-        self.session_store.finish_agent_run(
+        metadata = self._merge_runtime_metadata(
+            self._message_metadata(common, status)
+        )
+        self._finish_persisted_run(
             run_id,
             status=status,
             answer=str(common.get("answer") or ""),
@@ -124,6 +203,15 @@ class ResultPersistenceMixin:
                 ("llm_status", ""),
                 ("answer_renderer", ""),
                 ("performance", {}),
+                ("request_id", ""),
+                ("trace_id", ""),
+                ("termination_reason", ""),
+                ("steps", 0),
+                ("model_calls", 0),
+                ("subtask_status", []),
+                ("budget", {}),
+                ("token_stats", {}),
+                ("token_usage_source", ""),
                 ("follow_up_suggestions", []),
                 ("follow_up_status", "none"),
                 ("regenerated_from_message_id", None),

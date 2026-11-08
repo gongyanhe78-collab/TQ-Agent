@@ -72,12 +72,16 @@ class SmartCaseMatchAgent:
         """离开上下文时统一关闭资源，异常仍交给原调用方处理。"""
         self.close()
 
-    def run(self, request: SmartCaseMatchRequest) -> SmartCaseMatchResponse:
+    def run(
+        self,
+        request: SmartCaseMatchRequest,
+        owner_id: str = "",
+    ) -> SmartCaseMatchResponse:
         """执行一次完整匹配，并用 Pydantic 校验最终输出契约。"""
         client_progress_id = str(request.progress_id or "").strip()
         # 运行号必须由服务端生成，客户端进度号只作查询别名，避免重复值覆盖状态和审计文件。
         run_id = f"smart_case_{uuid4().hex}"
-        progress.start(run_id, alias=client_progress_id)
+        progress.start(run_id, alias=client_progress_id, owner_id=owner_id)
         state = {
             "run_id": run_id,
             "client_progress_id": client_progress_id,
@@ -100,12 +104,13 @@ class SmartCaseMatchAgent:
         self,
         payload: NaturalLanguageMatchRequest,
         is_disconnected: Callable[[], Awaitable[bool]] | None = None,
+        owner_id: str = "",
     ) -> AsyncIterator[tuple[str, dict]]:
         """解析自然语言并按业务阶段流式返回匹配个例和综合研判。"""
         client_progress_id = str(payload.progress_id or "").strip()
         # SSE 首个 accepted 事件会返回唯一运行号；传入的进度号仅保留为兼容查询别名。
         run_id = f"smart_case_chat_{uuid4().hex}"
-        progress.start(run_id, alias=client_progress_id)
+        progress.start(run_id, alias=client_progress_id, owner_id=owner_id)
         state = {
             "run_id": run_id,
             "client_progress_id": client_progress_id,

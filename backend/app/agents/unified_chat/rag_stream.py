@@ -11,6 +11,9 @@ from backend.app.agents.intent_analyzer.analyzers import (
     AgentIntentAnalyzer,
 )
 from backend.app.agents.planner.planner import AgentPlanner
+from backend.app.agents.unified_chat.orchestration_models import (
+    BudgetTermination,
+)
 from backend.app.agents.unified_chat.performance import PerformanceTrace
 from backend.app.services.feedback_guidance import (
     render_session_guidance,
@@ -54,6 +57,16 @@ class RagStreamMixin:
                 f"{regeneration_instruction}。"
                 "请仍严格依据本轮检索证据回答，不得编造材料外事实。"
             )
+        # 跨会话长期记忆只作为背景上下文，不改变检索范围与证据边界。
+        long_term_memory = (
+            getattr(self, "_long_term_memory_context", "") or ""
+        ).strip()
+        if long_term_memory:
+            generation_question = (
+                "用户长期记忆（仅作背景，不得据此编造新事实）：\n"
+                f"{long_term_memory}\n\n"
+                f"当前问题：\n{generation_question}"
+            )
         context_case_ids = list(referenced_case_ids or [])
         rag_tasks = [
             task
@@ -85,6 +98,13 @@ class RagStreamMixin:
                     history,
                     original_question,
                 )
+            )
+        if session_id:
+            self._start_persisted_run(
+                run_id,
+                session_id,
+                "document_rag",
+                original_question,
             )
         if rag_strategy == "structured" and not uses_task_plan:
             yield self._progress_metadata(
@@ -151,13 +171,6 @@ class RagStreamMixin:
                     yield event
                 return
 
-        if session_id:
-            self.session_store.start_agent_run(
-                run_id,
-                session_id,
-                "document_rag",
-                original_question,
-            )
         yield self._progress_metadata(
             "document_rag",
             run_id,
@@ -412,6 +425,9 @@ class RagStreamMixin:
                         ),
                     }
                 )
+            except BudgetTermination:
+                # 运行时终止由统一编排器转成结构化 SSE，不能被模型兜底吞掉。
+                raise
             except Exception as exc:
                 performance.stop("llm_total_ms")
                 # 首字前失败回退核验答案；已有增量时保留已显示内容。
@@ -458,6 +474,7 @@ class RagStreamMixin:
                 session_id,
                 common,
                 status="completed",
+                already_started=True,
                 performance=performance,
             )
         yield self._completion_metadata(common, status="completed")
@@ -556,6 +573,9 @@ class RagStreamMixin:
                     raise RuntimeError("云端模型返回空答案")
                 llm_used = True
                 llm_status = "called_with_local_evidence"
+            except BudgetTermination:
+                # 取消、超时和预算异常必须穿透回答兜底。
+                raise
             except Exception as exc:
                 # 首字前失败使用原兜底；已有部分内容时不再重复拼接。
                 fallback = (

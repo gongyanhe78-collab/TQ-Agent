@@ -67,3 +67,17 @@ class MessageIssueRequest(BaseModel):
     category: str = Field(min_length=1, max_length=80)
     description: str = Field(default="", max_length=2000)
     client_id: str = Field(default="anonymous", min_length=1, max_length=120)
+
+
+class RegisterRequest(BaseModel):
+    """公开注册只创建普通用户，管理员由受控运维流程创建。"""
+
+    username: str = Field(min_length=3, max_length=64)
+    password: str = Field(min_length=8, max_length=128)
+
+
+class LoginRequest(BaseModel):
+    """本地账号登录请求。"""
+
+    username: str = Field(min_length=1, max_length=64)
+    password: str = Field(min_length=1, max_length=128)

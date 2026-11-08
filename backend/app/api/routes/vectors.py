@@ -6,14 +6,14 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 
-from backend.app.api.dependencies import ServicesDep
+from backend.app.api.dependencies import AdminUserDep, ServicesDep
 
 
 router = APIRouter()
 
 
 @router.post("/api/documents/index")
-def index_document_pdfs(services: ServicesDep):
+def index_document_pdfs(services: ServicesDep, user: AdminUserDep):
     """用统一自然段方案重建主向量库、图片索引和精简标准个例。"""
     try:
         return services.knowledge_service.rebuild_documents()

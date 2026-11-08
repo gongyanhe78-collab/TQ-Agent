@@ -9,6 +9,12 @@ ENV/
 __pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
 
 # IDE 配置
 .idea/
@@ -49,6 +55,11 @@ frontend/dist/
 weather_qa_results.json
 *.tmp
 *.bak
+
+# 本地 AI 工具与代理生成文件
+.agents/
+.claude/
+.superpowers/
 
 # 运行数据与日志
 runtime/

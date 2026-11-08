@@ -1,0 +1,341 @@
+name: risk-master
+
+x-backend-environment: &backend-environment
+  TZ: ${TZ:-Asia/Shanghai}
+  DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-risk}:${POSTGRES_PASSWORD:-risk_local_password}@postgres:5432/${POSTGRES_DB:-risk}
+  REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+  REDIS_CACHE_ENABLED: ${REDIS_CACHE_ENABLED:-true}
+  REDIS_CONTEXT_TTL_SECONDS: ${REDIS_CONTEXT_TTL_SECONDS:-1800}
+  REDIS_KEY_PREFIX: ${REDIS_KEY_PREFIX:-risk}
+  AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:-local-development-only-change-before-deploying}
+  AUTH_ACCESS_TTL_SECONDS: ${AUTH_ACCESS_TTL_SECONDS:-900}
+  AUTH_REFRESH_TTL_SECONDS: ${AUTH_REFRESH_TTL_SECONDS:-604800}
+  AUTH_REFRESH_COOKIE_NAME: ${AUTH_REFRESH_COOKIE_NAME:-refresh_token}
+  AUTH_COOKIE_SECURE: ${AUTH_COOKIE_SECURE:-false}
+  AUTH_COOKIE_SAMESITE: ${AUTH_COOKIE_SAMESITE:-lax}
+  CORS_ORIGINS: ${CORS_ORIGINS:-http://127.0.0.1:8080,http://localhost:8080}
+  CASE_MULTIDIM_RUNTIME_DIR: /app/backend/app/agents/case_multidim_search/runtime
+  NUMBA_CACHE_DIR: /app/data/numba_cache
+  DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+  DASHSCOPE_BASE_URL: ${DASHSCOPE_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+  DASHSCOPE_CHAT_MODEL: ${DASHSCOPE_CHAT_MODEL:-qwen-plus}
+  DASHSCOPE_INTENT_MODEL: ${DASHSCOPE_INTENT_MODEL:-qwen-plus}
+  DASHSCOPE_FOLLOWUP_MODEL: ${DASHSCOPE_FOLLOWUP_MODEL:-qwen-plus}
+  DASHSCOPE_EMBEDDING_MODEL: ${DASHSCOPE_EMBEDDING_MODEL:-text-embedding-v4}
+  DASHSCOPE_RERANK_MODEL: ${DASHSCOPE_RERANK_MODEL:-qwen3-rerank}
+  DASHSCOPE_RERANK_ENDPOINT: ${DASHSCOPE_RERANK_ENDPOINT:-}
+  VECTOR_BACKEND: ${VECTOR_BACKEND:-milvus}
+  VECTOR_FALLBACK_BACKEND: ${VECTOR_FALLBACK_BACKEND:-chroma}
+  MILVUS_URI: ${MILVUS_URI:-http://milvus:19530}
+  MILVUS_TOKEN: ${MILVUS_TOKEN:-}
+  MILVUS_DATABASE: ${MILVUS_DATABASE:-default}
+  MILVUS_TIMEOUT_SECONDS: ${MILVUS_TIMEOUT_SECONDS:-10}
+  MILVUS_DOCUMENT_COLLECTION: ${MILVUS_DOCUMENT_COLLECTION:-weather_document_chunks_v1}
+  MILVUS_MEMORY_COLLECTION: ${MILVUS_MEMORY_COLLECTION:-weather_user_memories_v1}
+  MILVUS_DENSE_TOP_K: ${MILVUS_DENSE_TOP_K:-30}
+  MILVUS_SPARSE_TOP_K: ${MILVUS_SPARSE_TOP_K:-30}
+  MILVUS_RRF_K: ${MILVUS_RRF_K:-60}
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:-http://jaeger:4318/v1/traces}
+  PYTHONUNBUFFERED: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+  PYTHONUTF8: "1"
+
+x-backend-build: &backend-build
+  context: .
+  dockerfile: docker/backend.Dockerfile
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "5"
+
+services:
+  data-init:
+    build: *backend-build
+    command: ["python", "/app/scripts/init_api_data.py"]
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      DATA_INIT_SOURCE: /seed-data
+      DATA_INIT_TARGET: /app/data
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUTF8: "1"
+    volumes:
+      - api-data:/app/data
+      - ./data:/seed-data:ro
+    restart: "no"
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512m
+    logging: *default-logging
+
+  migrate:
+    build: *backend-build
+    command: ["python", "/app/docker/migrate_entrypoint.py"]
+    environment:
+      <<: *backend-environment
+      RUN_LEGACY_MIGRATION: ${RUN_LEGACY_MIGRATION:-false}
+      LEGACY_MIGRATION_DRY_RUN: ${LEGACY_MIGRATION_DRY_RUN:-false}
+      LEGACY_SQLITE_PATH: ${LEGACY_SQLITE_PATH:-/legacy/sessions.sqlite3}
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - data
+    volumes:
+      - api-data:/app/data:ro
+      - ./data:/legacy:ro
+    restart: "no"
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+    logging: *default-logging
+
+  postgres:
+    image: public.ecr.aws/docker/library/postgres:16.4-alpine3.20
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-risk}
+      POSTGRES_USER: ${POSTGRES_USER:-risk}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-risk_local_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: ${TZ:-Asia/Shanghai}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - data
+    shm_size: 256mb
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\" -h 127.0.0.1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+    logging: *default-logging
+
+  redis:
+    image: public.ecr.aws/docker/library/redis:7.2.5-alpine
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--appendfsync",
+        "everysec",
+        "--save",
+        "60",
+        "1000",
+        "--maxmemory",
+        "256mb",
+        "--maxmemory-policy",
+        "allkeys-lru",
+      ]
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+    volumes:
+      - redis-data:/data
+    networks:
+      - data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512m
+    logging: *default-logging
+
+  api:
+    build: *backend-build
+    command:
+      [
+        "python",
+        "-m",
+        "uvicorn",
+        "backend.app.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--workers",
+        "1",
+      ]
+    environment:
+      <<: *backend-environment
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      data-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - edge
+      - data
+    volumes:
+      - api-data:/app/data
+      - ./resource:/app/resource:ro
+      - api-runtime:/app/backend/app/agents/case_multidim_search/runtime
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "--silent",
+          "--show-error",
+          "http://127.0.0.1:8000/api/health",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    restart: unless-stopped
+    stop_grace_period: 30s
+    init: true
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4g
+        reservations:
+          memory: 512m
+    logging: *default-logging
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    networks:
+      - edge
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1/healthz",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256m
+    logging: *default-logging
+
+  milvus:
+    image: milvusdb/milvus:v2.5.18
+    profiles: ["vector"]
+    command: ["milvus", "run", "standalone"]
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      ETCD_USE_EMBED: "true"
+      ETCD_DATA_DIR: /var/lib/milvus/etcd
+      COMMON_STORAGETYPE: local
+      LOCAL_STORAGE_PATH: /var/lib/milvus/storage
+    volumes:
+      - risk-master-milvus-data:/var/lib/milvus
+    networks:
+      - data
+    ports:
+      - "${MILVUS_PORT:-19530}:19530"
+      - "9091:9091"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:9091/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2g
+    logging: *default-logging
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.60.0
+    profiles: ["observability"]
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "${JAEGER_UI_PORT:-16686}:16686"
+      - "4318:4318"
+    networks:
+      - data
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:14269/"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+    logging: *default-logging
+
+networks:
+  edge:
+    driver: bridge
+  data:
+    driver: bridge
+    internal: true
+
+volumes:
+  postgres-data:
+    name: risk-master-postgres-data
+  redis-data:
+    name: risk-master-redis-data
+  api-data:
+    name: risk-master-api-data
+  api-runtime:
+    name: risk-master-api-runtime
+  risk-master-milvus-data:
+    name: risk-master-milvus-data

@@ -39,7 +39,7 @@ class SmartStreamMixin:
                     or f"smart_case_{uuid4().hex}"
                 )
                 if session_id:
-                    self.session_store.start_agent_run(
+                    self._start_persisted_run(
                         run_id,
                         session_id,
                         "smart_case_match",
@@ -52,6 +52,7 @@ class SmartStreamMixin:
                     "run_id": run_id,
                     "status": "running",
                     "progress": data,
+                    **self._runtime_fields(),
                 }
                 continue
             if event in {
@@ -67,16 +68,14 @@ class SmartStreamMixin:
                     "run_id": run_id,
                     "status": "running",
                     "progress": data,
+                    **self._runtime_fields(),
                 }
                 continue
             if event == "error":
                 if session_id and started:
-                    self.session_store.finish_agent_run(
-                        run_id,
+                    self._finish_active_run(
                         status="failed",
-                        metadata={
-                            "error": data.get("message", ""),
-                        },
+                        error=str(data.get("message", "")),
                     )
                 yield {
                     "type": "error",
@@ -85,6 +84,7 @@ class SmartStreamMixin:
                         "相似个例匹配失败",
                     ),
                     "run_id": run_id,
+                    **self._runtime_fields(),
                 }
                 return
             if event == "completed":

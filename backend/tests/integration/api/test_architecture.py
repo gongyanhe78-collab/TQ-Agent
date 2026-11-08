@@ -51,8 +51,18 @@ class _FakeServices:
     """仅提供查询路由所需门面，并记录生命周期关闭。"""
 
     def __init__(self) -> None:
-        self.chat_service = _FakeChatService()
+        self._chat_service = _FakeChatService()
+        self.auth_service = self
         self.close_count = 0
+
+    def get_current_user(self, token: str) -> dict:
+        """返回结构测试使用的固定认证用户。"""
+        return {"user_id": "architecture-user", "role": "user", "token": token}
+
+    def chat_service_for(self, user_id: str) -> _FakeChatService:
+        """按认证用户返回记录调用的查询门面。"""
+        assert user_id == "architecture-user"
+        return self._chat_service
 
     def close(self) -> None:
         self.close_count += 1
@@ -133,7 +143,10 @@ class ApplicationArchitectureTests(unittest.TestCase):
                 return_value=settings,
             ):
                 app = create_app(services_factory=lambda: services)
-                with TestClient(app) as client:
+                with TestClient(
+                    app,
+                    headers={"Authorization": "Bearer architecture-token"},
+                ) as client:
                     document = client.post(
                         "/api/query",
                         json={"question": "查询文档证据", "top_k": 3, "top_n": 2},
@@ -154,7 +167,7 @@ class ApplicationArchitectureTests(unittest.TestCase):
         self.assertEqual(stream.status_code, 200)
         self.assertIn("统一流响应", stream.text)
         self.assertEqual(
-            [call[0] for call in services.chat_service.calls],
+            [call[0] for call in services._chat_service.calls],
             ["document", "agent", "stream"],
         )
         self.assertEqual(services.close_count, 1)

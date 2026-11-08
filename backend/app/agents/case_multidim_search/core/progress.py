@@ -9,10 +9,21 @@ from time import time
 
 _LOCK = Lock()
 _STATES: dict[str, dict] = {}
+_OWNERS: dict[str, str] = {}
 _MAX_AGE_SECONDS = 3600
 
 
-def start(progress_id: str) -> None:
+def claim(progress_id: str, owner_id: str) -> None:
+    """记录任务所属用户，供状态查询接口执行授权校验。"""
+    normalized_id = str(progress_id or "").strip()
+    normalized_owner = str(owner_id or "").strip()
+    if not normalized_id or not normalized_owner:
+        return
+    with _LOCK:
+        _OWNERS[normalized_id] = normalized_owner
+
+
+def start(progress_id: str, owner_id: str = "") -> None:
     """初始化检索进度，并顺便清理一小时前的历史状态。"""
     if not progress_id:
         return
@@ -21,6 +32,7 @@ def start(progress_id: str) -> None:
         expired = [key for key, value in _STATES.items() if now - value["updated_at"] > _MAX_AGE_SECONDS]
         for key in expired:
             _STATES.pop(key, None)
+            _OWNERS.pop(key, None)
         _STATES[progress_id] = {
             "progress_id": progress_id,
             "status": "running",
@@ -31,6 +43,8 @@ def start(progress_id: str) -> None:
             "total_cases": 0,
             "updated_at": now,
         }
+        if owner_id:
+            _OWNERS[progress_id] = str(owner_id)
 
 
 def update(
@@ -97,8 +111,10 @@ def fail(progress_id: str, message: str) -> None:
         )
 
 
-def get(progress_id: str) -> dict | None:
+def get(progress_id: str, owner_id: str | None = None) -> dict | None:
     """返回状态副本，避免前端读取期间被工作线程原地修改。"""
     with _LOCK:
+        if owner_id and _OWNERS.get(progress_id) != str(owner_id):
+            return None
         state = _STATES.get(progress_id)
         return deepcopy(state) if state is not None else None

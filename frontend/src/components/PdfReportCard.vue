@@ -10,8 +10,8 @@
     </header>
     <div class="pdf-thumbnail">
       <img
-        v-if="!thumbnailError"
-        :src="thumbnailUrl"
+          v-if="thumbnailObjectUrl && !thumbnailError"
+          :src="thumbnailObjectUrl"
         alt="PDF 报告第一页缩略图"
         @error="thumbnailError = true"
       />
@@ -45,7 +45,12 @@
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { Download } from "@element-plus/icons-vue";
-import { API_ORIGIN } from "../api";
+import { ElMessage } from "element-plus";
+import {
+  downloadAuthenticatedFile,
+  fetchAuthenticatedBlob,
+  getApiErrorMessage,
+} from "../api";
 
 const props = defineProps({
   report: { type: Object, required: true },
@@ -56,19 +61,21 @@ const previewUrl = ref("");
 const previewError = ref("");
 const previewLoading = ref(false);
 const thumbnailError = ref(false);
+const thumbnailObjectUrl = ref("");
 let previewRequestId = 0;
+let thumbnailRequestId = 0;
 
-const reportUrl = computed(() => {
+const reportPath = computed(() => {
   const value = props.report.url || "";
-  if (/^https?:\/\//i.test(value)) return value;
-  return `${API_ORIGIN}${value.startsWith("/") ? value : `/${value}`}`;
+  if (/^https?:\/\//i.test(value) || value.startsWith("/")) return value;
+  return value ? `/${value}` : "";
 });
 
-const thumbnailUrl = computed(() => {
+const thumbnailPath = computed(() => {
   const explicit = props.report.thumbnail_url || "";
-  if (explicit) return /^https?:\/\//i.test(explicit) ? explicit : `${API_ORIGIN}${explicit.startsWith("/") ? explicit : `/${explicit}`}`;
+  if (explicit) return /^https?:\/\//i.test(explicit) || explicit.startsWith("/") ? explicit : `/${explicit}`;
   const filename = String(props.report.filename || "").replace(/\.pdf$/i, ".thumbnail.png");
-  return filename ? `${API_ORIGIN}/api/case-multidim/report-thumbnails/${encodeURIComponent(filename)}` : "";
+  return filename ? `/api/case-multidim/report-thumbnails/${encodeURIComponent(filename)}` : "";
 });
 
 // 释放浏览器为 PDF 预览创建的临时地址，避免切换会话后持续占用内存。
@@ -78,23 +85,47 @@ const releasePreviewUrl = () => {
   previewUrl.value = "";
 };
 
-// 报告切换时只重置状态，完整 PDF 在用户点击后按需加载。
+const releaseThumbnailUrl = () => {
+  if (!thumbnailObjectUrl.value) return;
+  URL.revokeObjectURL(thumbnailObjectUrl.value);
+  thumbnailObjectUrl.value = "";
+};
+
+const loadThumbnail = async () => {
+  const requestId = ++thumbnailRequestId;
+  releaseThumbnailUrl();
+  if (!thumbnailPath.value) {
+    thumbnailError.value = true;
+    return;
+  }
+  try {
+    const blob = await fetchAuthenticatedBlob(thumbnailPath.value);
+    if (requestId !== thumbnailRequestId) return;
+    thumbnailObjectUrl.value = URL.createObjectURL(blob);
+  } catch {
+    if (requestId === thumbnailRequestId) thumbnailError.value = true;
+  }
+};
+
+// 报告切换时只重置状态，缩略图和完整 PDF 都通过带访问令牌的请求按需读取。
 watch(
-  reportUrl,
+  [reportPath, thumbnailPath],
   () => {
     previewRequestId += 1;
+    thumbnailRequestId += 1;
     previewOpen.value = false;
     previewError.value = "";
     previewLoading.value = false;
     thumbnailError.value = false;
     releasePreviewUrl();
+    loadThumbnail();
   },
   { immediate: true },
 );
 
 // 只有用户点击查看时才加载完整 PDF，列表缩略图始终使用稳定的 PNG 地址。
 const openPreview = async () => {
-  if (!reportUrl.value) return;
+  if (!reportPath.value) return;
   previewOpen.value = true;
   if (previewUrl.value || previewLoading.value) return;
   const requestId = ++previewRequestId;
@@ -102,14 +133,12 @@ const openPreview = async () => {
   previewLoading.value = true;
   try {
     // 报告接口按附件返回，转成 Blob 后在弹窗预览，不会误触发浏览器下载。
-    const response = await fetch(reportUrl.value);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const blob = await response.blob();
+    const blob = await fetchAuthenticatedBlob(reportPath.value);
     if (requestId !== previewRequestId) return;
     previewUrl.value = URL.createObjectURL(blob);
   } catch (error) {
     if (requestId !== previewRequestId) return;
-    previewError.value = `报告预览加载失败：${error instanceof Error ? error.message : "未知错误"}`;
+    previewError.value = `报告预览加载失败：${getApiErrorMessage(error)}`;
   } finally {
     if (requestId === previewRequestId) previewLoading.value = false;
   }
@@ -117,15 +146,22 @@ const openPreview = async () => {
 
 onBeforeUnmount(() => {
   previewRequestId += 1;
+  thumbnailRequestId += 1;
   releasePreviewUrl();
+  releaseThumbnailUrl();
 });
 
 // 使用浏览器原生下载能力，文件内容与缩略预览保持一致。
-const download = () => {
-  const link = document.createElement("a");
-  link.href = reportUrl.value;
-  link.download = props.report.filename || "case-report.pdf";
-  link.click();
+const download = async () => {
+  if (!reportPath.value) return;
+  try {
+    await downloadAuthenticatedFile(
+      reportPath.value,
+      props.report.filename || "case-report.pdf",
+    );
+  } catch (error) {
+    ElMessage.error(`报告下载失败：${getApiErrorMessage(error)}`);
+  }
 };
 </script>
 

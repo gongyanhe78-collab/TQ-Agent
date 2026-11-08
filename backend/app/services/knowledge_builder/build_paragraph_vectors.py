@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import io
 import json
-import os
 import re
 import shutil
 import sys
@@ -63,7 +62,7 @@ SENTENCE_END_RE = re.compile(r"[。！？；;]$")
 
 @dataclass
 class PdfElementText:
-    """保存 partition_pdf 返回元素的正文、页码和类型，便于后续段落重组。"""
+    """保存 PDF 文本行的正文、页码和类型，便于后续段落重组。"""
 
     text: str
     page_no: int
@@ -99,37 +98,27 @@ def split_paragraphs(text: str) -> list[str]:
     return [item.text for item in _split_oversized_paragraphs(paragraphs)]
 
 
-def _prepare_unstructured_environment() -> None:
-    """设置 Unstructured 运行缓存目录，避免 numba 把缓存写到不可控位置。"""
-    settings.numba_cache_dir.mkdir(parents=True, exist_ok=True)
-    os.environ.setdefault("NUMBA_CACHE_DIR", str(settings.numba_cache_dir))
-
-
 def _load_pdf_elements(pdf_path: Path) -> list[PdfElementText]:
-    """使用 partition_pdf 完成 PDF 文档化，并保留元素顺序、页码和分类。"""
-    _prepare_unstructured_environment()
+    """使用轻量 pypdf 读取 PDF 文本行，并保留元素顺序和页码。"""
     try:
-        from unstructured.partition.pdf import partition_pdf
+        from pypdf import PdfReader
     except ImportError as exc:
-        raise RuntimeError("缺少 PDF 文档化依赖，请安装 unstructured[pdf]。") from exc
+        raise RuntimeError("缺少 PDF 文本读取依赖，请安装 pypdf。") from exc
 
-    elements = partition_pdf(
-        filename=str(pdf_path),
-        strategy="fast",
-        infer_table_structure=False,
-        extract_images_in_pdf=False,
-    )
+    try:
+        reader = PdfReader(str(pdf_path))
+    except Exception as exc:
+        raise RuntimeError(f"无法读取 PDF 文件：{pdf_path.name}") from exc
+
     records: list[PdfElementText] = []
-    for element in elements:
-        text = _clean_text(str(element))
-        if not text:
-            continue
-        metadata = getattr(element, "metadata", None)
-        page_no = int(getattr(metadata, "page_number", None) or 0)
-        category = str(getattr(element, "category", "") or type(element).__name__)
-        records.append(PdfElementText(text=text, page_no=page_no, category=category))
+    for page_no, page in enumerate(reader.pages, start=1):
+        page_text = page.extract_text() or ""
+        for line in page_text.splitlines():
+            text = _clean_text(line)
+            if text:
+                records.append(PdfElementText(text=text, page_no=page_no, category="PypdfText"))
     if not records:
-        raise RuntimeError(f"PDF 文档化未产生有效文本：{pdf_path.name}")
+        raise RuntimeError(f"PDF 未提取到有效文本：{pdf_path.name}")
     return records
 
 
@@ -180,7 +169,7 @@ def _should_flush_before_next(buffer_text: str, next_text: str, next_page: int, 
 
 
 def _merge_adjacent_elements(elements: list[PdfElementText]) -> list[ParagraphItem]:
-    """在 partition_pdf 之后合并相邻短元素，把 PDF 行级碎片重组成自然段。"""
+    """在 PDF 文本行读取之后合并相邻短元素，把行级碎片重组成自然段。"""
     paragraphs: list[ParagraphItem] = []
     buffer_text = ""
     buffer_page = 0

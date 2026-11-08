@@ -1,10 +1,17 @@
 """三个查询入口共享的统一业务服务。"""
 from __future__ import annotations
 
+import inspect
 from collections.abc import AsyncIterator, Awaitable, Callable
+from dataclasses import replace
 from typing import Any
 
 from backend.app.api.schemas import AgentQueryRequest, QueryRequest, StreamQueryRequest
+from backend.app.agents.unified_chat.orchestration_models import (
+    AgentBudget,
+    ExecutionContext,
+)
+from backend.app.agents.unified_chat.runtime import AgentRuntime
 from backend.app.services.query.agent_query_service import AgentQueryService
 from backend.app.services.query.context_cases import ContextCaseResolver
 from backend.app.services.query.document_qa import DocumentQA
@@ -25,7 +32,7 @@ class ChatService:
         context_cases: ContextCaseResolver,
         agent_query: AgentQueryService,
         presenter: QueryResultPresenter,
-        orchestrator_factory: Callable[[], Any],
+        orchestrator_factory: Callable[..., Any],
     ) -> None:
         self.settings = settings
         self.session_store = session_store
@@ -121,11 +128,40 @@ class ChatService:
         self,
         request: StreamQueryRequest,
         is_disconnected: Callable[[], Awaitable[bool]],
+        execution_context: ExecutionContext | None = None,
     ) -> AsyncIterator[dict[str, Any]]:
         """执行统一流式查询主链路并原样转发编排事件。"""
-        orchestrator = self.orchestrator_factory()
+        context = execution_context or ExecutionContext()
+        if not context.session_id and request.session_id:
+            context = replace(context, session_id=request.session_id)
+        runtime = AgentRuntime(
+            AgentBudget.from_settings(self.settings),
+            context,
+        )
+        if self._factory_accepts_runtime():
+            orchestrator = self.orchestrator_factory(runtime)
+        else:
+            orchestrator = self.orchestrator_factory()
         async for event in orchestrator.stream(request, is_disconnected):
             yield event
+
+    def _factory_accepts_runtime(self) -> bool:
+        """判断旧工厂是否需要兼容，只有显式参数才注入请求运行时。"""
+        try:
+            parameters = inspect.signature(
+                self.orchestrator_factory
+            ).parameters.values()
+        except (TypeError, ValueError):
+            return False
+        return any(
+            parameter.kind
+            in {
+                inspect.Parameter.POSITIONAL_ONLY,
+                inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                inspect.Parameter.VAR_POSITIONAL,
+            }
+            for parameter in parameters
+        )
 
     def _save_agent_answer(
         self,

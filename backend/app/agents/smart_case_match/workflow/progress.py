@@ -10,6 +10,8 @@ _LOCK = Lock()
 _STATES: dict[str, dict] = {}
 # 客户端进度号只作为查询别名，真实状态始终使用服务端唯一 run_id 保存。
 _ALIASES: dict[str, str] = {}
+# 进度可能包含检索阶段信息，必须按用户隔离读取权限。
+_OWNERS: dict[str, str] = {}
 _TERMINAL_STATE_TTL_SECONDS = 2 * 60 * 60
 _RUNNING_STATE_TTL_SECONDS = 24 * 60 * 60
 _MAX_TERMINAL_STATES = 2000
@@ -32,10 +34,12 @@ def _purge_terminal_states_locked(now: float | None = None) -> None:
     ]
     for progress_id in expired:
         _STATES.pop(progress_id, None)
+        _OWNERS.pop(progress_id, None)
     # 任务状态删除后同步清理别名，避免长期运行时积累失效映射。
     stale_aliases = [alias for alias, run_id in _ALIASES.items() if run_id not in _STATES]
     for alias in stale_aliases:
         _ALIASES.pop(alias, None)
+        _OWNERS.pop(alias, None)
     terminal_ids = [
         (progress_id, float(state.get("_updated_monotonic") or current))
         for progress_id, state in _STATES.items()
@@ -45,12 +49,14 @@ def _purge_terminal_states_locked(now: float | None = None) -> None:
         terminal_ids.sort(key=lambda item: item[1])
         for progress_id, _ in terminal_ids[: len(terminal_ids) - _MAX_TERMINAL_STATES]:
             _STATES.pop(progress_id, None)
+            _OWNERS.pop(progress_id, None)
         stale_aliases = [alias for alias, run_id in _ALIASES.items() if run_id not in _STATES]
         for alias in stale_aliases:
             _ALIASES.pop(alias, None)
+            _OWNERS.pop(alias, None)
 
 
-def start(progress_id: str, alias: str = "") -> None:
+def start(progress_id: str, alias: str = "", owner_id: str = "") -> None:
     """使用唯一运行号初始化任务，并可注册一个向后兼容的客户端查询别名。"""
     if not progress_id:
         return
@@ -65,9 +71,14 @@ def start(progress_id: str, alias: str = "") -> None:
             "_updated_monotonic": monotonic(),
         }
         normalized_alias = str(alias or "").strip()
+        normalized_owner = str(owner_id or "").strip()
+        if normalized_owner:
+            _OWNERS[progress_id] = normalized_owner
         if normalized_alias and normalized_alias != progress_id:
             # 同一客户端别名重复提交时仅更新查询指向，不会覆盖两个任务各自的真实状态。
             _ALIASES[normalized_alias] = progress_id
+            if normalized_owner:
+                _OWNERS[normalized_alias] = normalized_owner
 
 
 def update(progress_id: str, stage: str, message: str, percent: int) -> None:
@@ -100,12 +111,17 @@ def fail(progress_id: str, message: str) -> None:
         state.update({"status": "failed", "stage": "failed", "message": str(message), "percent": 100, "_updated_monotonic": monotonic()})
 
 
-def get(progress_id: str) -> dict | None:
+def get(progress_id: str, owner_id: str | None = None) -> dict | None:
     """返回进度快照，避免外部修改共享状态。"""
     with _LOCK:
         _purge_terminal_states_locked()
         # 真实 run_id 优先；旧页面传客户端 progress_id 时再解析到最近注册的唯一任务。
         resolved_id = progress_id if progress_id in _STATES else _ALIASES.get(progress_id, progress_id)
+        normalized_owner = str(owner_id or "").strip()
+        if normalized_owner:
+            state_owner = _OWNERS.get(progress_id) or _OWNERS.get(resolved_id)
+            if state_owner != normalized_owner:
+                return None
         state = _STATES.get(resolved_id)
         if not state:
             return None

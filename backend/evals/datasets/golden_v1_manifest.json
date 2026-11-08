@@ -1,0 +1,23 @@
+{
+  "dataset_version": "golden-v1",
+  "created_at": "2026-11-07",
+  "category_distribution": {
+    "路由": 6,
+    "检索": 12,
+    "统计": 8,
+    "RAG": 10,
+    "相似匹配": 8,
+    "多轮记忆": 10,
+    "故障场景": 6
+  },
+  "knowledge_version": "standard-cases-2025-v1",
+  "prompt_version": "enterprise-runtime-v1",
+  "model_config": {
+    "provider": "dashscope",
+    "chat_model": "qwen-plus",
+    "embedding_model": "text-embedding-v4",
+    "temperature": 0,
+    "seed": 42
+  },
+  "dataset_sha256": "6df7f01d7b658610a6cc92b5aa5abe7f2bc4cb21fde37d6d5d04d96c576652c4"
+}

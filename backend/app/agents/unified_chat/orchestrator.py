@@ -17,7 +17,9 @@ from backend.app.agents.unified_chat.multidim_stream import (
     MultidimStreamMixin,
 )
 from backend.app.agents.unified_chat.orchestration_models import (
+    BudgetTermination,
     OrchestratorDependencies,
+    TerminationReason,
     UnifiedRouteDecision,
 )
 from backend.app.agents.unified_chat.performance import PerformanceTrace
@@ -29,6 +31,7 @@ from backend.app.agents.unified_chat.report_stream import (
     ReportStreamMixin,
 )
 from backend.app.agents.unified_chat.routing import RoutingMixin
+from backend.app.agents.unified_chat.runtime import AgentRuntime
 from backend.app.agents.unified_chat.smart_stream import SmartStreamMixin
 from backend.app.agents.unified_chat.stream_events import StreamEventMixin
 from backend.app.agents.unified_chat.structured_context import (
@@ -64,9 +67,12 @@ class UnifiedChatOrchestrator(
     def __init__(
         self,
         dependencies: OrchestratorDependencies,
+        runtime: AgentRuntime | None = None,
     ) -> None:
         """保存编排依赖并创建请求级会话记忆管理器。"""
         self.dependencies = dependencies
+        # 请求级运行时既可由 ChatService 注入，也兼容旧测试直接构造编排器。
+        self.runtime = runtime or AgentRuntime()
         self.session_store = dependencies.session_store
         self.document_store = dependencies.document_qa.document_store
         self.multidim_agent = dependencies.multidim_agent
@@ -84,6 +90,9 @@ class UnifiedChatOrchestrator(
         self._background_tasks: set[asyncio.Task] = set()
         # 编排器按请求创建，重生成信息可安全保存在当前实例中。
         self._regeneration_context: dict[str, Any] = {}
+        # 请求级跨会话长期记忆上下文，读取失败时保持空文本且不阻塞回答。
+        self._long_term_memory_context: str = ""
+        self._long_term_memory_trace: dict[str, Any] = {}
 
     async def stream(
         self,
@@ -92,12 +101,22 @@ class UnifiedChatOrchestrator(
     ) -> AsyncIterator[dict[str, Any]]:
         """识别意图并把选中链路转换为统一 SSE 事件。"""
         performance = PerformanceTrace()
+        try:
+            # 取消、总截止时间和 Token 预算必须先于会话判断与模型路由。
+            self.runtime.check()
+            self.runtime.count_tokens(str(payload.question or ""))
+        except BudgetTermination as exc:
+            yield self._runtime_error_event(str(exc))
+            return
         session_id = str(payload.session_id or "")
         if (
             session_id
             and self.session_store.get_session(session_id) is None
         ):
-            yield {"type": "error", "message": "Session not found"}
+            self.runtime.mark_terminated(
+                TerminationReason.INVALID_SESSION
+            )
+            yield self._runtime_error_event("Session not found")
             return
 
         # 首个事件先于记忆读取和意图模型调用，让页面立即给出反馈。
@@ -224,6 +243,8 @@ class UnifiedChatOrchestrator(
             else []
         )
         performance.stop("session_memory_read_ms")
+        # 跨会话长期记忆在回答前读取；失败只降级不阻塞主回答。
+        self._load_long_term_memory(session_id, regenerate_message_id)
         # 历史回答重做时不消费当前会话残留的多维确认状态。
         pending = (
             self.multidim_store.pending_proposal(session_id)
@@ -232,12 +253,24 @@ class UnifiedChatOrchestrator(
         )
         performance.start("intent_ms")
         # 意图模型在线程中执行，入口首个 metadata 已先行反馈。
-        decision = await asyncio.to_thread(
-            self._route,
-            payload.question,
-            bool(pending),
-            memory_context,
-        )
+        try:
+            self.runtime.begin_subtask(
+                "intent_route",
+                "query_intent",
+            )
+            self.runtime.count_step()
+            self.runtime.count_model_call()
+            decision = await asyncio.to_thread(
+                self._route,
+                payload.question,
+                bool(pending),
+                memory_context,
+            )
+            self.runtime.finish_subtask()
+        except BudgetTermination as exc:
+            performance.stop("intent_ms")
+            yield self._runtime_error_event(str(exc))
+            return
         # 承接式报告请求优先复用上一轮落库结果。
         previous_result = self._previous_reusable_result(
             session_id,
@@ -303,6 +336,12 @@ class UnifiedChatOrchestrator(
         )
 
         try:
+            self.runtime.check()
+            self.runtime.begin_subtask(
+                f"route_{decision.intent}",
+                decision.intent,
+            )
+            self.runtime.count_step()
             if (
                 decision.report_mode == "from_previous_result"
                 and previous_result
@@ -314,6 +353,7 @@ class UnifiedChatOrchestrator(
                     performance,
                 ):
                     yield event
+                self.runtime.finish_subtask()
                 return
             if decision.intent == "multidim_search":
                 # 确认和取消语句原样交给状态机，其他问题使用消解表达。
@@ -329,6 +369,7 @@ class UnifiedChatOrchestrator(
                     performance,
                 ):
                     yield event
+                self.runtime.finish_subtask()
                 return
             if decision.intent == "similar_case_match":
                 async for event in self._stream_smart(
@@ -338,6 +379,7 @@ class UnifiedChatOrchestrator(
                     performance,
                 ):
                     yield event
+                self.runtime.finish_subtask()
                 return
             if decision.intent == "clarify":
                 async for event in self._stream_clarification(
@@ -347,6 +389,7 @@ class UnifiedChatOrchestrator(
                     performance,
                 ):
                     yield event
+                self.runtime.finish_subtask()
                 return
             async for event in self._stream_rag(
                 payload,
@@ -361,8 +404,66 @@ class UnifiedChatOrchestrator(
                 performance=performance,
             ):
                 yield event
+            self.runtime.finish_subtask()
+        except BudgetTermination as exc:
+            self._finish_active_run(
+                status="failed",
+                error=str(exc),
+            )
+            yield self._runtime_error_event(str(exc))
         except Exception as exc:
-            yield {"type": "error", "message": str(exc)}
+            self.runtime.mark_terminated(
+                TerminationReason.INTERNAL_ERROR
+            )
+            self._finish_active_run(
+                status="failed",
+                error=str(exc),
+            )
+            yield self._runtime_error_event(str(exc))
+
+    def _runtime_error_event(self, message: str) -> dict[str, Any]:
+        """构造带请求关联字段的结构化运行时错误事件。"""
+        return {
+            "type": "error",
+            "message": str(message or "请求执行失败"),
+            **self._runtime_fields(),
+        }
+
+    def _load_long_term_memory(
+        self,
+        session_id: str,
+        regenerate_message_id: int | None = None,
+    ) -> None:
+        """按当前用户读取长期记忆；异常只记录降级并清空上下文。"""
+        self._long_term_memory_context = ""
+        self._long_term_memory_trace = {}
+        memory_service = getattr(self.dependencies, "memory_service", None)
+        if memory_service is None or not session_id:
+            return
+        if regenerate_message_id:
+            return
+        try:
+            context = memory_service.context_for_user(
+                self.session_store.user_id,
+                limit=10,
+            )
+            self._long_term_memory_context = "；".join(
+                str(item.get("content") or "")
+                for item in context.get("memories", [])
+                if str(item.get("content") or "")
+            )[:2000]
+            self._long_term_memory_trace = {
+                "fallback_structured": bool(
+                    context.get("fallback_structured")
+                ),
+                "memory_count": len(context.get("memories", [])),
+            }
+        except Exception as exc:
+            LOGGER.warning(
+                "[长期记忆] 读取失败，不阻塞回答 user_id=%s error=%s",
+                self.session_store.user_id,
+                exc,
+            )
 
     def _schedule_memory_refresh(self, session_id: str) -> None:
         """创建受引用保护的会话记忆刷新任务。"""

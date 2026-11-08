@@ -1,6 +1,7 @@
 """FastAPI 应用工厂，只负责中间件、生命周期和路由装配。"""
 from __future__ import annotations
 
+import os
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
@@ -10,7 +11,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.routes import (
     agent,
+    auth,
     case_multidim,
+    memories,
+    observability,
     query_intent,
     sessions,
     smart_case_match,
@@ -18,20 +22,38 @@ from backend.app.api.routes import (
     vectors,
 )
 from backend.app.core.lifecycle import lifespan
+from backend.app.observability.middleware import ObservabilityMiddleware
+from backend.app.observability.tracing import shutdown_tracing
 
 if TYPE_CHECKING:
     from backend.app.services.container import AppServices
 
 
 ROUTERS = (
+    auth.router,
     agent.router,
+    memories.router,
     sessions.router,
     case_multidim.router,
     smart_case_match.router,
     query_intent.router,
     system.router,
     vectors.router,
+    observability.router,
 )
+
+
+def _cors_origins() -> list[str]:
+    """读取显式前端来源，凭据模式下禁止通配来源。"""
+    raw = os.getenv(
+        "CORS_ORIGINS",
+        "http://127.0.0.1:5173,http://localhost:5173",
+    )
+    origins = [item.strip() for item in raw.split(",") if item.strip()]
+    return [item for item in origins if item != "*"] or [
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+    ]
 
 
 def register_routes(app: FastAPI) -> None:
@@ -48,11 +70,14 @@ def create_app(
     @asynccontextmanager
     async def app_lifespan(application: FastAPI):
         """把可选测试服务工厂传入统一生命周期。"""
-        async with lifespan(
-            application,
-            services_factory=services_factory,
-        ):
-            yield
+        try:
+            async with lifespan(
+                application,
+                services_factory=services_factory,
+            ):
+                yield
+        finally:
+            shutdown_tracing()
 
     app = FastAPI(
         title="Weather Case RAG System",
@@ -61,11 +86,12 @@ def create_app(
     )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=False,
+        allow_origins=_cors_origins(),
+        allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.add_middleware(ObservabilityMiddleware)
     register_routes(app)
     return app
 

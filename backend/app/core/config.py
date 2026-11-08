@@ -32,6 +32,24 @@ def _dashscope_api_key() -> str:
     )
 
 
+def _trace_sample_rate(raw: str) -> float:
+    """解析采样率，并在生产环境强制限制到 0.1。"""
+    try:
+        rate = float(raw)
+    except (TypeError, ValueError):
+        rate = 1.0
+    rate = min(1.0, max(0.0, rate))
+    environment = (
+        os.getenv("APP_ENV")
+        or os.getenv("ENVIRONMENT")
+        or os.getenv("DEPLOYMENT_ENV")
+        or ""
+    ).strip().lower()
+    if environment in {"prod", "production"}:
+        return min(rate, 0.1)
+    return rate
+
+
 @dataclass(slots=True)
 class Settings:
     """项目全局配置，字段保持与旧版本一致。"""
@@ -46,6 +64,60 @@ class Settings:
     image_metadata_path: Path = PROJECT_ROOT / "data" / "image_metadata.json"
     standard_cases_path: Path = PROJECT_ROOT / "data" / "standard_cases1.json"
     session_db_path: Path = PROJECT_ROOT / "data" / "sessions.sqlite3"
+    database_url: str = field(
+        default_factory=lambda: _env_value(
+            "DATABASE_URL",
+            f"sqlite+pysqlite:///{(PROJECT_ROOT / 'data' / 'risk.sqlite3').as_posix()}",
+        )
+    )
+    legacy_user_id: str = "legacy_user"
+    legacy_username: str = "legacy_user"
+    legacy_password: str = ""
+    redis_url: str = field(
+        default_factory=lambda: _env_value("REDIS_URL", "redis://127.0.0.1:6379/0")
+    )
+    redis_cache_enabled: bool = field(
+        default_factory=lambda: _env_value("REDIS_CACHE_ENABLED", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    redis_context_ttl_seconds: int = field(
+        default_factory=lambda: int(_env_value("REDIS_CONTEXT_TTL_SECONDS", "1800"))
+    )
+    redis_key_prefix: str = field(
+        default_factory=lambda: _env_value("REDIS_KEY_PREFIX", "risk")
+    )
+    auth_jwt_secret: str = field(
+        default_factory=lambda: _env_value(
+            "AUTH_JWT_SECRET",
+            "development-only-secret-change-before-deployment",
+        )
+    )
+    auth_access_ttl_seconds: int = field(
+        default_factory=lambda: int(_env_value("AUTH_ACCESS_TTL_SECONDS", "900"))
+    )
+    auth_refresh_ttl_seconds: int = field(
+        default_factory=lambda: int(_env_value("AUTH_REFRESH_TTL_SECONDS", "604800"))
+    )
+    auth_refresh_cookie_name: str = field(
+        default_factory=lambda: _env_value("AUTH_REFRESH_COOKIE_NAME", "refresh_token")
+    )
+    auth_cookie_secure: bool = field(
+        default_factory=lambda: _env_value("AUTH_COOKIE_SECURE", "false").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    auth_cookie_samesite: str = field(
+        default_factory=lambda: _env_value("AUTH_COOKIE_SAMESITE", "lax")
+    )
+    cors_origins: tuple[str, ...] = field(
+        default_factory=lambda: tuple(
+            item.strip()
+            for item in _env_value(
+                "CORS_ORIGINS",
+                "http://127.0.0.1:5173,http://localhost:5173",
+            ).split(",")
+            if item.strip()
+        )
+    )
     case_multidim_runtime_dir: Path = field(
         default_factory=lambda: _env_path(
             "CASE_MULTIDIM_RUNTIME_DIR",
@@ -53,6 +125,50 @@ class Settings:
         )
     )
     document_collection_name: str = "weather_document_chunks"
+    otel_service_name: str = field(
+        default_factory=lambda: _env_value("OTEL_SERVICE_NAME", "risk-master")
+    )
+    otlp_endpoint: str = field(
+        default_factory=lambda: (
+            os.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", "").strip()
+            or os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "").strip()
+            or os.getenv("OTLP_ENDPOINT", "").strip()
+        )
+    )
+    tracing_enabled: bool = field(
+        default_factory=lambda: _env_value("TRACING_ENABLED", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    tracing_sample_rate: float = field(
+        default_factory=lambda: _trace_sample_rate(
+            _env_value("OTEL_TRACES_SAMPLER_ARG", "1.0")
+        )
+    )
+    log_json: bool = field(
+        default_factory=lambda: _env_value("LOG_JSON", "false").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    metrics_enabled: bool = field(
+        default_factory=lambda: _env_value("METRICS_ENABLED", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    agent_max_seconds: float = field(
+        default_factory=lambda: float(_env_value("AGENT_MAX_SECONDS", "300"))
+    )
+    agent_max_steps: int = field(
+        default_factory=lambda: int(_env_value("AGENT_MAX_STEPS", "50"))
+    )
+    agent_max_model_calls: int = field(
+        default_factory=lambda: int(_env_value("AGENT_MAX_MODEL_CALLS", "40"))
+    )
+    agent_token_budget: int = field(
+        default_factory=lambda: int(_env_value("AGENT_TOKEN_BUDGET", "150000"))
+    )
+    agent_step_timeout_seconds: float = field(
+        default_factory=lambda: float(
+            _env_value("AGENT_STEP_TIMEOUT_SECONDS", "90")
+        )
+    )
 
     dashscope_api_key: str = field(default_factory=_dashscope_api_key)
     dashscope_base_url: str = field(
@@ -100,6 +216,56 @@ class Settings:
     rerank_model: str = ""
     api_key: str = ""
     base_url: str = ""
+    vector_backend: str = field(
+        default_factory=lambda: _env_value("VECTOR_BACKEND", "chroma").lower()
+    )
+    vector_fallback_backend: str = field(
+        default_factory=lambda: _env_value(
+            "VECTOR_FALLBACK_BACKEND",
+            "chroma",
+        ).lower()
+    )
+    vector_schema_version: str = field(
+        default_factory=lambda: _env_value("VECTOR_SCHEMA_VERSION", "v1")
+    )
+    milvus_uri: str = field(
+        default_factory=lambda: _env_value(
+            "MILVUS_URI",
+            "http://127.0.0.1:19530",
+        )
+    )
+    milvus_token: str = field(
+        default_factory=lambda: os.getenv("MILVUS_TOKEN", "")
+    )
+    milvus_database: str = field(
+        default_factory=lambda: _env_value("MILVUS_DATABASE", "default")
+    )
+    milvus_timeout_seconds: float = field(
+        default_factory=lambda: float(
+            _env_value("MILVUS_TIMEOUT_SECONDS", "10")
+        )
+    )
+    milvus_collection_name: str = field(
+        default_factory=lambda: _env_value(
+            "MILVUS_DOCUMENT_COLLECTION",
+            "weather_document_chunks_v1",
+        )
+    )
+    milvus_memory_collection_name: str = field(
+        default_factory=lambda: _env_value(
+            "MILVUS_MEMORY_COLLECTION",
+            "weather_user_memories_v1",
+        )
+    )
+    milvus_dense_top_k: int = field(
+        default_factory=lambda: int(_env_value("MILVUS_DENSE_TOP_K", "30"))
+    )
+    milvus_sparse_top_k: int = field(
+        default_factory=lambda: int(_env_value("MILVUS_SPARSE_TOP_K", "30"))
+    )
+    milvus_rrf_k: int = field(
+        default_factory=lambda: int(_env_value("MILVUS_RRF_K", "60"))
+    )
 
     def __post_init__(self) -> None:
         """回填系统状态接口需要的统一模型字段。"""

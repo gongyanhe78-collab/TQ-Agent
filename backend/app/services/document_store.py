@@ -1,281 +1,239 @@
-"""
-文档片段向量存储模块
-提供 JSON 元数据备份和 ChromaDB 向量存储，支持文档 chunk 的向量索引、
-相似度检索、增量更新和全量重建操作。
-"""
+"""兼容既有调用的文档片段权威存储与统一向量适配层。"""
 from __future__ import annotations
 
 import json
-import math
 from pathlib import Path
-from threading import Lock
+from typing import Any
 
 from backend.app.models import DocumentChunk, DocumentRetrievalHit
+from backend.app.services.vector.chroma_document_store import (
+    ChromaDocumentVectorStore,
+)
+from backend.app.services.vector.contracts import VectorHit
+from backend.app.services.vector.json_document_store import (
+    JsonDocumentVectorStore,
+    read_authority_chunks,
+)
+
+
+_DEFAULT_COLLECTION_NAME = "weather_document_chunks"
+_DEFAULT_SCHEMA_VERSION = "v1"
+
+
+def _write_authority_chunks(path: Path, chunks: list[DocumentChunk]) -> None:
+    """按稳定顺序写入权威 chunk JSON，正文不再由向量索引承担。"""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = [
+        chunk.to_dict()
+        for chunk in sorted(
+            chunks,
+            key=lambda item: (
+                item.source_pdf,
+                item.chunk_no,
+                item.chunk_id,
+            ),
+        )
+    ]
+    temporary_path = path.with_suffix(f"{path.suffix}.tmp")
+    temporary_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    temporary_path.replace(path)
+
+
+def _merge_authority_chunks(
+    path: Path,
+    chunks: list[DocumentChunk],
+) -> list[DocumentChunk]:
+    """把增量块合并进权威 JSON，并返回合并后的完整正文集合。"""
+    existing = {
+        chunk.chunk_id: chunk for chunk in read_authority_chunks(path)
+    }
+    for chunk in chunks:
+        chunk_id = str(chunk.chunk_id or "").strip()
+        if chunk_id:
+            existing[chunk_id] = chunk
+    merged = list(existing.values())
+    _write_authority_chunks(path, merged)
+    return merged
+
+
+def _legacy_hits(hits: list[VectorHit]) -> list[DocumentRetrievalHit]:
+    """把统一命中投影为旧检索调用方消费的正文与得分形状。"""
+    return [
+        DocumentRetrievalHit(chunk=hit.chunk, score=float(hit.score))
+        for hit in hits
+    ]
 
 
 class JsonDocumentChunkStore:
-    """
-    文档片段 JSON 元数据备份存储
-    提供 DocumentChunk 的增删改查和余弦相似度检索功能，作为 ChromaDB 的降级方案。
-    """
+    """兼容旧类名的 JSON 权威正文与轻量向量索引存储。"""
 
     def __init__(self, storage_path: Path):
-        """
-        初始化 JSON 文档片段存储
-
-        Args:
-            storage_path: JSON 备份文件路径
-        """
+        """以旧 chunks.json 路径建立正文权威文件和独立索引副本。"""
         self.storage_path = Path(storage_path)
         self.storage_path.parent.mkdir(parents=True, exist_ok=True)
-        self._cache_lock = Lock()
-        self._cached_signature: tuple[int, int] | None = None
-        self._cached_chunks: list[DocumentChunk] = []
-        self._cached_by_id: dict[str, DocumentChunk] = {}
-
-    def upsert_chunks(self, chunks: list[DocumentChunk]) -> None:
-        """
-        增量更新文档片段
-
-        Args:
-            chunks: DocumentChunk 对象列表
-        """
-        existing = {chunk.chunk_id: chunk for chunk in self._load_chunks()}
-        for chunk in chunks:
-            existing[chunk.chunk_id] = chunk
-        self._save_chunks(list(existing.values()))
-
-    def replace_chunks(self, chunks: list[DocumentChunk]) -> None:
-        """
-        全量替换文档片段（重建索引）
-
-        Args:
-            chunks: DocumentChunk 对象列表
-        """
-        self._save_chunks(chunks)
-
-    def list_chunk_ids(self) -> list[str]:
-        """列出 JSON 备份中保存的所有 chunk key。"""
-        return [chunk.chunk_id for chunk in self._load_chunks()]
-
-    def get_chunk(self, chunk_id: str) -> DocumentChunk | None:
-        """根据 chunk_id 返回单个文档 chunk，找不到时返回 None。"""
-        self._load_chunks()
-        with self._cache_lock:
-            return self._cached_by_id.get(chunk_id)
-
-    def list_chunks(self) -> list[DocumentChunk]:
-        """返回所有文档 chunk。"""
-        return self._load_chunks()
-
-    def query(self, embedding: list[float], top_k: int) -> list[DocumentRetrievalHit]:
-        """使用 JSON 备份中的向量执行余弦相似度查询。"""
-        hits = []
-        for chunk in self._load_chunks():
-            if not chunk.embedding:
-                continue
-            hits.append(
-                DocumentRetrievalHit(
-                    chunk=chunk,
-                    score=self._cosine_similarity(embedding, chunk.embedding),
-                )
-            )
-        hits.sort(key=lambda item: item.score, reverse=True)
-        return hits[:top_k]
-
-    def _load_chunks(self) -> list[DocumentChunk]:
-        """从 JSON 文件读取所有文档 chunk。"""
-        if not self.storage_path.exists():
-            return []
-        stat = self.storage_path.stat()
-        signature = (stat.st_mtime_ns, stat.st_size)
-        with self._cache_lock:
-            if signature != self._cached_signature:
-                data = json.loads(self.storage_path.read_text(encoding="utf-8"))
-                self._cached_chunks = [DocumentChunk.from_dict(item) for item in data]
-                self._cached_by_id = {item.chunk_id: item for item in self._cached_chunks}
-                self._cached_signature = signature
-            return list(self._cached_chunks)
-
-    def _save_chunks(self, chunks: list[DocumentChunk]) -> None:
-        """将文档 chunk 按 key 排序后持久化到 JSON 文件。"""
-        data = [chunk.to_dict() for chunk in sorted(chunks, key=lambda item: item.chunk_id)]
-        self.storage_path.write_text(
-            json.dumps(data, ensure_ascii=False, indent=2),
-            encoding="utf-8",
+        self._vector_store = JsonDocumentVectorStore(
+            authority_path=self.storage_path,
+            index_path=self.storage_path.parent / "document_vector_index.json",
+            collection_name=_DEFAULT_COLLECTION_NAME,
+            schema_version=_DEFAULT_SCHEMA_VERSION,
         )
-        with self._cache_lock:
-            self._cached_signature = None
-            self._cached_chunks = []
-            self._cached_by_id = {}
-
-    def _cosine_similarity(self, left: list[float], right: list[float]) -> float:
-        """计算两个向量的余弦相似度。"""
-        numerator = sum(a * b for a, b in zip(left, right))
-        left_norm = math.sqrt(sum(value * value for value in left))
-        right_norm = math.sqrt(sum(value * value for value in right))
-        if not left_norm or not right_norm:
-            return 0.0
-        return numerator / (left_norm * right_norm)
-
-
-class ChromaDocumentChunkStore:
-    """
-    文档片段 ChromaDB 向量存储
-    独立的文档 chunk 向量索引，不与原案例向量库混用，支持向量检索、
-    增量更新和全量重建，集成 JSON 元数据备份。
-    """
-
-    def __init__(self, persist_dir: Path, collection_name: str):
-        """准备新文档向量库目录和 JSON 备份存储。"""
-        self.persist_dir = Path(persist_dir)
-        self.persist_dir.mkdir(parents=True, exist_ok=True)
-        self.collection_name = collection_name
-        self._json_fallback = JsonDocumentChunkStore(self.persist_dir / "chunks.json")
-        self._client = None
-        self._collection = None
-        self._collection_lock = Lock()
-
-    def _get_collection(self):
-        """获取文档 chunk 的 ChromaDB 集合，未安装 chromadb 时返回 None。"""
-        try:
-            import chromadb
-        except ImportError:
-            return None
-        with self._collection_lock:
-            if self._collection is None:
-                self._client = chromadb.PersistentClient(path=str(self.persist_dir))
-                self._collection = self._client.get_or_create_collection(
-                    name=self.collection_name,
-                    metadata={"hnsw:space": "cosine"},
-                )
-            return self._collection
-
-    def _reset_collection(self):
-        """删除并重建文档 chunk 的 ChromaDB 集合。"""
-        try:
-            import chromadb
-        except ImportError:
-            return None
-        with self._collection_lock:
-            client = self._client or chromadb.PersistentClient(path=str(self.persist_dir))
-            try:
-                client.delete_collection(name=self.collection_name)
-            except Exception:
-                pass
-            self._client = client
-            self._collection = client.get_or_create_collection(
-                name=self.collection_name,
-                metadata={"hnsw:space": "cosine"},
-            )
-            return self._collection
 
     def upsert_chunks(self, chunks: list[DocumentChunk]) -> None:
-        """在 JSON 备份和 ChromaDB 中插入或更新文档 chunk。"""
-        collection = self._get_collection()
-        self._json_fallback.upsert_chunks(chunks)
-        if collection is None or not chunks:
-            return
-        payload = self._build_upsert_payload(chunks)
-        try:
-            collection.upsert(**payload)
-        except Exception as exc:
-            if "dimension" not in str(exc).lower():
-                raise
-            collection = self._reset_collection()
-            if collection is not None:
-                collection.upsert(**payload)
+        """先更新权威正文，再增量维护仅含向量和元数据的 JSON 索引。"""
+        _merge_authority_chunks(self.storage_path, chunks)
+        self._vector_store.upsert_chunks(chunks)
 
     def replace_chunks(self, chunks: list[DocumentChunk]) -> None:
-        """完整重建新文档向量库，适合扫描目录后批量生成 chunk。"""
-        self._json_fallback.replace_chunks(chunks)
-        collection = self._reset_collection()
-        if collection is None or not chunks:
-            return
-        collection.upsert(**self._build_upsert_payload(chunks))
+        """全量替换权威正文，并按新正文和既有向量重建 JSON 索引。"""
+        _write_authority_chunks(self.storage_path, chunks)
+        self._vector_store.rebuild()
 
-    def collection_info(self) -> dict:
-        """返回文档 chunk 集合的数量、维度和当前存储来源。"""
-        collection = self._get_collection()
-        if collection is None:
-            return {
-                "count": len(self._json_fallback.list_chunk_ids()),
-                "dimension": None,
-                "source": "json_fallback",
-            }
-        count = collection.count()
-        dimension = None
-        if count:
-            peek = collection.get(limit=1, include=["embeddings"])
-            embeddings = peek.get("embeddings")
-            if embeddings is not None and len(embeddings):
-                dimension = len(embeddings[0])
-        return {
-            "count": count,
-            "dimension": dimension,
-            "source": "chroma",
-        }
+    def delete_chunks(self, chunk_ids: list[str]) -> None:
+        """只删除 JSON 索引记录，权威正文保持不变。"""
+        self._vector_store.delete_chunks(chunk_ids)
 
-    def list_chunk_ids(self) -> list[str]:
-        """列出新文档向量库中的所有 chunk key。"""
-        collection = self._get_collection()
-        if collection is None:
-            return self._json_fallback.list_chunk_ids()
-        result = collection.get(include=[])
-        ids = result.get("ids") or []
-        if ids:
-            return sorted(ids)
-        return self._json_fallback.list_chunk_ids()
+    def query(
+        self,
+        embedding: list[float],
+        top_k: int,
+        query: Any = None,
+        filters: dict[str, Any] | None = None,
+    ) -> list[DocumentRetrievalHit]:
+        """执行统一 JSON 查询，并把结果投影为旧命中形状。"""
+        return _legacy_hits(
+            self._vector_store.query(
+                embedding,
+                top_k,
+                query=query,
+                filters=filters,
+            )
+        )
 
     def get_chunk(self, chunk_id: str) -> DocumentChunk | None:
-        """从 JSON 备份中读取完整 chunk 元数据和正文。"""
-        return self._json_fallback.get_chunk(chunk_id)
+        """始终从权威 chunk JSON 读取单个正文块。"""
+        return self._vector_store.get_chunk(chunk_id)
 
     def get_chunks(self, chunk_ids: list[str]) -> list[DocumentChunk]:
-        """按传入顺序批量读取正文块，供多维检索复用同一本地知识库。"""
+        """按传入顺序批量返回权威正文块。"""
         chunks = []
-        for chunk_id in dict.fromkeys(str(item) for item in chunk_ids or [] if str(item)):
+        for chunk_id in dict.fromkeys(
+            str(item) for item in chunk_ids or [] if str(item)
+        ):
             chunk = self.get_chunk(chunk_id)
             if chunk is not None:
                 chunks.append(chunk)
         return chunks
 
     def list_chunks(self) -> list[DocumentChunk]:
-        """从 JSON 备份中读取完整 chunk 数据。"""
-        return self._json_fallback.list_chunks()
+        """列出权威 chunk JSON 中的全部正文块。"""
+        return self._vector_store.list_chunks()
 
-    def query(self, embedding: list[float], top_k: int) -> list[DocumentRetrievalHit]:
-        """首先查询 ChromaDB，失败时回退到 JSON 余弦相似度查询。"""
-        collection = self._get_collection()
-        if collection is None:
-            return self._json_fallback.query(embedding, top_k)
-        result = collection.query(query_embeddings=[embedding], n_results=top_k)
-        hits: list[DocumentRetrievalHit] = []
-        ids = result.get("ids", [[]])[0]
-        distances = result.get("distances", [[]])[0]
-        for chunk_id, distance in zip(ids, distances):
+    def list_chunk_ids(self) -> list[str]:
+        """列出权威 chunk JSON 中的全部稳定标识。"""
+        return self._vector_store.list_chunk_ids()
+
+    def collection_info(self) -> dict[str, Any]:
+        """返回旧接口可直接读取的 JSON 索引集合信息。"""
+        return self._vector_store.collection_info().to_dict()
+
+    def rebuild(self) -> None:
+        """依据权威正文和既有向量副本重建 JSON 索引。"""
+        self._vector_store.rebuild()
+
+    def health(self) -> dict[str, Any]:
+        """返回 JSON 索引的可重复健康状态。"""
+        return self._vector_store.health()
+
+    def close(self) -> None:
+        """幂等关闭 JSON 索引。"""
+        self._vector_store.close()
+
+
+class ChromaDocumentChunkStore:
+    """兼容旧类名的 Chroma 纯向量索引与 JSON 权威正文适配层。"""
+
+    def __init__(self, persist_dir: Path, collection_name: str):
+        """在旧持久化目录中建立 Chroma 索引和 chunks.json 权威文件。"""
+        self.persist_dir = Path(persist_dir)
+        self.persist_dir.mkdir(parents=True, exist_ok=True)
+        self.collection_name = str(collection_name)
+        self.storage_path = self.persist_dir / "chunks.json"
+        self._vector_store = ChromaDocumentVectorStore(
+            authority_path=self.storage_path,
+            persist_dir=self.persist_dir,
+            collection_name=self.collection_name,
+            schema_version=_DEFAULT_SCHEMA_VERSION,
+        )
+
+    def upsert_chunks(self, chunks: list[DocumentChunk]) -> None:
+        """先更新权威正文，再只向 Chroma 写入向量和过滤元数据。"""
+        _merge_authority_chunks(self.storage_path, chunks)
+        self._vector_store.upsert_chunks(chunks)
+
+    def replace_chunks(self, chunks: list[DocumentChunk]) -> None:
+        """全量替换权威正文，并按新正文和既有向量重建 Chroma 集合。"""
+        _write_authority_chunks(self.storage_path, chunks)
+        self._vector_store.rebuild()
+
+    def delete_chunks(self, chunk_ids: list[str]) -> None:
+        """只删除 Chroma 索引记录，权威正文保持不变。"""
+        self._vector_store.delete_chunks(chunk_ids)
+
+    def query(
+        self,
+        embedding: list[float],
+        top_k: int,
+        query: Any = None,
+        filters: dict[str, Any] | None = None,
+    ) -> list[DocumentRetrievalHit]:
+        """执行统一 Chroma 查询，并把结果投影为旧命中形状。"""
+        return _legacy_hits(
+            self._vector_store.query(
+                embedding,
+                top_k,
+                query=query,
+                filters=filters,
+            )
+        )
+
+    def get_chunk(self, chunk_id: str) -> DocumentChunk | None:
+        """从权威 JSON 读取单个正文块，避免从 Chroma document 反推正文。"""
+        return self._vector_store.get_chunk(chunk_id)
+
+    def get_chunks(self, chunk_ids: list[str]) -> list[DocumentChunk]:
+        """按传入顺序批量返回权威正文块。"""
+        chunks = []
+        for chunk_id in dict.fromkeys(
+            str(item) for item in chunk_ids or [] if str(item)
+        ):
             chunk = self.get_chunk(chunk_id)
-            if chunk is None:
-                continue
-            score = 1 - float(distance) if distance is not None else 0.0
-            hits.append(DocumentRetrievalHit(chunk=chunk, score=score))
-        if hits:
-            return hits
-        return self._json_fallback.query(embedding, top_k)
+            if chunk is not None:
+                chunks.append(chunk)
+        return chunks
 
-    def _build_upsert_payload(self, chunks: list[DocumentChunk]) -> dict:
-        """构建 ChromaDB upsert 所需的 ids、documents、metadatas 和 embeddings。"""
-        return {
-            "ids": [chunk.chunk_id for chunk in chunks],
-            "documents": [chunk.content for chunk in chunks],
-            "metadatas": [
-                {
-                    "source_pdf": chunk.source_pdf,
-                    "chunk_no": chunk.chunk_no,
-                    "file_path": chunk.file_path or "",
-                    "text_length": len(chunk.content),
-                }
-                for chunk in chunks
-            ],
-            "embeddings": [chunk.embedding or [] for chunk in chunks],
-        }
+    def list_chunks(self) -> list[DocumentChunk]:
+        """从权威 JSON 列出全部正文块。"""
+        return self._vector_store.list_chunks()
+
+    def list_chunk_ids(self) -> list[str]:
+        """列出权威 chunk JSON 中的全部稳定标识。"""
+        return self._vector_store.list_chunk_ids()
+
+    def collection_info(self) -> dict[str, Any]:
+        """返回旧接口可直接读取的 Chroma 集合信息。"""
+        return self._vector_store.collection_info().to_dict()
+
+    def rebuild(self) -> None:
+        """依据权威正文和既有向量副本重建 Chroma 集合。"""
+        self._vector_store.rebuild()
+
+    def health(self) -> dict[str, Any]:
+        """返回 Chroma 适配器的可重复健康状态。"""
+        return self._vector_store.health()
+
+    def close(self) -> None:
+        """幂等关闭 Chroma 索引。"""
+        self._vector_store.close()

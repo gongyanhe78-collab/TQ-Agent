@@ -10,7 +10,7 @@ from backend.app.agents.query_intent.schemas import (
     IntentRouteRequest,
     IntentRouteResponse,
 )
-from backend.app.api.dependencies import ServicesDep
+from backend.app.api.dependencies import CurrentUserDep, ServicesDep
 
 
 router = APIRouter(prefix="/api", tags=["query-intent"])
@@ -30,12 +30,13 @@ def natural_chat_page():
 def route_intent(
     payload: IntentRouteRequest,
     services: ServicesDep,
+    user: CurrentUserDep,
 ) -> IntentRouteResponse:
     """识别本轮任务并返回原业务接口的分发信息。"""
     return services.intent_agent.route(payload)
 
 
 @router.get("/query-intent/knowledge-range")
-def knowledge_range(services: ServicesDep):
+def knowledge_range(services: ServicesDep, user: CurrentUserDep):
     """返回页面角落展示的本地知识库覆盖时间。"""
     return services.intent_agent.knowledge_range()
