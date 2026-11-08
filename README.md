@@ -670,6 +670,34 @@ python -m compileall backend/app backend/tests scripts docker
 python -m pytest backend/tests -q
 ```
 
+开发依赖统一声明在根目录 `requirements-dev.txt`（pytest、pytest-asyncio、ruff、mypy），本地与 CI 使用同一组依赖：
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m compileall backend/app backend/tests scripts docker
+python -m pytest backend/tests -q
+```
+
+静态检查（Ruff 聚焦新增与核心模块，Mypy 先覆盖新增公共接口）：
+
+```powershell
+ruff check backend/app/core backend/app/services/model_client backend/app/security backend/app/services/resilience scripts -q
+mypy backend/app/core/resilience.py
+```
+
+在 Docker 容器内运行同一组测试（镜像不包含测试目录与 dev 依赖，需先同步再安装）：
+
+```powershell
+docker cp backend/app risk-master-api-1:/app/backend/app
+docker cp backend/tests risk-master-api-1:/app/backend/tests
+docker cp .gitignore risk-master-api-1:/app/.gitignore
+docker cp requirements-dev.txt risk-master-api-1:/app/requirements-dev.txt
+docker compose exec -T -u root api pip install -r /app/requirements-dev.txt -i https://mirrors.aliyun.com/pypi/simple/
+docker compose exec -T -e DATABASE_URL= api sh -c "cd /app && python -m pytest backend/tests -q -p no:cacheprovider"
+```
+
+> 说明：容器内测试通过清空 `DATABASE_URL` 让 Alembic 迁移测试使用独立 SQLite 临时库，避免容器内 PostgreSQL 环境变量覆盖测试配置。
+
 ### 评测与向量索引
 
 ```powershell

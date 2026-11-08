@@ -1,0 +1,33 @@
+# 静态检查配置：Ruff 覆盖风格与常见缺陷，Mypy 先聚焦新增公共接口。
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [
+    "backend/tests",
+    "frontend/node_modules",
+    "frontend/dist",
+    "data",
+    "resource",
+    ".git",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"backend/app/agents/case_multidim_search/**" = ["I001"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+show_error_codes = true
+exclude = [
+    "frontend",
+    "data",
+    "resource",
+    "backend/tests",
+]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
