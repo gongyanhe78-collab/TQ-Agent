@@ -9,7 +9,25 @@
     </header>
 
     <div ref="messageList" class="messages">
+      <div v-if="!messages.length && !loading" class="welcome">
+        <div class="welcome-emoji" aria-hidden="true">🌦️ 🌤️ ⛅</div>
+        <h2 class="welcome-title">天气与气象灾害，问我吧</h2>
+        <p class="welcome-subtitle">可查询山西省历史个例、统计报告，也可问实时天气</p>
+        <div class="welcome-suggestions">
+          <button
+            v-for="item in suggestions"
+            :key="item.text"
+            class="suggestion"
+            type="button"
+            @click="fillSuggestion(item.text)"
+          >
+            <span aria-hidden="true">{{ item.icon }}</span>
+            {{ item.text }}
+          </button>
+        </div>
+      </div>
       <ChatMessages
+        v-else
         :messages="messages"
         :session-id="sessionId"
         @preview-image="openImagePreview"
@@ -18,7 +36,7 @@
       />
     </div>
 
-    <ChatComposer :loading="loading" @submit="emit('query', $event)" />
+    <ChatComposer ref="composerRef" :loading="loading" @submit="emit('query', $event)" />
 
     <EvidencePreview
       v-model:open="imagePreviewOpen"
@@ -62,6 +80,20 @@ const todayLabel = computed(() => {
 const messageList = ref(null);
 const imagePreviewOpen = ref(false);
 const imagePreview = ref(null);
+const composerRef = ref(null);
+
+// 空态示例问题：emoji 仅作按钮装饰，填入输入框时只保留纯文字。
+const suggestions = [
+  { icon: "❄️", text: "分析2025年山西寒潮天气过程" },
+  { icon: "🌧️", text: "检索2025年3月暴雨个例" },
+  { icon: "☀️", text: "今天重庆天气怎么样" },
+];
+
+const fillSuggestion = (text) => {
+  if (composerRef.value) {
+    composerRef.value.setQuestion(text);
+  }
+};
 
 const openImagePreview = (image) => {
   imagePreview.value = image;
@@ -131,6 +163,64 @@ h1 {
   padding: 30px max(24px, calc((100% - 800px) / 2)) 44px;
   scrollbar-color: #d8d8d4 transparent;
   scrollbar-width: thin;
+}
+
+.welcome {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px 0 60px;
+  text-align: center;
+}
+
+.welcome-emoji {
+  font-size: 44px;
+  letter-spacing: 8px;
+  line-height: 1;
+}
+
+.welcome-title {
+  color: #292927;
+  font-size: 18px;
+  font-weight: 650;
+  margin: 18px 0 0;
+}
+
+.welcome-subtitle {
+  color: #74746e;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.welcome-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+  max-width: 560px;
+}
+
+.suggestion {
+  background: #ffffff;
+  border: 1px solid #deded9;
+  border-radius: 16px;
+  color: #555550;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 8px 14px;
+}
+
+.suggestion:hover,
+.suggestion:focus {
+  border-color: #b8b8b1;
+  color: #292927;
+}
+
+.suggestion span {
+  margin-right: 5px;
 }
 
 @media (max-width: 760px) {

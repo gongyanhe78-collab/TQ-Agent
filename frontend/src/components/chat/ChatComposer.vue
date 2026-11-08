@@ -33,6 +33,12 @@ const submit = () => {
   emit("submit", text);
   question.value = "";
 };
+
+// 供 ChatPanel 的空态示例问题把纯文字填入输入框，emoji 只作按钮装饰。
+const setQuestion = (text) => {
+  question.value = String(text || "");
+};
+defineExpose({ setQuestion });
 </script>
 
 <style scoped>
