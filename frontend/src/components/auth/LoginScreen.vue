@@ -1,6 +1,7 @@
 <template>
   <main class="login-page">
     <section class="login-panel" aria-labelledby="login-title">
+      <div class="weather-decor" aria-hidden="true">🌦️ 🌤️ ⛅ 🌧️</div>
       <div class="brand-mark" aria-hidden="true">气象</div>
       <div class="login-heading">
         <h1 id="login-title">气象灾害个例问答助手</h1>
@@ -94,7 +95,7 @@ const submit = () => {
 <style scoped>
 .login-page {
   align-items: center;
-  background: #fbfbfa;
+  background: linear-gradient(180deg, #fbfbfa 0%, #f4f8fb 100%);
   color: #292927;
   display: flex;
   justify-content: center;
@@ -110,6 +111,15 @@ const submit = () => {
   max-width: 380px;
   padding: 30px;
   width: 100%;
+}
+
+.weather-decor {
+  color: #8f9aa8;
+  font-size: 20px;
+  letter-spacing: 5px;
+  line-height: 1;
+  margin-bottom: 14px;
+  text-align: center;
 }
 
 .brand-mark {
