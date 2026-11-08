@@ -211,6 +211,25 @@ class Settings:
         default_factory=lambda: os.getenv("DASHSCOPE_RERANK_ENDPOINT", "")
     )
 
+    # 开放域联网搜索：普通聊天模型直接回答库外问题并启用联网搜索。
+    web_search_enabled: bool = field(
+        default_factory=lambda: _env_value("WEB_SEARCH_ENABLED", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    web_search_forced: bool = field(
+        default_factory=lambda: _env_value("WEB_SEARCH_FORCED", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    # 本地知识库检索为空时自动升级联网搜索。
+    rag_empty_upgrade_web_search: bool = field(
+        default_factory=lambda: _env_value("RAG_EMPTY_UPGRADE_WEB_SEARCH", "true").lower()
+        in {"1", "true", "yes", "on"}
+    )
+    # 预留低分升级阈值；0 表示仅空结果触发，本次不参与判断逻辑。
+    rag_min_score: float = field(
+        default_factory=lambda: float(_env_value("RAG_MIN_SCORE", "0"))
+    )
+
     chat_model: str = ""
     embedding_model: str = ""
     rerank_model: str = ""
