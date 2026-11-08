@@ -5,7 +5,6 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 
-
 # 逐例提炼只有这两种来源可进入跨个例综合，节点、模型服务和审计共用同一口径。
 VALID_REFERENCE_SOURCES = frozenset({"llm_valid", "llm_repaired"})
 

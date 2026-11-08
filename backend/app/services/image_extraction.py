@@ -7,10 +7,10 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Callable, Iterable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Callable, Iterable, TypedDict
-
+from typing import TypedDict
 
 # 浏览器支持的图片扩展名集合
 BROWSER_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}

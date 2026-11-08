@@ -9,7 +9,6 @@ from backend.app.observability.context import (
     new_trace_id,
 )
 
-
 __all__ = [
     "RequestContext",
     "bind_request_context",

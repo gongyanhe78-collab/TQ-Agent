@@ -11,6 +11,7 @@ from typing import Any
 from ..infrastructure.data_store import LocalCaseDataStore
 from .dimension_profiles import resolve_dimension_profile
 from .query_taxonomy import AREA_ALIASES, SHANXI_CITIES
+
 logger = logging.getLogger("uvicorn.error")
 
 
@@ -745,7 +746,7 @@ def _cosine_score(left: list[float], right: list[float]) -> float:
     标准余弦相似度范围是 [-1, 1]，这里做 (x+1)/2 映射到 [0, 1]，
     方便和其他 0-1 分数加权融合。零向量直接返回 0。
     """
-    numerator = sum(a * b for a, b in zip(left, right))
+    numerator = sum(a * b for a, b in zip(left, right, strict=False))
     left_norm = math.sqrt(sum(value * value for value in left))
     right_norm = math.sqrt(sum(value * value for value in right))
     if not left_norm or not right_norm:

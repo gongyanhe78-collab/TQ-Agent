@@ -134,9 +134,10 @@ class AgentQueryService:
                     "failures": [],
                 },
             }
-        cases_provider = lambda: ContextCaseResolver.cases_scoped_by_context(
-            self.standard_case_store.list_cases(), context_case_ids
-        )
+        def cases_provider():
+            return ContextCaseResolver.cases_scoped_by_context(
+                self.standard_case_store.list_cases(), context_case_ids
+            )
         agent = AgentOrchestrator(
             cases_provider=cases_provider,
             structured_answerer=self.answerer,

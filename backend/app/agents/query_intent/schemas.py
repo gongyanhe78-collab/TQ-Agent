@@ -5,7 +5,6 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-
 IntentName = Literal["rag", "multidim_search", "similar_case_match", "clarify", "general_chat"]
 TaskType = Literal[
     "knowledge_qa",

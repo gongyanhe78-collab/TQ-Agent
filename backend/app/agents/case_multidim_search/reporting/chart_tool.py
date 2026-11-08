@@ -241,20 +241,20 @@ class ChartTool:
             return f"该图把强对流个例的小时雨强与极大风速放在同一坐标系中，最大雨强约{max_rain:g}mm/h，最大极大风速约{max_wind:g}m/s，可辅助识别雨强和风速共同突出的代表过程。"
 
         if spec.chart_key.startswith("intensity_") and spec.labels and spec.values:
-            pairs = list(zip(spec.labels, spec.values))
+            pairs = list(zip(spec.labels, spec.values, strict=False))
             prefer_min = "最低" in spec.title or "能见度" in spec.title
             focus_label, focus_value = min(pairs, key=lambda item: item[1]) if prefer_min else max(pairs, key=lambda item: item[1])
             unit = spec.unit or ""
             verb = "最低" if prefer_min else "最高"
             return f"该图按个例对比{spec.x_label}，{focus_label}的{verb}值为{focus_value:g}{unit}，适合从当前命中样本中识别需要优先复核的代表过程。"
         if spec.chart_type == "line" and spec.labels and spec.values:
-            pairs = list(zip(spec.labels, spec.values))
+            pairs = list(zip(spec.labels, spec.values, strict=False))
             top_label, _top_value = max(pairs, key=lambda item: item[1])
             # 图面已经展示具体频次，这里只保留业务启示，避免报告文字重复报数。
             return f"业务启示：{top_label}是本次样本的时间集中窗口，复盘时应重点对照该时段的天气背景和服务响应。"
 
         if spec.chart_type in {"bar", "horizontal_bar", "progress_bar", "lollipop"} and spec.labels and spec.values:
-            pairs = list(zip(spec.labels, spec.values))
+            pairs = list(zip(spec.labels, spec.values, strict=False))
             top_label, _top_value = max(pairs, key=lambda item: item[1])
             # 分布图的数值由图面承担，文字只解释它对业务筛查的意义。
             if spec.chart_key == "spatial":
@@ -273,7 +273,7 @@ class ChartTool:
             return "业务启示：该热力图用于识别复合灾种组合，颜色较深的位置应作为个例复核重点。"
 
         if spec.chart_type == "pie" and spec.labels and spec.values:
-            pairs = list(zip(spec.labels, spec.values))
+            pairs = list(zip(spec.labels, spec.values, strict=False))
             top_label, top_value = max(pairs, key=lambda item: item[1])
             total = sum(spec.values)
             share = top_value / total * 100 if total else 0
@@ -386,7 +386,7 @@ class ChartTool:
                     axis.set_xlim(0, maximum + span * 0.12)
                 axis.axvline(0, color="#D1D5DB", linewidth=0.9, zorder=0)
                 label_pad = span * 0.018
-                for value, y_pos in zip(spec.values, y_positions):
+                for value, y_pos in zip(spec.values, y_positions, strict=False):
                     x_value = float(value)
                     if x_value < 0:
                         axis.text(
@@ -425,7 +425,7 @@ class ChartTool:
             axis.set_ylim(-0.45, len(spec.labels) - 0.55)
             axis.axis("off")
             track_left, track_right = 0.20, 0.88
-            for row_index, (label, value) in enumerate(zip(spec.labels, spec.values)):
+            for row_index, (label, value) in enumerate(zip(spec.labels, spec.values, strict=False)):
                 y_pos = len(spec.labels) - row_index - 1
                 ratio = float(value) / max(max_value, 1)
                 axis.text(0.035, y_pos, label, va="center", ha="left", fontproperties=progress_font, fontsize=12, color="#1F2937")
@@ -440,7 +440,7 @@ class ChartTool:
             axis.set_yticks(y_positions)
             axis.set_yticklabels(spec.labels, fontproperties=bold_font)
             axis.invert_yaxis()
-            for value, y_pos in zip(spec.values, y_positions):
+            for value, y_pos in zip(spec.values, y_positions, strict=False):
                 axis.text(value, y_pos, f"  {value:g}", va="center", fontproperties=number_font, fontsize=17, color="#000000")
 
         elif spec.chart_type == "heatmap" and spec.matrix:
@@ -523,7 +523,7 @@ class ChartTool:
 
         elif spec.chart_type == "scatter" and spec.x_values and spec.y_values:
             axis.scatter(spec.x_values, spec.y_values, s=190, color=base_color, edgecolor=deep_blue, linewidth=1.8, alpha=0.88)
-            for label, x_value, y_value in zip(spec.labels, spec.x_values, spec.y_values):
+            for label, x_value, y_value in zip(spec.labels, spec.x_values, spec.y_values, strict=False):
                 axis.annotate(label, (x_value, y_value), xytext=(7, 7), textcoords="offset points", fontproperties=bold_font, fontsize=21, color="#0F172A")
 
         compact_chart = spec.chart_key in {"disaster_frequency", "disaster_cooccurrence"} or spec.chart_key.startswith("intensity_")
@@ -610,7 +610,7 @@ class ChartTool:
 
     def _annotate_points(self, axis, x_values: list[float], y_values: list[float], number_font) -> None:
         """给折线图节点补充数值标注。"""
-        for x_value, y_value in zip(x_values, y_values):
+        for x_value, y_value in zip(x_values, y_values, strict=False):
             axis.text(x_value, y_value, f"{y_value:g}", ha="center", va="bottom", fontproperties=number_font, fontsize=18, color="#1E3A8A")
 
     def _strongest_pair(self, labels: list[str], matrix: list[list[float]]) -> tuple[str, str, float] | None:

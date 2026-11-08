@@ -7,7 +7,6 @@ import re
 from collections.abc import Callable
 from typing import Any
 
-
 MEMORY_AGENT_TYPE = "conversation_memory"
 
 

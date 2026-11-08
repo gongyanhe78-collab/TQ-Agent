@@ -9,8 +9,10 @@ from typing import Any
 from sqlalchemy import Engine
 
 from backend.app.agents.case_multidim_search.agent import CaseMultidimSearchAgent
-from backend.app.agents.case_multidim_search.core.natural_query import NaturalCaseQueryParser
-from backend.app.agents.case_multidim_search.core.natural_query import NaturalConversationStore
+from backend.app.agents.case_multidim_search.core.natural_query import (
+    NaturalCaseQueryParser,
+    NaturalConversationStore,
+)
 from backend.app.agents.case_multidim_search.integrations.local_stores import (
     LocalDocumentChunkStore,
     LocalImageEvidenceStore,
@@ -36,11 +38,11 @@ from backend.app.db.session_repository import (
     SqlAlchemySessionStore,
 )
 from backend.app.repositories.memory_repository import MemoryRepository
-from backend.app.services.memory_service import MemoryService
 from backend.app.security.tokens import AccessTokenService
 from backend.app.services.auth_service import AuthService
 from backend.app.services.feedback_tasks import FeedbackTaskService
 from backend.app.services.image_extraction import ImageEvidenceStore
+from backend.app.services.memory_service import MemoryService
 from backend.app.services.model_client import (
     get_embedding_client,
     get_intent_llm_client,

@@ -5,13 +5,12 @@ import hashlib
 import json
 import re
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
-from backend.app.core.config import get_settings
+from backend.app.core.config import Settings, get_settings
 from backend.app.models import DocumentChunk
 from backend.app.services.document_store import ChromaDocumentChunkStore
-
 
 STANDARD_CASE_FIELDS = (
     "case_id",
@@ -59,7 +58,7 @@ def normalize_main_data() -> dict:
     # 复用 JSON 中已有的云端向量，只重建集合名称和元数据，不产生 API 费用。
     store = ChromaDocumentChunkStore(settings.document_index_dir, settings.document_collection_name)
     store.replace_chunks([DocumentChunk.from_dict(item) for item in chunks_data])
-    manifest = _build_manifest(chunks_data, minimal_cases, images_data, linked_image_count)
+    manifest = _build_manifest(settings, chunks_data, minimal_cases, images_data, linked_image_count)
     manifest_path = settings.data_dir / "knowledge_manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return manifest
@@ -105,15 +104,15 @@ def _ngrams(text: str, size: int = 3) -> set[str]:
     return {text[index:index + size] for index in range(len(text) - size + 1)}
 
 
-def _build_manifest(chunks: list[dict], cases: list[dict], images: list[dict], linked_images: int) -> dict:
+def _build_manifest(settings: Settings, chunks: list[dict], cases: list[dict], images: list[dict], linked_images: int) -> dict:
     """记录主知识库来源和模型信息，后续可判断向量是否需要更新。"""
     pdfs = []
     for pdf_path in sorted(settings.resource_dir.glob("*.pdf")):
         pdfs.append({"name": pdf_path.name, "sha256": _sha256(pdf_path)})
     dimension = len(chunks[0].get("embedding") or []) if chunks else 0
     return {
-        "build_id": f"smart-main-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}",
-        "built_at": datetime.now(timezone.utc).isoformat(),
+        "build_id": f"smart-main-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}",
+        "built_at": datetime.now(UTC).isoformat(),
         "source": "smart_case_match natural-paragraph index",
         "collection_name": settings.document_collection_name,
         "embedding_model": settings.dashscope_embedding_model,

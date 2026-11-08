@@ -26,7 +26,7 @@ class SmartCaseMatchRequest(BaseModel):
     include_images: bool = Field(default=True, description="是否返回证据图片")
 
     @model_validator(mode="after")
-    def validate_content(self) -> "SmartCaseMatchRequest":
+    def validate_content(self) -> SmartCaseMatchRequest:
         """保证请求至少包含灾种、地区或日期中的可用业务条件。"""
         if not (
             self.disaster_types

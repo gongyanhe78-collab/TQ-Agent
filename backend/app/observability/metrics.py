@@ -6,7 +6,6 @@ import threading
 from collections import Counter
 from typing import Any
 
-
 _LOCK = threading.RLock()
 _REQUESTS: Counter[tuple[str, str, str]] = Counter()
 _ERRORS: Counter[tuple[str, str, str]] = Counter()
@@ -145,7 +144,7 @@ def _counter_lines(
         key_values = key if isinstance(key, tuple) else (key,)
         label_text = ",".join(
             f'{label}="{key_value}"'
-            for label, key_value in zip(labels, key_values)
+            for label, key_value in zip(labels, key_values, strict=False)
         )
         lines.append(f"{name}{{{label_text}}} {float(value)}")
     return lines
@@ -250,7 +249,7 @@ def _render_duration(duration_values: dict[str, dict[str, Any]]) -> list[str]:
         "# TYPE app_request_duration_seconds histogram",
     ]
     for route, stats in sorted(duration_values.items()):
-        for boundary, count in zip(_DURATION_BUCKETS, stats["buckets"]):
+        for boundary, count in zip(_DURATION_BUCKETS, stats["buckets"], strict=False):
             lines.append(
                 "app_request_duration_seconds_bucket"
                 f'{{route="{route}",le="{boundary}"}} {count}'

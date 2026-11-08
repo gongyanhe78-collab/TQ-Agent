@@ -3,11 +3,10 @@ from __future__ import annotations
 
 import re
 import uuid
+from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass, replace
-from typing import Iterator
-
 
 _TRACE_ID_PATTERN = re.compile(r"^[0-9a-f]{32}$")
 _TRACEPARENT_PATTERN = re.compile(

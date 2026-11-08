@@ -21,7 +21,6 @@ from backend.app.services.vector.milvus_document_store import (
     MilvusDocumentStore,
 )
 
-
 _BACKEND_ORDER = ("milvus", "chroma", "json")
 
 

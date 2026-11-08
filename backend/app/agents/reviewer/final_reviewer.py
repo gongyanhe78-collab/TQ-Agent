@@ -8,7 +8,6 @@ from __future__ import annotations
 import re
 from typing import Any
 
-
 # 中文数字月份映射表
 CHINESE_MONTHS = {
     "一": 1,

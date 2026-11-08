@@ -3,10 +3,10 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, HTTPException, Request
 
-from backend.app.services.container import AppServices
 from backend.app.services.auth_service import InvalidCredentials
+from backend.app.services.container import AppServices
 
 
 def get_services(request: Request) -> AppServices:

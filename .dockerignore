@@ -28,9 +28,7 @@ htmlcov
 frontend/node_modules
 frontend/dist
 
-# 测试和临时产物
-backend/tests
-tests
+# 测试临时产物（backend/tests 源码保留进镜像以支持容器内回归测试）
 tmp
 logs
 **/logs

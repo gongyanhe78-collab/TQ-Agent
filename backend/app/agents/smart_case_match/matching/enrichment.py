@@ -7,7 +7,6 @@ from typing import Any
 
 from ..infrastructure.data_store import LocalCaseDataStore
 
-
 FOCUS_TERMS = ("天气实况", "实况", "环流形势", "影响系统", "演变", "降水", "大风", "温度", "预警", "服务")
 WARNING_TERMS = ("预警", "警报", "预报服务", "服务材料", "应急响应")
 # 先扩大候选图片范围，最终主证据和补充资料仍由结果组装节点分别限量。

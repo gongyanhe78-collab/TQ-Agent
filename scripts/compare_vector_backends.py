@@ -10,13 +10,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from backend.app.core.config import Settings
+from backend.app.services.model_client import get_embedding_client
 from backend.evals.loader import GoldenDataset
 from backend.evals.metrics.retrieval import (
     hit_at_k,
     mrr,
     recall_at_k,
 )
-from backend.app.services.model_client import get_embedding_client
 
 
 def _load_cases(dataset_path: Path) -> list:

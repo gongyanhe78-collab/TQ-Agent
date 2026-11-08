@@ -15,7 +15,6 @@ from backend.app.services.vector.contracts import (
 )
 from backend.app.services.vector.json_document_store import (
     chunk_metadata,
-    filter_matches,
     merge_vector_query,
     read_authority_chunks,
 )

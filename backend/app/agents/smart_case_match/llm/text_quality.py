@@ -4,7 +4,6 @@ from __future__ import annotations
 import re
 from typing import Any
 
-
 COLLOQUIAL_REPLACEMENTS = {
     "咱们得": "需",
     "咱们要": "需",

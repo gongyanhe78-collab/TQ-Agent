@@ -5,7 +5,6 @@ from fastapi import APIRouter, HTTPException
 
 from backend.app.api.dependencies import CurrentUserDep, MemoryServiceDep
 
-
 router = APIRouter()
 
 

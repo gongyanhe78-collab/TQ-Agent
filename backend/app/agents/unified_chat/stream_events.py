@@ -11,11 +11,10 @@ from typing import Any
 from backend.app.agents.case_multidim_search.reporting.report_preview import (
     ensure_report_thumbnail,
 )
-from backend.app.agents.unified_chat.performance import PerformanceTrace
 from backend.app.agents.unified_chat.orchestration_models import (
     BudgetTermination,
 )
-
+from backend.app.agents.unified_chat.performance import PerformanceTrace
 
 LOGGER = logging.getLogger("uvicorn.error")
 
@@ -263,7 +262,7 @@ class StreamEventMixin:
                         queue.get(),
                         timeout=0.75,
                     )
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     if runtime is not None:
                         # 长模型请求不能依赖首字返回才执行取消和超时检查。
                         runtime.check()

@@ -8,7 +8,6 @@ from fastapi.responses import FileResponse
 
 from backend.app.api.dependencies import AdminUserDep, ServicesDep
 
-
 router = APIRouter()
 
 

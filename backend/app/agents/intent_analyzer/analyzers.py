@@ -15,7 +15,13 @@ from backend.app.agents.models import (
     SafetySignal,
     ToolRoute,
 )
-from backend.app.services.structured_qa import AREA_ALIASES, CITY_TERMS, DISASTER_TERMS, asks_for_image, parse_image_type
+from backend.app.services.structured_qa import (
+    AREA_ALIASES,
+    CITY_TERMS,
+    DISASTER_TERMS,
+    asks_for_image,
+    parse_image_type,
+)
 
 
 class AgentIntentAnalyzer:

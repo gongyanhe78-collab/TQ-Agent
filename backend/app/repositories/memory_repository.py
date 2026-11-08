@@ -1,7 +1,7 @@
 """长期记忆权威仓储：所有读、删、重建来源都强制绑定 user_id。"""
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -16,7 +16,7 @@ def _as_utc(value: datetime | None) -> datetime | None:
     """把数据库返回的无时区时间按 UTC 解释。"""
     if value is None:
         return None
-    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    return value if value.tzinfo else value.replace(tzinfo=UTC)
 
 
 def _iso(value: datetime | None) -> str | None:

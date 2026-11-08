@@ -328,7 +328,7 @@ class ReportLlmEnhancer:
             return {}
         result: dict[str, dict[str, float]] = {}
         for name, values in list(value.items())[:8]:
-            numbers = [float(item) for item in values if isinstance(item, (int, float))]
+            numbers = [float(item) for item in values if isinstance(item, (int | float))]
             if not numbers:
                 continue
             result[str(name)] = {

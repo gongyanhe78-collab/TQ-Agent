@@ -3,21 +3,24 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import AsyncIterator, Awaitable, Callable
 from pathlib import Path
-from typing import AsyncIterator, Awaitable, Callable
 from uuid import uuid4
 
-from backend.app.services.model_client import get_embedding_client, get_llm_client, get_rerank_client
+from backend.app.services.model_client import (
+    get_embedding_client,
+    get_llm_client,
+    get_rerank_client,
+)
 
-from .infrastructure.data_store import LocalCaseDataStore
 from .infrastructure.audit_log import MatchAuditLogWriter
-from .workflow.graph import build_smart_case_graph
+from .infrastructure.data_store import LocalCaseDataStore
 from .llm.llm_service import SmartCaseLlmService
 from .matching.natural_query import normalize_natural_extraction
-from .workflow.nodes import SmartCaseGraphNodes
 from .schemas import NaturalLanguageMatchRequest, SmartCaseMatchRequest, SmartCaseMatchResponse
 from .workflow import progress
-
+from .workflow.graph import build_smart_case_graph
+from .workflow.nodes import SmartCaseGraphNodes
 
 logger = logging.getLogger("uvicorn.error")
 SSE_HEARTBEAT_SECONDS = 10.0
@@ -64,7 +67,7 @@ class SmartCaseMatchAgent:
         """统一释放本 Agent 自己创建的 LLM 连接池和工作线程。"""
         self.llm_service.close()
 
-    def __enter__(self) -> "SmartCaseMatchAgent":
+    def __enter__(self) -> SmartCaseMatchAgent:
         """支持脚本和测试通过 with 语句安全复用并自动关闭 Agent。"""
         return self
 

@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """从自然段 chunk 构建多维检索使用的精简标准化气象个例。"""
 from __future__ import annotations
 
@@ -9,7 +10,6 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-
 
 
 def _bootstrap_project_root() -> Path:
@@ -25,11 +25,10 @@ def _bootstrap_project_root() -> Path:
 
 PROJECT_ROOT = _bootstrap_project_root()
 
-from backend.app.models import DocumentChunk
 from backend.app.core.config import get_settings
+from backend.app.models import DocumentChunk
 from backend.app.services.image_extraction import ImageEvidenceStore
 from backend.app.services.model_client.chat import get_llm_client
-
 
 settings = get_settings()
 DOCUMENT_INDEX_DIR = settings.document_index_dir

@@ -3,11 +3,11 @@ from __future__ import annotations
 
 import os
 import threading
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Iterator
+from typing import Any
 
 from backend.app.observability.context import current_context, is_valid_trace_id
-
 
 _LOCK = threading.RLock()
 _INITIALIZED = False

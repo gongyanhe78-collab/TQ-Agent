@@ -328,7 +328,7 @@ class ReferenceReportDocument:
     def _wrap_table_row(self, values: list[str], col_widths: list[float]) -> list[str]:
         """表格内容按列宽换行，防止长灾种或地市文本溢出单元格。"""
         wrapped = []
-        for value, width in zip(values, col_widths):
+        for value, width in zip(values, col_widths, strict=False):
             limit = max(4.0, width * 42.0)
             wrapped.append("\n".join(self._wrap_text(str(value or '—'), limit=limit)))
         return wrapped

@@ -1,28 +1,21 @@
 """相似个例 Agent 使用的 JSON 大模型调用与结果校验。"""
 from __future__ import annotations
 
-import logging
-import json
 import hashlib
+import json
+import logging
 import re
 import threading
 import time
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeoutError
 from copy import deepcopy
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 from time import perf_counter
 from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
-from .llm_schemas import (
-    CandidateRerankOutput,
-    CaseReferenceOutput,
-    ForecastSynthesisOutput,
-    NaturalQueryOutput,
-    VALID_REFERENCE_SOURCES,
-    normalize_legacy_enum_items,
-)
 from ..matching.dimension_profiles import (
     all_supported_metrics,
     legacy_dimension_scores,
@@ -30,6 +23,14 @@ from ..matching.dimension_profiles import (
     terminology_profile_context,
 )
 from ..matching.query_taxonomy import STANDARD_AREA_TYPES, STANDARD_DISASTER_TYPES
+from .llm_schemas import (
+    VALID_REFERENCE_SOURCES,
+    CandidateRerankOutput,
+    CaseReferenceOutput,
+    ForecastSynthesisOutput,
+    NaturalQueryOutput,
+    normalize_legacy_enum_items,
+)
 from .text_quality import (
     build_action_tip,
     build_evidence_bounded_reason,
@@ -40,7 +41,6 @@ from .text_quality import (
     normalize_complete_text,
     normalize_soft_text,
 )
-
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -1233,7 +1233,7 @@ def _parse_json_object(raw: str) -> dict[str, Any] | None:
 
 def _is_transient_error(exc: Exception) -> bool:
     """只重试限流、超时和服务端错误，避免业务错误被重复放大。"""
-    if isinstance(exc, (TimeoutError, ConnectionError)):
+    if isinstance(exc, TimeoutError | ConnectionError):
         return True
     status_code = getattr(exc, "status_code", None)
     if status_code == 429 or isinstance(status_code, int) and status_code >= 500:

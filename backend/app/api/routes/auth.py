@@ -15,7 +15,6 @@ from backend.app.services.auth_service import (
     UserAlreadyExists,
 )
 
-
 LOGGER = logging.getLogger("uvicorn.error")
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 

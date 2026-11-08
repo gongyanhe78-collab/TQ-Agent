@@ -183,8 +183,8 @@ class ExecutionPlan:
     steps: list[PlanStep]
     forbidden_tools: list[ToolRoute] = field(default_factory=list)
     risk_notes: list[str] = field(default_factory=list)
-    units: list["ExecutionUnit"] = field(default_factory=list)
-    graph: "GraphExecutionPlan | None" = None
+    units: list[ExecutionUnit] = field(default_factory=list)
+    graph: GraphExecutionPlan | None = None
 
     def to_dict(self) -> dict:
         return {

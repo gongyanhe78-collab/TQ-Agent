@@ -6,11 +6,10 @@ import re
 from typing import Any
 
 from backend.app.models import DocumentChunk, DocumentRetrievalHit
-from backend.app.observability.context import current_context
 from backend.app.observability import metrics
+from backend.app.observability.context import current_context
 from backend.app.services.vector.contracts import VectorHit, VectorQuery
 from backend.app.services.vector.json_document_store import lexical_terms
-
 
 _CONTEXT_EVIDENCE_SECTIONS: tuple[tuple[str, ...], ...] = (
     (

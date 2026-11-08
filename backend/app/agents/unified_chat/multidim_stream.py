@@ -96,7 +96,7 @@ class MultidimStreamMixin:
                     timeout=0.5,
                 )
                 break
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 yield self._progress_metadata(
                     "case_multidim_search",
                     "",

@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 # 所有灾种都可以使用的基础配置。未识别到具体灾种时使用它，保证新增灾种也有稳定的退化路径。
 GENERIC_PROFILE = {
     "profile_id": "generic",

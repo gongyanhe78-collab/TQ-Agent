@@ -8,7 +8,6 @@ from uuid import uuid4
 
 from backend.app.db.base import utc_now
 
-
 LOGGER = logging.getLogger("uvicorn.error")
 
 # 明确表达偏好或习惯的稳定信号词，避免把单次事实误判为长期记忆。

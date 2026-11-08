@@ -8,7 +8,6 @@ import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
-
 LOGGER = logging.getLogger("risk-data-init")
 SKIPPED_DIRECTORY_NAMES = {"__pycache__", "numba_cache"}
 SKIPPED_FILE_NAMES = {

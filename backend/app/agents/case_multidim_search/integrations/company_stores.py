@@ -169,7 +169,7 @@ class CompanyDocumentChunkStore:
         unique_ids = list(dict.fromkeys(str(item or "").strip() for item in chunk_ids or [] if str(item or "").strip()))
         futures = [self._shared_chunk_future(chunk_id) for chunk_id in unique_ids]
         chunks: list[DocumentChunk] = []
-        for chunk, chunk_id in zip((future.result() for future in futures), unique_ids):
+        for chunk, _chunk_id in zip((future.result() for future in futures), unique_ids, strict=False):
             if chunk is not None:
                 chunks.append(chunk)
         return chunks

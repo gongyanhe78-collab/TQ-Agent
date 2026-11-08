@@ -6,13 +6,12 @@ import re
 import secrets
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 from backend.app.db.repositories import AuthRepository, RefreshTokenRecord
 from backend.app.security.passwords import hash_password, verify_password
 from backend.app.security.tokens import AccessTokenService, InvalidAccessToken
-
 
 USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{2,63}$")
 
@@ -57,7 +56,7 @@ class AuthService:
         self.repository = repository
         self.access_tokens = access_tokens
         self.refresh_ttl = refresh_ttl
-        self.clock = clock or (lambda: datetime.now(timezone.utc))
+        self.clock = clock or (lambda: datetime.now(UTC))
 
     def register(
         self,
@@ -207,4 +206,4 @@ class AuthService:
     @staticmethod
     def _normalize(value: datetime) -> datetime:
         """把数据库读出的无时区时间按 UTC 处理。"""
-        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+        return value if value.tzinfo else value.replace(tzinfo=UTC)

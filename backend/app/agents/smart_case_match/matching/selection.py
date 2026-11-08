@@ -11,7 +11,6 @@ from .dimension_profiles import (
     legacy_dimension_scores,
 )
 
-
 # 平局分差阈值：两个个例的融合分差在这个值以内，才允许 LLM 微调它们的先后顺序
 TIE_SCORE_GAP = 0.08
 # 动态兼容度差距超过该值时不视为平局，避免模型顺序重新抬高机制或强度明显偏弱的候选。

@@ -1,4 +1,5 @@
 """把旧 SQLite 业务数据一次性、可重复地迁移到 PostgreSQL 权威库。"""
+# ruff: noqa: E402
 from __future__ import annotations
 
 import argparse
@@ -7,10 +8,11 @@ import os
 import secrets
 import sqlite3
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -22,7 +24,6 @@ from sqlalchemy.orm import Session
 from backend.app.db import models
 from backend.app.db.base import Base
 from backend.app.security.passwords import hash_password
-
 
 TABLES = (
     "sessions",
@@ -148,8 +149,8 @@ def normalize_utc(value: Any, *, fallback: datetime) -> datetime:
         return fallback
     if isinstance(value, datetime):
         parsed = value
-    elif isinstance(value, (int, float)):
-        parsed = datetime.fromtimestamp(float(value), tz=timezone.utc)
+    elif isinstance(value, (int | float)):
+        parsed = datetime.fromtimestamp(float(value), tz=UTC)
     elif isinstance(value, str):
         raw = value.strip()
         if raw.endswith("Z"):
@@ -161,15 +162,15 @@ def normalize_utc(value: Any, *, fallback: datetime) -> datetime:
     else:
         raise TypeError(f"不支持的时间值类型：{type(value).__name__}")
     if parsed.tzinfo is None:
-        return parsed.replace(tzinfo=timezone.utc)
-    return parsed.astimezone(timezone.utc)
+        return parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
 
 
 def optional_utc(value: Any) -> datetime | None:
     """把空字符串或空值转换为 NULL，其余值按 UTC 解析。"""
     if value is None or (isinstance(value, str) and not value.strip()):
         return None
-    return normalize_utc(value, fallback=datetime.now(timezone.utc))
+    return normalize_utc(value, fallback=datetime.now(UTC))
 
 
 def _json_value(
@@ -210,7 +211,7 @@ def _boolean(value: Any) -> bool:
     """兼容 SQLite 的 0/1、文本和原生布尔值。"""
     if isinstance(value, bool):
         return value
-    if isinstance(value, (int, float)):
+    if isinstance(value, (int | float)):
         return bool(value)
     return str(value or "").strip().lower() in {"1", "true", "yes", "on"}
 
@@ -390,7 +391,7 @@ def _migrate_messages(
             values,
             report,
             "messages",
-            lambda item: item.session_id == session_id,
+            lambda item, session_id=session_id: item.session_id == session_id,
         )
         keys.append((message_id,))
     return keys
@@ -431,7 +432,7 @@ def _migrate_agent_runs(
             values,
             report,
             "agent_runs",
-            lambda item: item.session_id == session_id,
+            lambda item, session_id=session_id: item.session_id == session_id,
         )
         keys.append((run_id,))
     return keys
@@ -932,7 +933,7 @@ def run_migration(options: MigrationOptions) -> MigrationReport:
         report = _prepare_report(snapshot, dry_run=options.dry_run)
         engine = create_engine(target_url, pool_pre_ping=True)
         _validate_target_schema(engine)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         with engine.connect() as connection:
             transaction = connection.begin()
             try:

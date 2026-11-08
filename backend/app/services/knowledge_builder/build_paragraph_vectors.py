@@ -1,4 +1,5 @@
-﻿"""按 PDF 文档化结果重建多维个例检索使用的段落 chunk、图片证据和 Chroma 向量库。"""
+﻿# ruff: noqa: E402
+"""按 PDF 文档化结果重建多维个例检索使用的段落 chunk、图片证据和 Chroma 向量库。"""
 from __future__ import annotations
 
 import argparse
@@ -7,10 +8,9 @@ import json
 import re
 import shutil
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
-
 
 
 def _bootstrap_project_root() -> Path:
@@ -29,9 +29,8 @@ PROJECT_ROOT = _bootstrap_project_root()
 from backend.app.core.config import get_settings
 from backend.app.models import DocumentChunk
 from backend.app.services.document_store import ChromaDocumentChunkStore
-from backend.app.services.model_client.embedding import get_embedding_client
 from backend.app.services.image_extraction import ImageEvidence, PdfImageEvidenceExtractor
-
+from backend.app.services.model_client.embedding import get_embedding_client
 
 settings = get_settings()
 DATA_DIR = settings.data_dir
@@ -273,7 +272,7 @@ def embed_chunks(records: list[dict]) -> None:
     embeddings = client.embed_documents(texts) if texts else []
     if len(embeddings) != len(records):
         raise RuntimeError(f"向量数量不匹配：文本 {len(records)} 条，向量 {len(embeddings)} 条")
-    for record, embedding in zip(records, embeddings):
+    for record, embedding in zip(records, embeddings, strict=False):
         record["embedding"] = embedding
 
 

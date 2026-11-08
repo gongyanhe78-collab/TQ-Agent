@@ -23,7 +23,6 @@ from backend.app.observability.tracing import (
     start_span,
 )
 
-
 _OBSERVABILITY_HEADERS = {b"x-request-id", b"x-trace-id"}
 
 

@@ -6,12 +6,11 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 from backend.app.models import StandardCase
 from backend.app.services.image_extraction import ImageEvidence, ImageEvidenceStore
-
 
 # 区域别名映射（用于泛化区域匹配
 AREA_ALIASES = {

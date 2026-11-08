@@ -5,7 +5,6 @@ from copy import deepcopy
 from threading import Lock
 from time import monotonic
 
-
 _LOCK = Lock()
 _STATES: dict[str, dict] = {}
 # 客户端进度号只作为查询别名，真实状态始终使用服务端唯一 run_id 保存。

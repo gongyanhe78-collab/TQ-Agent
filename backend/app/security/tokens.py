@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -28,7 +28,7 @@ class AccessTokenService:
             raise ValueError("JWT 密钥长度不能少于 32 个字符")
         self.secret = secret
         self.ttl_seconds = max(60, int(ttl_seconds))
-        self.clock = clock or (lambda: datetime.now(timezone.utc))
+        self.clock = clock or (lambda: datetime.now(UTC))
 
     def issue(self, user_id: str, role: str) -> str:
         """签发包含用户、角色、jti 和有效期的访问令牌。"""
@@ -69,4 +69,4 @@ class AccessTokenService:
     def _now(self) -> datetime:
         """返回统一时区的当前时间，便于测试注入时钟。"""
         value = self.clock()
-        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+        return value if value.tzinfo else value.replace(tzinfo=UTC)

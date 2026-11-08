@@ -43,7 +43,7 @@ class ExtractedCase:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ExtractedCase":
+    def from_dict(cls, data: dict[str, Any]) -> ExtractedCase:
         """
         从字典数据还原 ExtractedCase 对象
 
@@ -72,7 +72,7 @@ class DocumentChunk:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "DocumentChunk":
+    def from_dict(cls, data: dict[str, Any]) -> DocumentChunk:
         """从 JSON 备份中的字典还原 DocumentChunk 对象。"""
         return cls(**data)
 
@@ -108,7 +108,7 @@ class StandardCase:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "StandardCase":
+    def from_dict(cls, data: dict[str, Any]) -> StandardCase:
         """从 JSON 字典还原标准化个例，并兼容缺失字段。"""
         defaults = {
             "disaster_types": [],

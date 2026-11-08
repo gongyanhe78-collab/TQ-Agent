@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, replace
-from datetime import datetime, timedelta, timezone
-from typing import Callable
+from datetime import UTC, datetime, timedelta
 
 from backend.app.agents.unified_chat.orchestration_models import (
     AgentBudget,
@@ -36,7 +36,7 @@ class AgentRuntime:
         clock: Callable[[], datetime] | None = None,
     ) -> None:
         self.budget = budget or AgentBudget()
-        self._clock = clock or (lambda: datetime.now(timezone.utc))
+        self._clock = clock or (lambda: datetime.now(UTC))
         context = execution_context or ExecutionContext(
             started_at=self._clock(),
         )
@@ -302,5 +302,5 @@ class AgentRuntime:
         """读取注入时钟，并兼容带时区与不带时区的历史时间值。"""
         value = self._clock()
         if value.tzinfo is None:
-            return value.replace(tzinfo=timezone.utc)
+            return value.replace(tzinfo=UTC)
         return value

@@ -8,7 +8,6 @@ from typing import Any
 
 from ..infrastructure.data_store import LocalCaseDataStore
 
-
 logger = logging.getLogger("uvicorn.error")
 
 
@@ -218,7 +217,7 @@ def _normalize_ordered_hit(value: Any) -> tuple[ChunkRerankHit, float | None] | 
     """读取带真实相关度的Rerank结果，同时兼容既有仅排序客户端。"""
     if isinstance(value, ChunkRerankHit):
         return value, None
-    if isinstance(value, (tuple, list)) and len(value) == 2 and isinstance(value[0], ChunkRerankHit):
+    if isinstance(value, tuple | list) and len(value) == 2 and isinstance(value[0], ChunkRerankHit):
         try:
             return value[0], float(value[1])
         except (TypeError, ValueError):

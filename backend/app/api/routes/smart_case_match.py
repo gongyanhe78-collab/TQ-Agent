@@ -15,7 +15,6 @@ from backend.app.agents.smart_case_match.schemas import (
 from backend.app.agents.smart_case_match.workflow import progress
 from backend.app.api.dependencies import CurrentUserDep, ServicesDep
 
-
 router = APIRouter(prefix="/api/smart-case-match", tags=["smart-case-match"])
 SMART_AGENT_DIR = Path(__file__).resolve().parents[2] / "agents" / "smart_case_match"
 

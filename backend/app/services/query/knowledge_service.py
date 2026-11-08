@@ -13,7 +13,9 @@ class KnowledgeService:
 
     def rebuild_documents(self, pdf_paths: list[Path] | None = None) -> dict[str, Any]:
         """重建统一知识库，并返回现有接口使用的统计字段。"""
-        from backend.app.services.knowledge_builder.build_paragraph_vectors import build as build_vectors
+        from backend.app.services.knowledge_builder.build_paragraph_vectors import (
+            build as build_vectors,
+        )
         from backend.app.services.knowledge_builder.build_standard_cases import build as build_cases
 
         requested_files = [Path(path).name for path in (pdf_paths or [])]

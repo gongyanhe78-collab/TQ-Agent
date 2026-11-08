@@ -7,12 +7,11 @@ from __future__ import annotations
 
 import re
 from collections import Counter, defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 from backend.app.models import StandardCase
 from backend.app.services.image_extraction import ImageEvidence, ImageEvidenceStore
-
 
 # 灾害类型关键词（用于规则匹配识别查询灾种
 DISASTER_TERMS = (
@@ -611,29 +610,7 @@ class StructuredQuestionAnswerer:
             for month, profile in sorted(profiles.items())
         ]
 
-    def _metric_gap_visual(self, metric: str, months: list[int]) -> list[dict]:
-        rows = [
-            {
-                "month": f"{month}月",
-                "metric": metric,
-                "status": "缺少结构化指标数据",
-            }
-            for month in months
-        ]
-        if not rows:
-            return []
-        return [
-            {
-                "type": "table",
-                "title": "指标数据检查",
-                "columns": [
-                    {"key": "month", "label": "月份"},
-                    {"key": "metric", "label": "指标"},
-                    {"key": "status", "label": "数据状态"},
-                ],
-                "rows": rows,
-            }
-        ]
+
         profile_rows = [
             {
                 "month": f"{month}月",
@@ -660,6 +637,30 @@ class StructuredQuestionAnswerer:
                 "rows": profile_rows,
             },
             self._case_table_visual("代表个例", representatives),
+        ]
+
+    def _metric_gap_visual(self, metric: str, months: list[int]) -> list[dict]:
+        rows = [
+            {
+                "month": f"{month}月",
+                "metric": metric,
+                "status": "缺少结构化指标数据",
+            }
+            for month in months
+        ]
+        if not rows:
+            return []
+        return [
+            {
+                "type": "table",
+                "title": "指标数据检查",
+                "columns": [
+                    {"key": "month", "label": "月份"},
+                    {"key": "metric", "label": "指标"},
+                    {"key": "status", "label": "数据状态"},
+                ],
+                "rows": rows,
+            }
         ]
 
     def _ranking_visuals(self, city_counter: Counter) -> list[dict]:

@@ -26,7 +26,6 @@ from backend.app.api.dependencies import (
     ServicesDep,
 )
 
-
 router = APIRouter(prefix="/api/case-multidim", tags=["case-multidim-search"])
 CASE_AGENT_DIR = Path(__file__).resolve().parents[2] / "agents" / "case_multidim_search"
 

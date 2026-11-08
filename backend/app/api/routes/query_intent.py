@@ -12,7 +12,6 @@ from backend.app.agents.query_intent.schemas import (
 )
 from backend.app.api.dependencies import CurrentUserDep, ServicesDep
 
-
 router = APIRouter(prefix="/api", tags=["query-intent"])
 QUERY_INTENT_DIR = Path(__file__).resolve().parents[2] / "agents" / "query_intent"
 

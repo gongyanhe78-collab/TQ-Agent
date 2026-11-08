@@ -15,7 +15,6 @@ from backend.app.services.vector.json_document_store import (
     read_authority_chunks,
 )
 
-
 _DEFAULT_COLLECTION_NAME = "weather_document_chunks"
 _DEFAULT_SCHEMA_VERSION = "v1"
 

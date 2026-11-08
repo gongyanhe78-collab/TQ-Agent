@@ -1,9 +1,9 @@
 """查询意图识别、置信度校验和目标智能体选择。"""
 from __future__ import annotations
 
-import json
 import hashlib
 import inspect
+import json
 import logging
 import re
 from collections import OrderedDict
@@ -16,14 +16,19 @@ from threading import Lock
 from typing import Any
 from uuid import uuid4
 
-from backend.app.core.config import get_settings
 from backend.app.agents.case_multidim_search.core.natural_query import NaturalCaseQueryParser
+from backend.app.core.config import get_settings
 from backend.app.services.model_client import get_intent_llm_client
 
 from .audit import IntentAuditWriter
 from .knowledge import KnowledgeRangeReader
-from .schemas import IntentName, IntentRouteRequest, IntentRouteResponse, KnowledgeRange, TaskPlanItem
-
+from .schemas import (
+    IntentName,
+    IntentRouteRequest,
+    IntentRouteResponse,
+    KnowledgeRange,
+    TaskPlanItem,
+)
 
 LOGGER = logging.getLogger("uvicorn.error")
 REPORT_TERMS = ("生成报告", "生成一份报告", "出一份报告", "制作报告", "形成报告", "导出报告", "生成PDF", "导出PDF")
@@ -505,10 +510,6 @@ class QueryIntentAgent:
         requested_outputs = set(conditions.get("requested_outputs") or [])
         # 输出字段按任务契约分成“个例目录字段”和“必须回到正文核验的分析字段”。
         # 这里校验的是模型输出协议，不依赖用户问题中的某个关键词。
-        listing_fields = {
-            "case_id", "title", "name", "date", "date_range", "disaster_types",
-            "affected_areas", "source_pdf", "count",
-        }
         deep_analysis_fields = {
             "features", "case_features", "weather_facts", "intensity_metrics",
             "impact", "impact_area", "evolution", "mechanism", "circulation",
@@ -540,7 +541,6 @@ class QueryIntentAgent:
 
         compiled = list(tasks)
         identification = next((item for item in compiled if item.type == "case_identification"), None)
-        existing_analysis = next((item for item in compiled if item.type == "case_analysis"), None)
         # 所有需要按个例逐条回答的任务都必须先获得统一的个例集合。
         # 只有上下文已经明确给出库内 case_id 时才跳过识别，避免模型漏写
         # case_identification 导致后续分析任务在空范围上执行。

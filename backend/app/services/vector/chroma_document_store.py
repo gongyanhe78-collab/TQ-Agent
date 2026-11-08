@@ -126,7 +126,7 @@ class ChromaDocumentVectorStore:
         distances = (result.get("distances") or [[]])[0]
 
         hits: list[VectorHit] = []
-        for chunk_id, distance in zip(ids, distances):
+        for chunk_id, distance in zip(ids, distances, strict=False):
             chunk = authority.get(str(chunk_id))
             if chunk is None:
                 continue
@@ -229,7 +229,7 @@ class ChromaDocumentVectorStore:
                 ids = existing.get("ids") or []
                 embeddings = existing.get("embeddings")
                 if embeddings is not None:
-                    for chunk_id, embedding in zip(ids, embeddings):
+                    for chunk_id, embedding in zip(ids, embeddings, strict=False):
                         if embedding is not None:
                             previous_embeddings[str(chunk_id)] = [
                                 float(value) for value in embedding
@@ -347,7 +347,7 @@ def _chroma_where(filters: dict[str, Any]) -> dict[str, Any] | None:
     """把稳定精确过滤转换为 Chroma where 条件。"""
     clauses = []
     for key, expected in filters.items():
-        if isinstance(expected, (str, int, float, bool)):
+        if isinstance(expected, str | int | float | bool):
             clauses.append({key: expected})
     if not clauses:
         return None

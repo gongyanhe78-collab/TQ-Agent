@@ -7,7 +7,6 @@ from typing import Any
 
 from backend.app.services.feedback_guidance import guidance_fingerprint, normalize_with_model
 
-
 LOGGER = logging.getLogger("uvicorn.error")
 
 

@@ -16,7 +16,6 @@ from backend.app.services.vector.contracts import (
     VectorQuery,
 )
 
-
 _TOKEN_SEPARATOR = re.compile(
     r"[\s，。！？、；：,.!?;:（）()\-_/]+"
 )
@@ -86,7 +85,7 @@ def filter_matches(metadata: dict[str, Any], filters: dict[str, Any]) -> bool:
             if "$eq" in expected and actual != expected["$eq"]:
                 return False
             continue
-        if isinstance(expected, (list, tuple, set)):
+        if isinstance(expected, list | tuple | set):
             if actual not in expected:
                 return False
             continue
@@ -432,7 +431,7 @@ def _cosine_similarity(left: list[float], right: list[float]) -> float:
     """计算两个有效等维向量的余弦相似度。"""
     if not left or not right or len(left) != len(right):
         return 0.0
-    numerator = sum(a * b for a, b in zip(left, right))
+    numerator = sum(a * b for a, b in zip(left, right, strict=False))
     left_norm = math.sqrt(sum(value * value for value in left))
     right_norm = math.sqrt(sum(value * value for value in right))
     if not left_norm or not right_norm:

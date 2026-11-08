@@ -9,11 +9,11 @@ import re
 from collections.abc import Callable
 from typing import Any
 
-from backend.app.models import DocumentRetrievalHit, StandardCase
 from backend.app.agents.intent_analyzer.analyzers import AgentIntentAnalyzer
-from backend.app.agents.synthesizer.answer_synthesizer import AnswerSynthesizer
-from backend.app.agents.models import EvidenceChunk, IntentType, ToolRoute
+from backend.app.agents.models import EvidenceChunk, IntentType
 from backend.app.agents.planner.planner import AgentPlanner
+from backend.app.agents.synthesizer.answer_synthesizer import AnswerSynthesizer
+from backend.app.models import DocumentRetrievalHit, StandardCase
 from backend.app.services.similar_case_matcher import SimilarCaseQuery
 from backend.app.services.structured_qa import StructuredQuestionAnswerer
 

@@ -21,7 +21,6 @@ from backend.app.services.feedback_guidance import (
     render_session_guidance,
 )
 
-
 LOGGER = logging.getLogger("uvicorn.error")
 
 

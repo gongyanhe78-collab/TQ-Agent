@@ -6,7 +6,6 @@ from fastapi.responses import PlainTextResponse
 
 from backend.app.observability.metrics import render_prometheus
 
-
 router = APIRouter()
 
 

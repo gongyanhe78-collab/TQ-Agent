@@ -1,8 +1,8 @@
 """为每次相似个例匹配生成可人工复核的独立 JSON 审计文件。"""
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import logging
 import os
 import re
@@ -10,7 +10,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
-
 
 logger = logging.getLogger("uvicorn.error")
 # 新增客户端关联号字段，版本递增便于后续审计工具区分结构。

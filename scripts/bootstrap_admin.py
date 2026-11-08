@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import logging
 import os
-import sys
 from datetime import timedelta
 
 from backend.app.core.config import get_settings
@@ -12,7 +11,6 @@ from backend.app.db.session import build_engine
 from backend.app.security.tokens import AccessTokenService
 from backend.app.services.admin_bootstrap import bootstrap_admin_from_environment
 from backend.app.services.auth_service import AuthService
-
 
 LOGGER = logging.getLogger("risk-admin-bootstrap")
 

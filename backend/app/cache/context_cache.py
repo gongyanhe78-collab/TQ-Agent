@@ -5,7 +5,6 @@ import json
 import logging
 from typing import Any
 
-
 LOGGER = logging.getLogger("uvicorn.error")
 
 

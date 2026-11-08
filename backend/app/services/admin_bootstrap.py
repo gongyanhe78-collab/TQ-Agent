@@ -8,7 +8,6 @@ from typing import Any
 
 from backend.app.services.auth_service import AuthService
 
-
 LOGGER = logging.getLogger("risk-admin-bootstrap")
 USERNAME_ENV = "BOOTSTRAP_ADMIN_USERNAME"
 PASSWORD_ENV = "BOOTSTRAP_ADMIN_PASSWORD"

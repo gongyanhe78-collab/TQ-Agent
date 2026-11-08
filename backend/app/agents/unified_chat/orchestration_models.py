@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
@@ -69,7 +69,7 @@ class ExecutionContext:
     user_id: str = ""
     session_id: str = ""
     started_at: datetime = field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        default_factory=lambda: datetime.now(UTC)
     )
     deadline: datetime | None = None
     cancel_event: asyncio.Event | None = field(
@@ -91,7 +91,7 @@ class SubtaskExecutionState:
     model_calls: int = 0
     elapsed_ms: int = 0
     started_at: datetime = field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        default_factory=lambda: datetime.now(UTC)
     )
 
 

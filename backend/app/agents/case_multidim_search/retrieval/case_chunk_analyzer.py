@@ -218,7 +218,7 @@ class CaseChunkAnalyzer:
     ) -> list[DocumentChunk]:
         """把拼接文本中的正文区间重新映射回原 chunk，保留溯源编号和顺序。"""
         result: list[DocumentChunk] = []
-        for chunk, (chunk_start, chunk_end) in zip(chunks, positions):
+        for chunk, (chunk_start, chunk_end) in zip(chunks, positions, strict=False):
             content_start = max(start, chunk_start)
             content_end = min(end, chunk_end)
             if content_start >= content_end:
@@ -823,9 +823,11 @@ class CaseChunkAnalyzer:
             groups.setdefault(name, []).append(metric)
         prefer_min = {"最低能见度", "最低气温"}
         selected = []
+        def _metric_key(item):
+            return float(self._metric_value(item, "value"))
+
         for name, candidates in groups.items():
-            key = lambda item: float(self._metric_value(item, "value"))
-            selected.append(min(candidates, key=key) if name in prefer_min else max(candidates, key=key))
+            selected.append(min(candidates, key=_metric_key) if name in prefer_min else max(candidates, key=_metric_key))
         return selected
 
     @staticmethod

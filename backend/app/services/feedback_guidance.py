@@ -5,7 +5,6 @@ import json
 import re
 from typing import Any
 
-
 # 反馈只影响回答质量，不应拥有修改查询范围或系统指令的权限。
 MAX_GUIDANCE_PROMPT_CHARS = 300
 MAX_DIMENSION_CHARS = 60

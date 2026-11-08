@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from langgraph.graph import END, START, StateGraph
 
-from .nodes import SmartCaseGraphNodes
 from ..schemas import SmartCaseState
+from .nodes import SmartCaseGraphNodes
 
 
 def build_smart_case_graph(nodes: SmartCaseGraphNodes):

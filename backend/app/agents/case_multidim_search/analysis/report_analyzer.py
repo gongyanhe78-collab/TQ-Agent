@@ -5,7 +5,6 @@ import re
 import logging
 import math
 from collections import Counter
-from statistics import mean
 
 from backend.app.models import StandardCase
 from backend.app.agents.case_multidim_search.retrieval.case_evidence import CaseEvidenceBundle
@@ -360,7 +359,7 @@ class ReportAnalyzer:
             metric.metric_name
             for metrics in metrics_by_case.values()
             for metric in metrics
-            if isinstance(metric.value, (int, float)) and not self._metric_needs_review(metric)
+            if isinstance(metric.value, (int | float)) and not self._metric_needs_review(metric)
         }
         selected: list[dict] = []
         for column in self.OVERVIEW_METRIC_COLUMNS:
@@ -543,7 +542,7 @@ class ReportAnalyzer:
             metric.metric_name
             for case in cases
             for metric in metrics_by_case.get(case.case_id, [])
-            if isinstance(metric.value, (int, float)) and not self._metric_needs_review(metric)
+            if isinstance(metric.value, (int | float)) and not self._metric_needs_review(metric)
         }
         candidates = list(preferred)
         for column in self.OVERVIEW_METRIC_COLUMNS:
@@ -927,7 +926,7 @@ class ReportAnalyzer:
         items = []
         for column in columns or []:
             key = column["key"]
-            candidates = [row for row in rows if isinstance((row.get("metric_values") or {}).get(key), (int, float))]
+            candidates = [row for row in rows if isinstance((row.get("metric_values") or {}).get(key), (int | float))]
             if not candidates:
                 continue
             # 概况句优先引用未标记“需复核”的值，避免异常 OCR 或原文疑值压过可靠极值。

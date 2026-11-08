@@ -9,7 +9,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from backend.app.core.config import Settings
-from backend.app.services.vector.fallback import FallbackDocumentVectorStore
 from backend.app.services.vector.factory import build_document_vector_store
 from backend.app.services.vector.rebuild import (
     rebuild_document_store,

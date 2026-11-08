@@ -8,7 +8,6 @@ from typing import Any
 
 from backend.app.core.config import get_settings
 
-
 logger = logging.getLogger("uvicorn.error")
 
 

@@ -8,10 +8,10 @@ from time import perf_counter, sleep
 from typing import Any
 
 from ..infrastructure.data_store import LocalCaseDataStore
-from ..matching.dimension_profiles import resolve_dimension_profile
-from ..matching.enrichment import enrich_selected_cases
 from ..llm.llm_schemas import VALID_REFERENCE_SOURCES
 from ..llm.llm_service import SmartCaseLlmService
+from ..matching.dimension_profiles import resolve_dimension_profile
+from ..matching.enrichment import enrich_selected_cases
 from ..matching.matching import add_semantic_scores, fuse_scores, normalize_query, structured_recall
 from ..matching.selection import apply_llm_tie_break, select_cases
 from ..matching.semantic_rerank import rerank_semantic_hits
@@ -232,7 +232,7 @@ class SmartCaseGraphNodes:
                     case = cases[index]
                     try:
                         reference, status = future.result()
-                    except Exception as exc:
+                    except Exception:
                         # 单个例失败不能污染其他个例；保留该个例并生成可溯源规则摘要。
                         fallback = getattr(self.llm_service, "_fallback_case_reference", None)
                         reference = fallback(state["query"], case) if fallback else {

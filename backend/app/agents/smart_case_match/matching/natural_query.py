@@ -2,12 +2,17 @@
 from __future__ import annotations
 
 import re
-from datetime import date as date_type, datetime, timedelta
+from datetime import date as date_type
+from datetime import datetime, timedelta
 from typing import Any
 from zoneinfo import ZoneInfo
 
-from .query_taxonomy import AREA_ALIASES, SHANXI_CITIES, STANDARD_AREA_TYPES, STANDARD_DISASTER_TYPES
-
+from .query_taxonomy import (
+    AREA_ALIASES,
+    SHANXI_CITIES,
+    STANDARD_AREA_TYPES,
+    STANDARD_DISASTER_TYPES,
+)
 
 SNOW_MIXED_TERMS = ("雨夹雪", "雨雪", "雨转雪", "雪转雨", "雨转雨夹雪", "雪转雨夹雪")
 SNOW_ONLY_TERMS = ("纯雪", "降雪", "下雪", "转为雪", "转成雪", "转雪", "积雪", "雪深")

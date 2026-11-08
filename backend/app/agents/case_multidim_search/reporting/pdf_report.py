@@ -248,7 +248,7 @@ class PdfReportBuilder:
     ) -> dict[str, list[tuple[Path, str, str]]]:
         """把统计图按含义映射到对应分析章节，每章允许保留多张。"""
         mapped: dict[str, list[tuple[Path, str, str]]] = {}
-        for spec, path in zip(response.charts, chart_paths):
+        for spec, path in zip(response.charts, chart_paths, strict=False):
             key = str(getattr(spec, "chart_key", "") or "").strip()
             section_key = self._chart_section(key, spec.x_label, spec.title)
             if not section_key:
