@@ -8,7 +8,6 @@ from pathlib import Path
 
 from backend.evals.schemas.dataset import EvaluationReport
 
-
 秘密键模式 = re.compile(
     r"(?i)\b(authorization|bearer|api[_-]?key|access[_-]?token|secret|token)\b"
     r"(?:[ \t]*[:=][ \t]*|[ \t]+)"

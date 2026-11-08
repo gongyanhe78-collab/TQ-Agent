@@ -10,7 +10,6 @@ from typing import Any
 
 from backend.evals.schemas.dataset import EvaluationCase, EvaluationManifest
 
-
 固定样例数量 = 60
 固定类别分布 = {
     "路由": 6,

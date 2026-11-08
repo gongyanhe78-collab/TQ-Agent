@@ -39,7 +39,7 @@
 - 🔁 **重生成与版本切换**：可附带本次重生成要求，并保留、切换查看历史回答版本。
 - 💬 **消息操作**：支持复制、分享、反馈、问题上报、重新生成和 PDF 导出。
 - 🧠 **长期记忆**：按用户持久化偏好与事实，回答前自动注入记忆上下文，支持按用户读取与软删除。
-- 🧪 **确定性评测**：60 条黄金用例与固定 Harness，路由与检索指标可重复复现，可选 RAGAS 评测。
+- 🧪 **双模式评测**：60 条黄金用例，支持离线固定夹具自检与 `--real` 真实模型评测（qwen3.7-flash + text-embedding-v4 + qwen3-rerank），并可选 RAGAS。
 - 🔭 **可观测性**：OpenTelemetry 链路追踪、Prometheus 指标与 Jaeger 可视化，请求级 Agent 预算与终止原因。
 
 ### 🧠 代码功能简要说明
@@ -63,7 +63,7 @@
 | 🧠 `backend/app/services/memory_service.py` | 长期记忆候选抽取、结构化降级、Redis 缓存与删除联动 |
 | 🗂️ `backend/app/repositories/memory_repository.py` | PostgreSQL 长期记忆权威仓储与软删除 |
 | 📐 `backend/app/services/vector/` | Milvus / Chroma / JSON 统一契约与固定降级链 |
-| 🧪 `backend/evals/` | 60 条黄金数据集、确定性指标与评测 Harness |
+| 🧪 `backend/evals/` | 60 条黄金数据集、确定性指标、离线固定夹具与 `--real` 真实模型执行器 |
 | 🛠️ `scripts/rebuild_vector_index.py` | 向量索引重建与权威 JSON 对账（支持 dry-run） |
 | 💬 `frontend/src/components/` | Vue 3 聊天界面、会话列表、处理进度、证据预览、报告卡和消息操作 |
 
@@ -732,8 +732,14 @@ docker compose exec -T -e DATABASE_URL= api sh -c "cd /app && python -m pytest b
 ### 评测与向量索引
 
 ```powershell
-# 黄金数据集确定性评测（60 条用例，固定 seed）
+# 黄金数据集确定性评测（60 条用例，离线固定夹具）
 python scripts/run_evaluation.py --dataset backend/evals/datasets/golden_v1.json --max-concurrency 1 --output-dir .tmp/eval-run-1
+
+# 真实模型评测（需要 .env 配置 DashScope 密钥；宽召回 + qwen3-rerank 重排）
+python scripts/run_evaluation.py --real --max-concurrency 4 --output-dir .tmp/eval-real-1
+
+# 真实模型单例重放，便于定位失败样例
+python scripts/run_evaluation.py --real --case-id golden-v1-rag-001 --max-concurrency 1 --output-dir .tmp/eval-real-smoke
 
 # 向量索引重建对账（dry-run 不写库）
 python scripts/rebuild_vector_index.py --collection documents --dry-run
@@ -742,7 +748,9 @@ python scripts/rebuild_vector_index.py --collection documents --dry-run
 python scripts/compare_vector_backends.py
 ```
 
-评测使用固定夹具与固定 seed，两次运行的确定性路由与检索指标应完全一致；向量重建后 chunk 数量与 ID 集合应和权威 JSON 索引一致。
+离线固定夹具模式使用固定执行器与固定 seed，两次运行的路由与检索指标应完全一致；
+真实模型模式会实际调用云端模型，受模型服务状态影响，结果用于质量基线而非逐字节复现。
+向量重建后 chunk 数量与 ID 集合应和权威 JSON 索引一致。
 
 `pytest` 只用于开发测试；如果 `riskMe` 中已经安装，可以跳过安装命令。
 
@@ -813,7 +821,7 @@ docker compose logs data-init --no-color
 | P3-06 运维证据、压测与容量说明 | 健康 / 就绪检查、Prometheus 指标、本地并发压测、单机运行手册、日志轮转 | 压测无未捕获异常与连接泄漏；依赖故障的错误率和降级次数进入指标 |
 | P3-07 面试材料与工程取舍说明 | 架构图、请求时序图、评测报告、Chroma / Milvus 对比、隔离 / 降级 / 备份记录、模块化单体取舍文档 | 材料见 `docs/`，可用一条启动命令和固定步骤复现演示 |
 
-### 🧪 黄金数据集与确定性评测
+### 🧪 黄金数据集与两种评测模式
 
 黄金数据集 `golden-v1` 共 **60 条**，按 7 类业务场景分层：
 
@@ -828,28 +836,51 @@ docker compose logs data-init --no-color
 | 故障场景 | 6 |
 
 - 数据集 SHA-256：`6df7f01d7b658610a6cc92b5aa5abe7f2bc4cb21fde37d6d5d04d96c576652c4`
-- 评测提交：`9c44484`
+- 评测 Harness 支持两种执行器：
 
-确定性评测 Harness 实测指标（两次运行结果完全一致，证明指标可重复复现）。**说明：以下数值来自离线固定夹具模式（不调用真实模型，仅验证评测管线可重复运行），不反映真实模型效果；真实模型效果需连接模型后另行评估。**
+| 模式 | 命令参数 | 用途 | 是否调用真实模型 |
+|------|----------|------|------------------|
+| 离线固定夹具 | 默认 | 验证 Harness、指标计算和报告链路可重复 | 否 |
+| 真实模型执行 | `--real` | 衡量真实路由、检索和回答质量 | 是 |
 
-| 指标 | 固定夹具实测值 |
-|------|------|
-| route_accuracy（路由准确率） | 8.33% |
-| hit_at_1 / hit_at_3（检索命中） | 11.67% |
-| recall_at_5（召回率） | 11.67% |
-| mrr（平均倒数排名） | 11.67% |
-| evidence_id_hit_rate（证据命中率） | 11.67% |
-| no_result_accuracy（无结果准确率） | 11.67% |
-| required_fact_coverage（必含事实覆盖率） | 0.0% |
-| citation_support_rate（引用支持率） | 100% |
-| forbidden_claim_count（违规断言数） | 0 |
-| abstention_accuracy（拒答准确率） | 11.67% |
+真实模型执行器复用生产链路的意图 Agent、文档检索、结构化个例检索和回答生成，
+并默认采用「宽召回 + 大模型重排」策略：
+
+- 回答模型：`qwen3.7-flash`
+- 意图模型：`qwen-plus`（由 `DASHSCOPE_INTENT_MODEL` 配置）
+- 向量模型：`text-embedding-v4`
+- 重排模型：`qwen3-rerank`
+- 向量后端：Milvus 混合检索（稠密 + BM25 稀疏，失败时按固定链降级）
+
+#### 指标对比（2026-11-08 实测）
+
+| 指标 | 离线固定夹具（自检） | 真实模型实测 | 说明 |
+|------|---------------------:|-------------:|------|
+| route_accuracy（路由准确率） | 8.33% | **45.00%** | 真实意图模型 + 规则融合 |
+| hit_at_1（首位命中） | 11.67% | **50.00%** | 宽召回后经 qwen3-rerank 重排 |
+| hit_at_3（前三命中） | 11.67% | **66.67%** | |
+| recall_at_5（前五召回） | 11.67% | **43.06%** | 多证据样例按比例计分 |
+| mrr（平均倒数排名） | 11.67% | **58.17%** | 正确证据的平均排名显著前移 |
+| evidence_id_hit_rate（证据命中率） | 11.67% | **75.00%** | 至少命中一条期望证据 |
+| no_result_accuracy（无结果准确率） | 11.67% | **88.33%** | |
+| required_fact_coverage（必含事实覆盖率） | 0.00% | **11.67%** | 受数据集标注口径限制，见下方说明 |
+| citation_support_rate（引用支持率） | 100% | **100%** | 引用均能在检索证据中找到依据 |
+| forbidden_claim_count（违规断言数） | 0 | **0** | 未出现禁止结论 |
+| abstention_accuracy（拒答准确率） | 11.67% | **88.33%** | |
+
+#### 如何解读这组指标
+
+1. **离线固定夹具的数值不是模型效果**：它不调用任何模型，只验证 Harness 能否稳定运行、指标计算是否正确。8.33% 和 11.67% 是“所有样例都走兜底澄清”时的理论值。
+2. **真实模型实测明显优于自检基线**：首位命中从 11.67% 提升到 50.00%，前三命中 66.67%，证据命中率 75.00%，MRR 58.17%，说明宽召回加重排的链路有效。
+3. **路由准确率 45.00% 的口径差异**：当前生产规则会把“对库内已有个例做统计或列举”的问题优先交给主 RAG（由结构化问答内部完成），而黄金数据集仍按早期契约期望 `multidim_search`。这属于路由契约差异，不是检索失败。
+4. **必含事实覆盖率偏低的原因**：部分 `required_facts` 写的是行为期望（例如“应同时覆盖6月和7月”），并非回答中会逐字出现的文本，子串匹配无法命中。该指标更适合作为改进线索，不宜单独作为质量结论。
+5. **引用支持率 100% 与违规断言 0** 是两项可靠的正向结论：回答没有编造检索证据之外的引用，也没有出现禁止结论。
 
 ### 🛠️ 测试、静态检查与运维实测
 
-- **后端回归测试**：容器内实测 **514 通过 + 3 跳过**，另 1 个失败为容器缺少 `.gitignore` 的环境问题（宿主机与 CI 全过）；`pytest backend/tests --collect-only` 共收集 519 个用例。
+- **后端回归测试**：本机实测 **522 通过 + 3 跳过**（含 48 个子测试）；`pytest backend/tests --collect-only` 共收集 525 个用例。
 - **迁移测试**：`backend/tests/integration/storage/test_migrations.py` 共 8 个全过（清空 `DATABASE_URL` 使用独立临时库）。
-- **静态检查**：Ruff 全过（容器内实测）；Mypy 覆盖新增公共接口与核心业务服务。
+- **静态检查**：使用 CI 固定版本 Ruff 0.8.4 检查新增与核心模块，全部通过；Mypy 覆盖新增公共接口与核心业务服务。
 - **向量重建对账**：`scripts/rebuild_vector_index.py --collection documents --dry-run` 实测 documents 317 = 317，无缺失、无多余。
 - **备份恢复演练**：详见 `docs/operations/backup-restore-drill.md`（2026-11-08 完成，恢复后核心表行数与备份完全一致）。
 
@@ -857,6 +888,7 @@ docker compose logs data-init --no-color
 
 - 《企业化过渡实施方案.md》：三个阶段的工作包、验收门槛与跨阶段测试策略
 - `docs/operations/backup-restore-drill.md`：PostgreSQL 备份、恢复与演练记录
+- `docs/evals/eval-real-2026-11-08.md`：本次真实模型评测的完整指标与分类表现
 - `docs/`：架构设计、工程取舍、评测报告与单机运行手册
 
 

@@ -37,7 +37,7 @@ def route_accuracy(actual_routes: list[str], expected_routes: list[str]) -> floa
         return 0.0
     matched = sum(
         1
-        for actual, expected in zip(actual_routes, expected_routes)
+        for actual, expected in zip(actual_routes, expected_routes, strict=False)
         if actual == expected
     )
     return matched / len(expected_routes)

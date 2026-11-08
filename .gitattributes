@@ -1,0 +1,2 @@
+# 黄金数据集按原始字节计算 SHA-256，必须在所有平台保持 LF 换行。
+backend/evals/datasets/*.json text eol=lf

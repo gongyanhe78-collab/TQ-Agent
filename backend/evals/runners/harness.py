@@ -28,7 +28,6 @@ from backend.evals.metrics.retrieval import (
 from backend.evals.reports import 脱敏
 from backend.evals.schemas.dataset import EvaluationCase, EvaluationCaseResult, EvaluationReport
 
-
 默认路由配置 = {
     "routes": ["rag", "multidim_search", "similar_case_match", "clarify"],
 }
@@ -84,10 +83,15 @@ def 离线固定执行器(case: EvaluationCase, seed: int = 0) -> EvaluationCase
 class _样例结果槽:
     """封存单例执行结果与完成事件，供并发线程回填。"""
 
-    def __init__(self, deadline: float) -> None:
+    def __init__(self, timeout_seconds: float, *, start_now: bool = True) -> None:
         self.事件 = threading.Event()
         self.result: EvaluationCaseResult | None = None
-        self.deadline = deadline
+        self.timeout_seconds = max(float(timeout_seconds), 0.001)
+        # 固定夹具模式按提交时刻计时，保持既有确定性语义；
+        # 真实模式不设置截止时间，避免排队等待被误判为执行超时。
+        self.deadline: float | None = (
+            time.monotonic() + self.timeout_seconds if start_now else None
+        )
 
 
 class EvaluationHarness:
@@ -116,8 +120,13 @@ class EvaluationHarness:
         category: str | None = None,
         failed_only: bool = False,
         baseline_report: EvaluationReport | None = None,
+        enforce_case_deadline: bool = True,
     ) -> EvaluationReport:
-        """执行筛选后的样例并聚合为单个报告对象。"""
+        """执行筛选后的样例并聚合为单个报告对象。
+
+        enforce_case_deadline 为 False 时不按单例时限中断等待，供真实模型
+        评测使用；真实模型调用由客户端自身的超时与熔断保护。
+        """
 
         if max_concurrency < 1:
             raise ValueError("max_concurrency 必须大于 0")
@@ -134,7 +143,12 @@ class EvaluationHarness:
             cases = [item for item in cases if item.category == category]
 
         started_at = datetime.now().astimezone()
-        results = self._执行(cases, seed=seed, max_concurrency=max_concurrency)
+        results = self._执行(
+            cases,
+            seed=seed,
+            max_concurrency=max_concurrency,
+            enforce_deadline=enforce_case_deadline,
+        )
         ended_at = datetime.now().astimezone()
 
         return EvaluationReport(
@@ -163,14 +177,17 @@ class EvaluationHarness:
         *,
         seed: int,
         max_concurrency: int,
+        enforce_deadline: bool = True,
     ) -> list[EvaluationCaseResult]:
         """按固定顺序返回结果，超时或异常都转换为失败样例。"""
 
         holders: list[_样例结果槽] = []
         信号量 = threading.Semaphore(max_concurrency)
         for case in cases:
-            deadline = time.monotonic() + max(case.max_latency_ms / 1000.0, 0.001)
-            holder = _样例结果槽(deadline)
+            holder = _样例结果槽(
+                case.max_latency_ms / 1000.0,
+                start_now=enforce_deadline,
+            )
             holders.append(holder)
             thread = threading.Thread(
                 target=self._执行单例,
@@ -180,8 +197,13 @@ class EvaluationHarness:
             thread.start()
 
         results: list[EvaluationCaseResult] = []
-        for case, holder in zip(cases, holders):
-            remaining = max(0.0, holder.deadline - time.monotonic())
+        for case, holder in zip(cases, holders, strict=False):
+            if not enforce_deadline:
+                # 真实模型模式由客户端自身超时与熔断控制，避免排队被误判超时。
+                holder.事件.wait()
+                results.append(holder.result)
+                continue
+            remaining = max(0.0, (holder.deadline or 0.0) - time.monotonic())
             if holder.事件.wait(remaining):
                 results.append(holder.result)
             else:
