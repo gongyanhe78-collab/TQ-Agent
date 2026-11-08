@@ -52,6 +52,19 @@ class ConversationReportBuilder:
             except Exception as exc:
                 logging.getLogger(__name__).warning("HTML/CSS PDF 渲染失败，回退旧版排版：%s", exc)
 
+        # 容器内没有 Edge/Chrome 时，优先用 WeasyPrint 按同一 HTML/CSS 排版，
+        # 保持与聊天页面一致的标题、列表、表格和强调样式。
+        if self._weasyprint_available():
+            try:
+                return self._build_with_weasyprint(
+                    content,
+                    output_path,
+                    title,
+                    progress_callback,
+                )
+            except Exception as exc:
+                logging.getLogger(__name__).warning("WeasyPrint 渲染失败，回退旧版排版：%s", exc)
+
         import matplotlib
 
         logging.getLogger("fontTools.subset").setLevel(logging.ERROR)
@@ -128,6 +141,37 @@ class ConversationReportBuilder:
                 pass
 
     @staticmethod
+    def _weasyprint_available() -> bool:
+        """判断 WeasyPrint 是否可导入；系统库缺失时返回 False 触发兼容回退。"""
+        try:
+            import weasyprint  # noqa: F401
+            return True
+        except Exception:
+            return False
+
+    def _build_with_weasyprint(
+        self,
+        content: str,
+        output_path: Path,
+        title: str,
+        progress_callback=None,
+    ) -> Path:
+        """用 WeasyPrint 将页面同款 Markdown HTML/CSS 渲染为 A4 PDF。"""
+        self._notify(progress_callback, 20, "正在读取上一轮页面内容")
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        html_document = self._html_document(content, title)
+        if output_path.exists():
+            output_path.unlink()
+        import weasyprint
+        self._notify(progress_callback, 48, "正在按页面样式排版 PDF")
+        weasyprint.HTML(string=html_document).write_pdf(output_path)
+        if not output_path.is_file() or output_path.stat().st_size < 100:
+            raise RuntimeError("WeasyPrint 没有生成有效 PDF")
+        self._notify(progress_callback, 92, "正在保存 PDF 文件")
+        return output_path
+
+    @staticmethod
     def _find_edge() -> str:
         """定位 Windows Edge；部署到无 Edge 环境时返回空字符串触发兼容回退。"""
         candidates = [
@@ -159,8 +203,15 @@ class ConversationReportBuilder:
                 body.append(f"<p class=\"list-item\">{cls._inline_html(block.get('text', ''))}</p>")
             else:
                 body.append(f"<p>{cls._inline_html(block.get('text', ''))}</p>")
-        css_path = Path(__file__).resolve().parents[6] / "frontend" / "src" / "styles" / "answer-content.css"
-        css = css_path.read_text(encoding="utf-8") if css_path.is_file() else ""
+        css_base = Path(__file__).resolve()
+        css_candidates = [
+            css_base.parents[5] / "frontend" / "src" / "styles" / "answer-content.css",
+            css_base.parents[6] / "frontend" / "src" / "styles" / "answer-content.css",
+        ]
+        css = next(
+            (item.read_text(encoding="utf-8") for item in css_candidates if item.is_file()),
+            "",
+        )
         # 导出专用规则补足聊天容器的宽度、页边距和打印分页行为。
         css += """
         @page { size: A4; margin: 18mm 17mm 18mm; }

@@ -26,3 +26,4 @@ opentelemetry-sdk==1.28.2
 opentelemetry-exporter-otlp-proto-http==1.28.2
 opentelemetry-exporter-prometheus==0.49b2
 pymilvus==2.5.18
+weasyprint==63.1

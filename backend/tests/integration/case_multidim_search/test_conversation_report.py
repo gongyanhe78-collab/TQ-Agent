@@ -60,6 +60,18 @@ class ConversationReportBuilderTests(unittest.TestCase):
         table = next(block for block in blocks if block["type"] == "table")
         self.assertEqual(len(table["rows"]), 17)
 
+    def test_html_document_reuses_page_css_and_keeps_table_structure(self) -> None:
+        """导出 PDF 的 HTML 必须复用页面样式并保留 Markdown 表格，保证与聊天页面视觉一致。"""
+        html = ConversationReportBuilder._html_document(
+            "## 统计结论\n\n| 时段 | 过程 |\n| --- | --- |\n| 5月2日 | 雷暴大风 |",
+            "测试报告标题",
+        )
+        self.assertIn(".markdown-body", html)
+        self.assertIn("<h2>统计结论</h2>", html)
+        self.assertIn("<table>", html)
+        self.assertIn("<th>时段</th>", html)
+        self.assertIn("<td>雷暴大风</td>", html)
+
 
 if __name__ == "__main__":
     unittest.main()

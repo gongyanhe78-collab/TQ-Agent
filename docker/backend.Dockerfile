@@ -43,6 +43,12 @@ RUN sed -i "s|http://deb.debian.org|https://${DEBIAN_MIRROR}|g" \
     && apt-get install -y --no-install-recommends \
         curl \
         libgomp1 \
+        libglib2.0-0 \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
+        libgdk-pixbuf-2.0-0 \
+        shared-mime-info \
+        fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 10001 appuser \
     && useradd --uid 10001 --gid 10001 --create-home appuser
@@ -56,6 +62,7 @@ COPY --chown=appuser:appuser pyproject.toml ./pyproject.toml
 COPY --chown=appuser:appuser backend ./backend
 COPY --chown=appuser:appuser scripts ./scripts
 COPY --chown=appuser:appuser docker ./docker
+COPY --chown=appuser:appuser frontend/src/styles/answer-content.css ./frontend/src/styles/answer-content.css
 
 RUN mkdir -p \
         /app/data \

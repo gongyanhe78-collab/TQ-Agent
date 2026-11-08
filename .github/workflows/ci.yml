@@ -143,6 +143,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt -r requirements-dev.txt
 
+      - name: 安装 WeasyPrint 系统依赖（PDF 按页面 CSS 渲染）
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-0 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 shared-mime-info fonts-noto-cjk
+
       - name: 执行 Alembic 迁移
         run: |
           if [ -f backend/alembic.ini ]; then
