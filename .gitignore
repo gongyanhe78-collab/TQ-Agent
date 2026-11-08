@@ -75,6 +75,9 @@ backend/tests/**/artifacts/
 backend/tests/**/*.png
 backend/tests/**/*.pdf
 
+# 数据库备份产物
+backups/
+
 # 数据库与缓存
 *.sqlite3
 *.sqlite3-*
