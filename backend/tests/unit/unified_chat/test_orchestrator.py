@@ -1308,5 +1308,35 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
             for item in messages
         ))
 
+
+    async def test_rag_empty_retrieval_upgrades_to_web_search(self) -> None:
+        """本地知识库检索为空时自动升级为联网搜索回答。"""
+        self.main.llm_client = _GeneralChatLlm()
+        self.dependencies.llm_client = self.main.llm_client
+        original = self.main._retrieve_document_chunks
+
+        def empty_retrieve(_question, **_kwargs):
+            return "document_vector", []
+
+        self.main._retrieve_document_chunks = empty_retrieve
+        try:
+            session_id = self.session_store.create_session()["session_id"]
+            events = await self._collect("山西省2025年3月降水总量", session_id)
+        finally:
+            self.main._retrieve_document_chunks = original
+
+        general_metadata = self._agent_metadata(events, "general_chat")
+        self.assertEqual(general_metadata["status"], "running")
+        answer = "".join(
+            event["text"]
+            for event in events
+            if event.get("type") == "delta"
+        )
+        self.assertIn("重庆今天多云转晴", answer)
+        self.assertNotIn("未检索到相关证据片段", answer)
+        done = events[-1]
+        self.assertEqual(done["type"], "done")
+        self.assertEqual(done["status"], "completed")
+
 if __name__ == "__main__":
     unittest.main()

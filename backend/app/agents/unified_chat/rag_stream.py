@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections.abc import AsyncIterator
 from time import perf_counter
 from typing import Any
@@ -15,13 +16,31 @@ from backend.app.agents.unified_chat.orchestration_models import (
     BudgetTermination,
 )
 from backend.app.agents.unified_chat.performance import PerformanceTrace
+from backend.app.core.config import get_settings
 from backend.app.services.feedback_guidance import (
     render_session_guidance,
 )
 
 
+LOGGER = logging.getLogger("uvicorn.error")
+
+
 class RagStreamMixin:
     """保留主项目文档向量检索和云端流式回答链路。"""
+
+    def _should_upgrade_to_web_search(self) -> bool:
+        """判断本地检索为空时是否允许升级为联网搜索。"""
+        settings = get_settings()
+        if not (
+            settings.web_search_enabled
+            and settings.rag_empty_upgrade_web_search
+        ):
+            return False
+        llm_client = self.dependencies.llm_client
+        try:
+            return bool(llm_client.is_available())
+        except Exception:
+            return False
 
     async def _stream_rag(
         self,
@@ -215,6 +234,42 @@ class RagStreamMixin:
             f"已找到 {len(hits)} 个相关证据片段",
             performance,
         )
+        if (
+            not hits
+            and not task_context_blocks
+            and self._should_upgrade_to_web_search()
+        ):
+            # 本地知识库没有证据，升级为联网搜索回答。
+            if session_id:
+                try:
+                    self._finish_persisted_run(
+                        run_id,
+                        status="completed",
+                        answer="",
+                        metadata=self._runtime_metadata(),
+                    )
+                except Exception as exc:
+                    LOGGER.warning(
+                        "[RAG升级] 检索运行记录收口失败 run_id=%s error=%s",
+                        run_id,
+                        exc,
+                    )
+            yield self._progress_metadata(
+                "general_chat",
+                run_id,
+                "web_search",
+                40,
+                "正在联网搜索最新信息",
+                performance,
+            )
+            async for event in self._stream_general_chat(
+                question,
+                session_id,
+                run_id=f"general_chat_{uuid4().hex}",
+                performance=performance,
+            ):
+                yield event
+            return
         analysis = AgentIntentAnalyzer().analyze(question)
         plan = AgentPlanner().plan(question, analysis)
         hit_payloads = [
