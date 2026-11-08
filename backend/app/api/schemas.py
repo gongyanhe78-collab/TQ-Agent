@@ -32,6 +32,11 @@ class StreamQueryRequest(QueryRequest):
         ge=1,
         description="需要重新生成的助手消息 ID；设置后复用其原问题且排除旧回答",
     )
+    idempotency_key: str = Field(
+        default="",
+        max_length=128,
+        description="幂等键：同一键的重复请求直接返回首次结果，不重复写入",
+    )
     regeneration_instruction: str = Field(
         default="",
         max_length=1000,

@@ -10,9 +10,11 @@ from uuid import uuid4
 from backend.app.agents.case_multidim_search.retrieval.structured_retriever import (
     StructuredCaseRetriever,
 )
-from backend.app.agents.query_intent import QueryIntentAgent
 from backend.app.agents.unified_chat.conversation_memory import (
     ConversationMemoryManager,
+)
+from backend.app.agents.unified_chat.general_chat_stream import (
+    GeneralChatStreamMixin,
 )
 from backend.app.agents.unified_chat.multidim_stream import (
     MultidimStreamMixin,
@@ -28,9 +30,6 @@ from backend.app.agents.unified_chat.persistence import (
     ResultPersistenceMixin,
 )
 from backend.app.agents.unified_chat.rag_stream import RagStreamMixin
-from backend.app.agents.unified_chat.general_chat_stream import (
-    GeneralChatStreamMixin,
-)
 from backend.app.agents.unified_chat.report_stream import (
     ReportStreamMixin,
 )
@@ -44,7 +43,6 @@ from backend.app.agents.unified_chat.structured_context import (
 from backend.app.agents.unified_chat.task_retrieval import (
     TaskRetrievalMixin,
 )
-
 
 LOGGER = logging.getLogger("uvicorn.error")
 
@@ -421,6 +419,13 @@ class UnifiedChatOrchestrator(
             ):
                 yield event
             self.runtime.finish_subtask()
+        except (asyncio.CancelledError, GeneratorExit):
+            # 客户端断开或任务取消时把运行收口为 cancelled，避免残留 running。
+            self._finish_active_run(
+                status="cancelled",
+                error="客户端断开或请求取消",
+            )
+            raise
         except BudgetTermination as exc:
             self._finish_active_run(
                 status="failed",

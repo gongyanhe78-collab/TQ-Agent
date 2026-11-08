@@ -7,7 +7,6 @@ from uuid import uuid4
 
 from backend.app.agents.unified_chat.performance import PerformanceTrace
 
-
 LOGGER = logging.getLogger("uvicorn.error")
 
 
@@ -79,6 +78,13 @@ class ResultPersistenceMixin:
             if error
             else self._merge_runtime_metadata()
         )
+        if status == "cancelled":
+            # 取消时保留已生成部分并标记 partial，供审计与重放区分终态。
+            metadata = dict(metadata or {})
+            metadata["partial"] = True
+            metadata["termination_reason"] = (
+                str(error) or "cancelled"
+            )
         run_id = str(getattr(self, "_active_run_id", "") or "")
         if not run_id:
             return {}

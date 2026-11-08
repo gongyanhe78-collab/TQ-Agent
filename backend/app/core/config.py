@@ -232,6 +232,13 @@ class Settings:
         )
     )
 
+    # 查询幂等：同一幂等键的重复请求直接返回首次结果，不重复写入消息与运行。
+    idempotency_ttl_seconds: int = field(
+        default_factory=lambda: int(
+            _env_value("IDEMPOTENCY_TTL_SECONDS", "1800")
+        )
+    )
+
     # 开放域联网搜索：普通聊天模型直接回答库外问题并启用联网搜索。
     web_search_enabled: bool = field(
         default_factory=lambda: _env_value("WEB_SEARCH_ENABLED", "true").lower()

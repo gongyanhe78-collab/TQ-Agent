@@ -40,6 +40,16 @@ class GeneralChatStreamMixin:
             "个例分析、统计或预警信息。"
         )
         yield self._metadata(common, status="running")
+        if session_id:
+            # 开放域回答也提前登记运行，取消时能收口为 cancelled。
+            self._start_persisted_run(
+                run_id,
+                session_id,
+                "general_chat",
+                text,
+                status="running",
+                metadata=self._runtime_metadata(),
+            )
         if settings.web_search_enabled and llm_client.is_available():
             answer_parts: list[str] = []
             try:
@@ -99,6 +109,7 @@ class GeneralChatStreamMixin:
                 session_id,
                 common,
                 status="completed",
+                already_started=True,
                 performance=performance,
             )
         yield self._completion_metadata(common, status="completed")
