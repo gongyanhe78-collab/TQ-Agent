@@ -435,6 +435,60 @@ class _MisroutingIntentAgent:
         )
 
 
+
+
+class _GeneralChatLlm:
+    """模拟支持联网搜索的普通聊天客户端。"""
+
+    def __init__(self) -> None:
+        self.last_question = ""
+        self.last_search = None
+
+    def is_available(self) -> bool:
+        return True
+
+    def stream_general_chat(
+        self,
+        question,
+        *,
+        system_prompt="",
+        enable_search=True,
+        forced_search=True,
+    ):
+        self.last_question = question
+        self.last_search = {
+            "enable_search": enable_search,
+            "forced_search": forced_search,
+        }
+        yield "重庆今天多云转晴，气温 18℃ 到 26℃。"
+
+
+class _GeneralChatIntentAgent:
+    """模拟意图模型把开放域问题路由到普通聊天。"""
+
+    case_provider = None
+
+    @staticmethod
+    def route(_request):
+        return SimpleNamespace(
+            intent="general_chat",
+            rag_strategy="vector",
+            normalized_message="今天重庆天气怎么样",
+            clarification_question="",
+            referenced_case_ids=[],
+            conditions={},
+            audit_id="intent-general",
+            context_related=False,
+            relation_type="standalone",
+            reference_type="none",
+            reference_clues=[],
+            context_confidence=1.0,
+            context_resolution_source="llm",
+            context_message_ids=[],
+            routing_source="llm",
+            reason="开放域实时天气查询",
+        )
+
 class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
     """验证三类问题在同一会话和统一协议下正确运行。"""
 
@@ -1221,6 +1275,38 @@ class UnifiedChatOrchestratorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(decision.referenced_case_ids, ["case-001"])
         self.assertEqual(decision.trace["orchestrator_guard"], "knowledge_case_forced_to_rag")
 
+
+
+    async def test_general_chat_uses_web_search_stream_and_persists(self) -> None:
+        """开放域问题直接走普通聊天联网搜索链路。"""
+        self.main.llm_client = _GeneralChatLlm()
+        self.dependencies.llm_client = self.main.llm_client
+        self.orchestrator.intent_agent = _GeneralChatIntentAgent()
+
+        session_id = self.session_store.create_session()["session_id"]
+        events = await self._collect("今天重庆天气怎么样", session_id)
+
+        general_metadata = self._agent_metadata(events, "general_chat")
+        self.assertEqual(general_metadata["status"], "running")
+        answer = "".join(
+            event["text"]
+            for event in events
+            if event.get("type") == "delta"
+        )
+        self.assertIn("重庆今天多云转晴", answer)
+        done = events[-1]
+        self.assertEqual(done["type"], "done")
+        self.assertEqual(done["status"], "completed")
+        self.assertEqual(self.main.llm_client.last_search, {
+            "enable_search": True,
+            "forced_search": True,
+        })
+        messages = self.session_store.list_messages(session_id)
+        self.assertTrue(any(
+            item.get("role") == "assistant"
+            and "重庆今天多云转晴" in str(item.get("content") or "")
+            for item in messages
+        ))
 
 if __name__ == "__main__":
     unittest.main()

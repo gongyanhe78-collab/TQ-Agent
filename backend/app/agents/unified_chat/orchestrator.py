@@ -5,6 +5,7 @@ import asyncio
 import logging
 from collections.abc import AsyncIterator, Awaitable, Callable
 from typing import Any
+from uuid import uuid4
 
 from backend.app.agents.case_multidim_search.retrieval.structured_retriever import (
     StructuredCaseRetriever,
@@ -27,6 +28,9 @@ from backend.app.agents.unified_chat.persistence import (
     ResultPersistenceMixin,
 )
 from backend.app.agents.unified_chat.rag_stream import RagStreamMixin
+from backend.app.agents.unified_chat.general_chat_stream import (
+    GeneralChatStreamMixin,
+)
 from backend.app.agents.unified_chat.report_stream import (
     ReportStreamMixin,
 )
@@ -56,6 +60,7 @@ class UnifiedChatOrchestrator(
     SmartStreamMixin,
     RagStreamMixin,
     ReportStreamMixin,
+    GeneralChatStreamMixin,
     RoutingMixin,
     StructuredContextMixin,
     TaskRetrievalMixin,
@@ -322,6 +327,7 @@ class UnifiedChatOrchestrator(
             "multidim_search": "正在准备多维检索与报告",
             "similar_case_match": "正在匹配相似历史过程",
             "clarify": "正在整理需要确认的信息",
+            "general_chat": "正在联网搜索最新信息",
         }
         yield self._progress_metadata(
             decision.intent,
@@ -387,6 +393,16 @@ class UnifiedChatOrchestrator(
                     session_id,
                     decision.clarification,
                     performance,
+                ):
+                    yield event
+                self.runtime.finish_subtask()
+                return
+            if decision.intent == "general_chat":
+                async for event in self._stream_general_chat(
+                    decision.resolved_question,
+                    session_id,
+                    run_id=f"general_chat_{uuid4().hex}",
+                    performance=performance,
                 ):
                     yield event
                 self.runtime.finish_subtask()
