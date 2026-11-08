@@ -1,0 +1,102 @@
+name: 真实模型评测趋势
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每周一 02:00（北京时间）执行，属于非阻塞趋势任务。
+    - cron: "0 18 * * 0"
+
+concurrency:
+  group: real-eval-trend
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  real-eval-trend:
+    name: 真实模型评测、门禁与趋势记录
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    # 该任务只用于趋势告警，不参与日常提交和合并阻塞。
+    continue-on-error: true
+    env:
+      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      DASHSCOPE_BASE_URL: ${{ vars.DASHSCOPE_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1' }}
+      DASHSCOPE_CHAT_MODEL: qwen3.7-flash
+      DASHSCOPE_INTENT_MODEL: qwen3.7-flash
+      DASHSCOPE_EMBEDDING_MODEL: text-embedding-v4
+      DASHSCOPE_RERANK_MODEL: qwen3-rerank
+      VECTOR_BACKEND: milvus
+      MILVUS_URI: http://milvus:19530
+      MILVUS_DOCUMENT_COLLECTION: weather_document_chunks_v1
+      PYTHONPATH: .
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 校验真实模型密钥
+        shell: bash
+        run: |
+          if [ -z "${DASHSCOPE_API_KEY}" ]; then
+            echo "未配置 DASHSCOPE_API_KEY，跳过真实模型趋势评测。"
+            exit 1
+          fi
+
+      - name: 启动 PostgreSQL、Redis 与 Milvus
+        run: |
+          docker compose up -d --wait postgres redis
+          docker compose --profile vector up -d --wait milvus
+
+      - name: 同步知识库数据
+        run: |
+          docker compose run --rm data-init
+
+      - name: 重建 Milvus 文档索引
+        run: |
+          docker compose run --rm --no-deps \
+            -v "${GITHUB_WORKSPACE}:/app" \
+            api python scripts/rebuild_vector_index.py \
+            --collection documents \
+            --output-dir .tmp/vector-rebuild
+
+      - name: 执行真实模型评测
+        run: |
+          docker compose run --rm --no-deps \
+            -v "${GITHUB_WORKSPACE}:/app" \
+            api python scripts/run_evaluation.py \
+            --real \
+            --max-concurrency 2 \
+            --output-dir .tmp/real-eval
+
+      - name: 执行真实模型质量门禁
+        run: |
+          docker compose run --rm --no-deps \
+            -v "${GITHUB_WORKSPACE}:/app" \
+            api python scripts/check_evaluation_gate.py \
+            --mode real \
+            --report .tmp/real-eval/report.json
+
+      - name: 记录真实模型评测趋势
+        run: |
+          docker compose run --rm --no-deps \
+            -v "${GITHUB_WORKSPACE}:/app" \
+            api python scripts/record_evaluation_trend.py \
+            --report .tmp/real-eval/report.json \
+            --trend-dir docs/evals/trends
+
+      - name: 上传真实评测报告与趋势
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-eval-report
+          path: |
+            .tmp/real-eval/
+            .tmp/vector-rebuild/
+            docs/evals/trends/
+          if-no-files-found: warn
+
+      - name: 清理临时服务
+        if: always()
+        run: |
+          docker compose --profile vector down -v --remove-orphans

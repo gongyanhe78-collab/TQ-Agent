@@ -160,7 +160,8 @@ def test_may_hail_query_references_authoritative_hail_case_and_chunks() -> None:
         "FST2025-5-chunk-008",
     ]
     required_facts = "；".join(case.required_facts)
-    assert "中阳、方山、蒲县" in required_facts
+    for station in ("中阳", "方山", "蒲县"):
+        assert station in required_facts
     assert "冰雹" in required_facts
 
 

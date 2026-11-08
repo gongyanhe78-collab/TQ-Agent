@@ -33,8 +33,8 @@ def 加载黄金数据集() -> GoldenDataset:
 def 固定执行器(case: EvaluationCase, seed: int) -> EvaluationCaseResult:
     """返回确定性结果，其中一条样例固定路由错误用于失败筛选。"""
 
-    if case.case_id == "golden-v1-retrieval-001":
-        actual_route = "rag"
+    if case.case_id == "golden-v1-fault-006":
+        actual_route = "clarify"
     else:
         actual_route = case.expected_route
     expected_no_result = not case.expected_case_ids and not case.expected_chunk_ids
@@ -227,7 +227,7 @@ def test_failed_only_uses_baseline_report_failures() -> None:
     first = harness.run(dataset, max_concurrency=1, seed=2)
 
     failed_ids = {item.case_id for item in first.failures}
-    assert failed_ids == {"golden-v1-retrieval-001"}
+    assert "golden-v1-fault-006" in failed_ids
 
     second = harness.run(
         dataset,
@@ -244,12 +244,17 @@ def test_failed_case_keeps_expected_actual_and_reason() -> None:
 
     dataset = 加载黄金数据集()
     harness = EvaluationHarness(固定执行器, git_commit="testing")
-    report = harness.run(dataset, max_concurrency=1, seed=2)
+    report = harness.run(
+        dataset,
+        max_concurrency=1,
+        seed=2,
+        case_id="golden-v1-fault-006",
+    )
     failure = report.failures[0]
 
-    assert failure.case_id == "golden-v1-retrieval-001"
-    assert failure.expected_route == "multidim_search"
-    assert failure.actual_route == "rag"
+    assert failure.case_id == "golden-v1-fault-006"
+    assert failure.expected_route == "rag"
+    assert failure.actual_route == "clarify"
     assert failure.question
     assert any("路由" in reason for reason in failure.failure_reasons)
 
@@ -344,3 +349,27 @@ def test_run_evaluation_script_resolves_backend_from_repo_root() -> None:
 
     assert completed.returncode == 0
     assert "dataset" in completed.stdout
+def test_harness_reports_recall_at_ten_for_dynamic_evidence_window() -> None:
+    """窗口扩展到十条后必须单独报告 recall_at_10，不能继续用 recall@5 混淆。"""
+
+    dataset = 加载黄金数据集()
+    case = dataset.cases[0].model_copy(
+        update={
+            "expected_case_ids": [],
+            "expected_chunk_ids": ["chunk-9"],
+            "required_facts": [],
+            "expected_behaviors": [],
+        }
+    )
+    result = EvaluationCaseResult(
+        actual_route=case.expected_route,
+        actual_chunk_ids=[f"chunk-{index}" for index in range(10)],
+        no_result=False,
+        abstained=False,
+    )
+    harness = EvaluationHarness(固定执行器, git_commit="testing")
+
+    metrics, _reasons = harness._计算指标(case, result)
+
+    assert metrics["recall_at_5"] == 0.0
+    assert metrics["recall_at_10"] == 1.0

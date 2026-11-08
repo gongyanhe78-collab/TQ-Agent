@@ -101,6 +101,8 @@ class QueryIntentAgent:
         self._model_cache: OrderedDict[str, dict[str, Any]] = OrderedDict()
         self._model_cache_lock = Lock()
         self._model_cache_limit = 256
+        # 意图模型允许更长的单次读取窗口，避免复杂多轮问题被 15 秒硬超时截断。
+        self.intent_timeout_seconds = settings.model_intent_timeout_seconds
 
     def knowledge_range(self) -> KnowledgeRange:
         """返回页面展示和意图判断共同使用的知识库时间范围。"""
@@ -182,6 +184,7 @@ class QueryIntentAgent:
             and requested_outputs.issubset(rag_output_targets)
             # “它们/各过程”等代词可由前置的统计或清单任务解析；只有没有任何
             # 可生成实体集合的目标时，才把未解析指代升级为必须澄清。
+            and not final.hard
             and (
                 not context.unresolved_reference
                 or bool(requested_outputs & {"count", "case_list"})
@@ -219,6 +222,8 @@ class QueryIntentAgent:
             clarification_question=(
                 (context.reason or "请明确指出需要继续分析的历史个例。")
                 if context.unresolved_reference
+                else final.reason
+                if need_clarification and final.hard
                 else "请确认你希望按时间、灾种和地区筛选历史个例，还是根据一个天气过程匹配相似历史个例。"
                 if need_clarification
                 else ""
@@ -1150,7 +1155,7 @@ class QueryIntentAgent:
         kwargs: dict[str, Any] = {"max_tokens": max_tokens}
         parameters = inspect.signature(call).parameters
         if "timeout_seconds" in parameters:
-            kwargs["timeout_seconds"] = 15.0
+            kwargs["timeout_seconds"] = self.intent_timeout_seconds
         if "json_mode" in parameters:
             kwargs["json_mode"] = True
         raw = call(prompt, [json.dumps(model_input, ensure_ascii=False)], **kwargs)
@@ -1209,6 +1214,8 @@ class QueryIntentAgent:
             "上述", "上面", "上文", "前面", "这些", "那些", "这两个", "那两个", "这几个", "那几个",
             "这几次", "那几次", "它们", "他们", "分别分析", "继续分析", "接着分析", "进一步分析",
             "这个个例", "这个过程", "该个例", "该过程", "其中一个", "这个灾害", "这次灾害", "这次过程",
+            "刚才", "刚刚", "上一轮", "这些结果", "那些结果", "当前结果", "现有结果", "其中", "继续按", "继续比较",
+            "再查一次", "再补充一条",
         )
         return any(term in text for term in terms) or bool(
             re.search(r"(?:[这那]|第)(?:一|二|两|三|四|五|六|七|八|九|十|\d+)(?:个|次)", text)
@@ -1408,10 +1415,66 @@ class QueryIntentAgent:
         asks_risk_analysis = any(term in text for term in RISK_ANALYSIS_TERMS)
         has_knowledge_case = bool(context.case_ids)
         describes_new_process = relation in {"after", "before"} or self._describes_current_or_future_process(text)
+
+        # 越权、隐私和跨数据边界请求优先澄清，不能被默认 RAG 或相似匹配覆盖。
+        privacy_terms = ("另一个用户", "其他用户", "别人上次", "另一个账号", "他人查询")
+        if any(term in text for term in privacy_terms):
+            return CandidateDecision("clarify", 0.999, "请求涉及其他用户数据，当前会话没有读取权限。", "privacy_guard", True)
+        unsupported_terms = ("火星", "月球", "外太空")
+        if any(term in text for term in unsupported_terms):
+            return CandidateDecision("clarify", 0.999, "请求地点不在当前气象知识库支持范围内。", "domain_guard", True)
+        certainty_terms = ("是否一定", "一定出现", "一定会", "确定会", "保证出现", "必然出现")
+        # “是否一定”等确定性措辞本身就是不可承诺的预测边界，
+        # 即使日期解析失败或模型误判为相似匹配，也必须优先澄清。
+        if any(term in text for term in certainty_terms):
+            return CandidateDecision("clarify", 0.99, "未来天气无法给出确定性结论，需要改为风险分析或相似经验查询。", "forecast_boundary_guard", True)
+
         if asks_report:
             return CandidateDecision("multidim_search", 0.99, "用户明确要求生成或导出分析报告。", "rule", True)
+
+        has_time_anchor = any(conditions.get(key) for key in ("start_date", "end_date", "years", "months"))
+        has_entity_anchor = any(conditions.get(key) for key in ("disaster_types", "cities", "areas")) or "山西" in text
+        process_terms = ("天气过程", "个例", "灾害", "事件")
+        if (
+            any(term in text for term in ("最近", "近期", "那个", "这个"))
+            and any(term in text for term in process_terms)
+            and not has_time_anchor
+            and not has_entity_anchor
+            and not context.case_ids
+        ):
+            return CandidateDecision("clarify", 0.98, "天气过程缺少时间、区域或灾种等必要定位条件。", "underspecified_process_guard", True)
+
         if has_knowledge_case:
             return CandidateDecision("rag", 0.99, "本轮已定位到当前标准个例库中的历史个例，限定其正文证据交由主 RAG 分析。", "knowledge_guard", True)
+        # 知识库时间范围内且带“比较/相近”等表达的候选筛选仍是库内事实任务，
+        # 不能让模型因语义相似升级为重型相似匹配 Agent。
+        comparison_terms = ("比较", "对比", "相近", "相似", "类似", "相同点", "不同点", "差异")
+        knowledge_start_date = self._iso_date(knowledge.start_date)
+        knowledge_end_date = self._iso_date(knowledge.end_date)
+        historical_years = [
+            int(value)
+            for value in re.findall(r"(20\d{2})年", text)
+            if knowledge_start_date
+            and knowledge_end_date
+            and knowledge_start_date.year <= int(value) <= knowledge_end_date.year
+        ]
+        # 复杂候选句可能让日期解析退化为 unbounded，但只要问题中的历史年份
+        # 落在知识库年份内且没有当前/未来锚点，仍必须按库内比较处理。
+        if (
+            any(term in text for term in comparison_terms)
+            and not self._describes_current_or_future_process(text)
+            and (relation == "inside" or historical_years)
+        ):
+            return CandidateDecision("rag", 0.99, "库内已知候选的比较与相近筛选由主 RAG 执行。", "knowledge_comparison_guard", True)
+        if (
+            any(term in text for term in STRUCTURED_QUERY_TERMS)
+            and not asks_report
+            and not asks_risk_analysis
+            and any(conditions.get(key) for key in ("start_date", "end_date", "years", "months"))
+        ):
+            # 明确检索动作即使时间超出知识库范围，也应返回可核验的“无结果”，
+            # 不能升级为相似匹配或报告生成。
+            return CandidateDecision("rag", 0.98, "用户执行的是明确的结构化检索动作，交由主 RAG 返回命中或无结果。", "structured_lookup_guard", True)
         if context.reference_type == "aggregate_result":
             return CandidateDecision("rag", 0.98, "本轮承接普通聚合结果，继续交由主 RAG 处理。", "context_guard", True)
         if context.reference_type == "external_process" and asks_risk_analysis:

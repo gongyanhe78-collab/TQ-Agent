@@ -49,6 +49,33 @@ class _模型配置别名模型(BaseModel):
         return super().model_dump_json(**kwargs)
 
 
+BehaviorCheckKind = Literal[
+    "route_equals",
+    "answer_contains_any",
+    "answer_contains_all",
+    "evidence_hit",
+    "no_result",
+    "abstained",
+]
+
+
+class BehaviorCheck(BaseModel):
+    """一条可由评测 Harness 确定性执行的行为检查。"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: BehaviorCheckKind
+    values: list[str] = Field(default_factory=list)
+
+
+class ExpectedBehavior(BaseModel):
+    """人工定义的行为期望及其可执行检查集合。"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    description: str = Field(min_length=1)
+    checks: list[BehaviorCheck] = Field(min_length=1)
+
 class EvaluationCase(_模型配置别名模型):
     """单条黄金评测样例。"""
 
@@ -60,6 +87,7 @@ class EvaluationCase(_模型配置别名模型):
     expected_case_ids: list[str]
     expected_chunk_ids: list[str]
     required_facts: list[str]
+    expected_behaviors: list[ExpectedBehavior] = Field(default_factory=list)
     forbidden_claims: list[str]
     max_latency_ms: int = Field(gt=0)
     tags: list[str]

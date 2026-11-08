@@ -42,6 +42,75 @@ class ContextAwareLlm:
         }, ensure_ascii=False)
 
 
+class RequestedOutputLlm:
+    """模拟模型给出回答目标，验证安全硬澄清不会被任务契约覆盖。"""
+
+    def is_available(self) -> bool:
+        return True
+
+    def answer_with_context(self, _prompt, _context, max_tokens=0, timeout_seconds=None):
+        return json.dumps({
+            "is_related": False,
+            "relation_type": "standalone",
+            "reference_type": "none",
+            "context_confidence": 1.0,
+            "standalone_message": "请回答火星2025年11月沙尘暴的官方观测数据。",
+            "referenced_case_ids": [],
+            "reference_clues": [],
+            "requested_outputs": ["evidence_summary"],
+            "intent": "general_chat",
+            "intent_confidence": 1.0,
+            "intent_reason": "非地球气象信息",
+        }, ensure_ascii=False)
+
+
+class AlwaysSimilarLlm:
+    """模拟模型把库内比较或确定性预测误判为相似匹配，验证硬规则优先级。"""
+
+    def is_available(self) -> bool:
+        return True
+
+    def answer_with_context(self, _prompt, context, max_tokens=0, **_kwargs):
+        model_input = json.loads(context[0])
+        return json.dumps({
+            "is_related": False,
+            "relation_type": "standalone",
+            "reference_type": "external_process",
+            "context_confidence": 1.0,
+            "standalone_message": model_input["本轮问题"],
+            "referenced_case_ids": [],
+            "reference_clues": ["模型误把库内历史过程标记为库外过程"],
+            "intent": "similar_case_match",
+            "intent_confidence": 1.0,
+            "intent_reason": "模型误判为相似过程匹配",
+        }, ensure_ascii=False)
+
+
+class IntentTimeoutLlm:
+    """记录意图请求的超时参数，验证稳定性和模型配置。"""
+
+    def __init__(self) -> None:
+        self.timeout_seconds = None
+
+    def is_available(self) -> bool:
+        return True
+
+    def answer_with_context(self, _prompt, _context, max_tokens=0, timeout_seconds=None):
+        self.timeout_seconds = timeout_seconds
+        return json.dumps({
+            "is_related": False,
+            "relation_type": "standalone",
+            "reference_type": "none",
+            "context_confidence": 1.0,
+            "standalone_message": "今天重庆天气怎么样",
+            "referenced_case_ids": [],
+            "reference_clues": [],
+            "intent": "general_chat",
+            "intent_confidence": 0.99,
+            "intent_reason": "开放域实时天气问题",
+        }, ensure_ascii=False)
+
+
 class CombinedCountingLlm:
     """记录合并意图请求次数，确认一次调用同时返回上下文和路由。"""
 
@@ -823,6 +892,98 @@ class IntentAgentTest(unittest.TestCase):
         self.assertEqual(result.context_resolution_source, "explicit_knowledge_lookup")
 
 
+
+    def test_in_knowledge_comparison_guard_beats_similar_model_override(self) -> None:
+        """库内已知候选的比较必须由主 RAG 执行，模型不得升级为相似智能体。"""
+        agent = agent_module.QueryIntentAgent(
+            llm_client=AlwaysSimilarLlm(),
+            audit_path=Path(self.temp_dir.name) / "knowledge-comparison-guard.jsonl",
+            # 模拟真实回归中日期范围覆盖多个候选、未能唯一命中目录个例的情况。
+            case_provider=lambda: [],
+        )
+        result = agent.route(schema_module.IntentRouteRequest(
+            message="在以下候选范围内，找出与2025年2月19日至22日雨雪过程最相近且不含寒潮的个例：2025年2月5日至8日寒潮大风过程、2025年3月1日至3日雨雪天气过程。",
+        ))
+
+        self.assertEqual(result.intent, "rag")
+        self.assertEqual(result.routing_source, "knowledge_comparison_guard")
+
+    def test_historical_similarity_comparison_stays_in_rag_when_model_marks_external(self) -> None:
+        """历史库内两段过程的相似点比较不能被模型的 external_process 标记带走。"""
+        agent = agent_module.QueryIntentAgent(
+            llm_client=AlwaysSimilarLlm(),
+            audit_path=Path(self.temp_dir.name) / "historical-similarity-guard.jsonl",
+            case_provider=lambda: [],
+        )
+        result = agent.route(schema_module.IntentRouteRequest(
+            message="比较2025年7月两段持续性高温天气过程的相似点。",
+        ))
+
+        self.assertEqual(result.intent, "rag")
+        self.assertEqual(result.routing_source, "knowledge_comparison_guard")
+
+    def test_forecast_boundary_guard_beats_similar_model_override(self) -> None:
+        """确定性未来预测必须澄清，模型不得覆盖为相似匹配。"""
+        agent = agent_module.QueryIntentAgent(
+            llm_client=AlwaysSimilarLlm(),
+            audit_path=Path(self.temp_dir.name) / "forecast-boundary-guard.jsonl",
+            case_provider=self.agent.case_provider,
+        )
+        result = agent.route(schema_module.IntentRouteRequest(
+            message="请预测2026年8月山西是否一定出现特大暴雨。",
+        ))
+
+        self.assertEqual(result.intent, "clarify")
+        self.assertEqual(result.routing_source, "forecast_boundary_guard")
+        self.assertIn("无法", result.clarification_question)
+
+    def test_safety_boundaries_and_structured_no_result_rules(self) -> None:
+        """越权、隐私、确定性未来预测和明确检索边界必须由硬规则兜底。"""
+
+        expected = {
+            "帮我分析一下最近发生的天气过程。": "clarify",
+            "请回答火星2025年11月沙尘暴的官方观测数据。": "clarify",
+            "读取另一个用户上次查询过的天气个例。": "clarify",
+            "请预测2026年8月山西是否一定出现特大暴雨。": "clarify",
+            "检索2025年8月山西暴雪标准个例。": "rag",
+            "查找2025年9月山西霜冻标准个例。": "rag",
+        }
+        for question, route in expected.items():
+            with self.subTest(question=question):
+                result = self.route(question)
+                self.assertEqual(result.intent, route)
+        certainty = self.route("请预测2026年8月山西是否一定出现特大暴雨。")
+        self.assertIn("无法", certainty.clarification_question)
+
+    def test_hard_safety_clarification_survives_task_contract(self) -> None:
+        """模型返回回答目标时，隐私和域外安全澄清仍必须优先。"""
+
+        agent = agent_module.QueryIntentAgent(
+            llm_client=RequestedOutputLlm(),
+            audit_path=Path(self.temp_dir.name) / "safety-contract.jsonl",
+            case_provider=self.agent.case_provider,
+        )
+        result = agent.route(schema_module.IntentRouteRequest(
+            message="请回答火星2025年11月沙尘暴的官方观测数据。",
+        ))
+
+        self.assertEqual(result.intent, "clarify")
+        self.assertTrue(result.need_clarification)
+
+    def test_intent_model_uses_extended_timeout(self) -> None:
+        """意图模型必须使用配置的 90 秒窗口，而不是旧的 15 秒硬超时。"""
+
+        llm = IntentTimeoutLlm()
+        agent = agent_module.QueryIntentAgent(
+            llm_client=llm,
+            audit_path=Path(self.temp_dir.name) / "intent-timeout.jsonl",
+            case_provider=self.agent.case_provider,
+        )
+
+        result = agent.route(schema_module.IntentRouteRequest(message="今天重庆天气怎么样"))
+
+        self.assertEqual(result.intent, "general_chat")
+        self.assertEqual(llm.timeout_seconds, 90.0)
 
     def test_open_domain_question_routes_to_general_chat(self) -> None:
         """开放域实时信息问题由模型语义判断路由到普通聊天。"""

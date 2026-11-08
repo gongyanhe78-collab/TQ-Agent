@@ -222,6 +222,16 @@ class Settings:
             _env_value("MODEL_CONNECT_TIMEOUT_SECONDS", "10")
         )
     )
+    model_intent_timeout_seconds: float = field(
+        default_factory=lambda: float(
+            _env_value("MODEL_INTENT_TIMEOUT_SECONDS", "90")
+        )
+    )
+    model_intent_max_retries: int = field(
+        default_factory=lambda: int(
+            _env_value("MODEL_INTENT_MAX_RETRIES", "1")
+        )
+    )
     circuit_failure_threshold: int = field(
         default_factory=lambda: int(
             _env_value("CIRCUIT_FAILURE_THRESHOLD", "5")

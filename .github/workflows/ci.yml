@@ -184,6 +184,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt -r requirements-dev.txt
 
-      - name: 确定性核心评测子集
+      - name: 评测框架单元与集成测试
         run: |
           python -m pytest backend/tests/unit/evals backend/tests/integration/evals -q
+
+      - name: 离线固定夹具评测
+        run: |
+          python scripts/run_evaluation.py --max-concurrency 1 --output-dir .tmp/eval-ci
+
+      - name: 离线评测基线门禁
+        run: |
+          python scripts/check_evaluation_gate.py --mode offline --report .tmp/eval-ci/report.json

@@ -1,5 +1,5 @@
 {
-  "dataset_version": "golden-v1",
+  "dataset_version": "golden-v1.5",
   "created_at": "2026-11-07",
   "category_distribution": {
     "路由": 6,
@@ -19,5 +19,5 @@
     "temperature": 0,
     "seed": 42
   },
-  "dataset_sha256": "6df7f01d7b658610a6cc92b5aa5abe7f2bc4cb21fde37d6d5d04d96c576652c4"
+  "dataset_sha256": "f392c7845d94165fa2e92322bf12d68b0d58bb676bc96c9bbf41ee87a311b69d"
 }

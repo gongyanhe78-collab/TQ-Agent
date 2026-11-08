@@ -13,6 +13,7 @@ from typing import Any
 from backend.evals.loader import GoldenDataset
 from backend.evals.metrics.answer import (
     abstention_accuracy,
+    behavior_satisfaction_rate,
     citation_support_rate,
     forbidden_claim_count,
     required_fact_coverage,
@@ -37,10 +38,12 @@ from backend.evals.schemas.dataset import EvaluationCase, EvaluationCaseResult, 
     "hit_at_1",
     "hit_at_3",
     "recall_at_5",
+    "recall_at_10",
     "mrr",
     "evidence_id_hit_rate",
     "no_result_accuracy",
     "required_fact_coverage",
+    "behavior_satisfaction_rate",
     "citation_support_rate",
     "forbidden_claim_count",
     "abstention_accuracy",
@@ -167,7 +170,7 @@ class EvaluationHarness:
             ),
             started_at=started_at,
             ended_at=ended_at,
-            metrics=self._聚合指标(results),
+            metrics=self._聚合指标(results, cases),
             results=results,
         )
 
@@ -335,10 +338,19 @@ class EvaluationHarness:
             "hit_at_1": hit_at_k(actual_evidence, expected_evidence, 1),
             "hit_at_3": hit_at_k(actual_evidence, expected_evidence, 3),
             "recall_at_5": recall_at_k(actual_evidence, expected_evidence, 5),
+            "recall_at_10": recall_at_k(actual_evidence, expected_evidence, 10),
             "mrr": mrr(actual_evidence, expected_evidence),
             "evidence_id_hit_rate": evidence_id_hit_rate(actual_evidence, expected_evidence),
             "no_result_accuracy": no_result_accuracy(result.no_result, expected_no_result),
             "required_fact_coverage": required_fact_coverage(result.answer, case.required_facts),
+            "behavior_satisfaction_rate": behavior_satisfaction_rate(
+                result.answer,
+                actual_route=result.actual_route,
+                actual_evidence=actual_evidence,
+                no_result=result.no_result,
+                abstained=result.abstained,
+                behaviors=case.expected_behaviors,
+            ),
             "citation_support_rate": citation_support_rate(
                 result.cited_evidence_ids,
                 actual_evidence,
@@ -355,8 +367,10 @@ class EvaluationHarness:
                 reasons.append("遗漏无结果判断")
         elif metrics["evidence_id_hit_rate"] == 0.0:
             reasons.append("证据 ID 未命中期望")
-        if metrics["required_fact_coverage"] < 1.0:
+        if case.required_facts and metrics["required_fact_coverage"] < 1.0:
             reasons.append("必含事实覆盖不足")
+        if case.expected_behaviors and metrics["behavior_satisfaction_rate"] < 1.0:
+            reasons.append("行为期望未满足")
         if metrics["forbidden_claim_count"]:
             reasons.append("出现禁止结论")
         if metrics["abstention_accuracy"] == 0.0:
@@ -364,20 +378,52 @@ class EvaluationHarness:
         return metrics, reasons
 
     @staticmethod
-    def _聚合指标(results: list[EvaluationCaseResult]) -> dict[str, float | int]:
-        """对所有单例指标求均值，禁止结论违规数求和。"""
+    def _聚合指标(
+        results: list[EvaluationCaseResult],
+        cases: list[EvaluationCase],
+    ) -> dict[str, float | int]:
+        """按适用样例聚合指标，事实和行为为空时不进入分母。"""
 
         if not results:
-            return {key: 0.0 for key in 汇总指标键 if key != "forbidden_claim_count"} | {
-                "forbidden_claim_count": 0,
+            empty = {
+                key: 0.0 for key in 汇总指标键 if key != "forbidden_claim_count"
             }
+            empty["forbidden_claim_count"] = 0
+            empty["required_fact_case_count"] = 0
+            empty["behavior_case_count"] = 0
+            return empty
+
+        case_by_id = {case.case_id: case for case in cases}
+        fact_results = [
+            item
+            for item in results
+            if case_by_id.get(item.case_id)
+            and case_by_id[item.case_id].required_facts
+        ]
+        behavior_results = [
+            item
+            for item in results
+            if case_by_id.get(item.case_id)
+            and case_by_id[item.case_id].expected_behaviors
+        ]
 
         summary: dict[str, float | int] = {}
         for key in 汇总指标键:
             if key == "forbidden_claim_count":
                 summary[key] = sum(int(item.metrics.get(key, 0)) for item in results)
+                continue
+            if key == "required_fact_coverage":
+                applicable = fact_results
+            elif key == "behavior_satisfaction_rate":
+                applicable = behavior_results
             else:
-                summary[key] = sum(float(item.metrics.get(key, 0.0)) for item in results) / len(
-                    results
-                )
+                applicable = results
+            if not applicable:
+                summary[key] = 0.0
+                continue
+            summary[key] = sum(
+                float(item.metrics.get(key, 0.0)) for item in applicable
+            ) / len(applicable)
+        summary["required_fact_case_count"] = len(fact_results)
+        summary["behavior_case_count"] = len(behavior_results)
         return summary

@@ -7,6 +7,10 @@ from backend.app.agents.synthesizer.answer_synthesizer import AnswerSynthesizer
 from backend.app.models import DocumentRetrievalHit
 from backend.app.services.query.document_retrieval import DocumentRetriever
 from backend.app.services.query.result_presenters import QueryResultPresenter
+from backend.app.services.query.structured_facts import (
+    extract_structured_facts,
+    render_structured_fact_block,
+)
 
 
 class DocumentQuestionAnswerer:
@@ -99,6 +103,18 @@ class DocumentQuestionAnswerer:
                 f"正文：{hit.chunk.content}"
                 f"{image_block}"
             )
+        facts = []
+        for hit in hits:
+            facts.extend(
+                extract_structured_facts(
+                    hit.chunk.content,
+                    evidence_id=hit.chunk.chunk_id,
+                )
+            )
+        fact_block = render_structured_fact_block(facts)
+        if fact_block:
+            # 原文块保留完整语境，事实块突出模型必须逐项保留的数值和日期。
+            blocks.append(fact_block)
         return blocks
 
     def fallback_answer(self, question: str, hits: list[DocumentRetrievalHit]) -> str:

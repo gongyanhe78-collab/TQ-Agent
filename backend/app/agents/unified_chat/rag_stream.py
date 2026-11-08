@@ -20,6 +20,7 @@ from backend.app.core.config import get_settings
 from backend.app.services.feedback_guidance import (
     render_session_guidance,
 )
+from backend.app.services.query.evidence_window import dynamic_evidence_window
 
 LOGGER = logging.getLogger("uvicorn.error")
 
@@ -117,6 +118,11 @@ class RagStreamMixin:
                     original_question,
                 )
             )
+        evidence_top_n = dynamic_evidence_window(
+            question,
+            payload.top_n,
+            matched_case_count=len(context_case_ids),
+        )
         if session_id:
             self._start_persisted_run(
                 run_id,
@@ -148,7 +154,7 @@ class RagStreamMixin:
                     self.dependencies.structured_query.metric_document_result(
                         question,
                         top_k=payload.top_k,
-                        top_n=payload.top_n,
+                        top_n=evidence_top_n,
                         context_case_ids=context_case_ids,
                     )
                     or structured
@@ -212,7 +218,7 @@ class RagStreamMixin:
                 rag_tasks,
                 context_case_ids,
                 top_k=payload.top_k,
-                top_n=payload.top_n,
+                top_n=evidence_top_n,
             )
         else:
             # 单任务继续沿用原检索路径。
@@ -220,7 +226,7 @@ class RagStreamMixin:
                 self.dependencies.document_qa.retrieve(
                     question,
                     top_k=payload.top_k,
-                    top_n=payload.top_n,
+                    top_n=evidence_top_n,
                     context_case_ids=context_case_ids,
                 )
             )

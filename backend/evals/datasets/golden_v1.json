@@ -1,5 +1,5 @@
 {
-  "dataset_version": "golden-v1",
+  "dataset_version": "golden-v1.5",
   "cases": [
     {
       "case_id": "golden-v1-route-001",
@@ -8,46 +8,125 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-3-chunk-001"],
-      "required_facts": ["2025年3月全省平均降水量为14.1毫米"],
-      "forbidden_claims": ["不得回答其他月份的全省平均降水量"],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-001"
+      ],
+      "required_facts": [
+        "2025年3月全省平均降水量为14.1毫米"
+      ],
+      "forbidden_claims": [
+        "不得回答其他月份的全省平均降水量"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["主RAG", "路由"],
+      "tags": [
+        "主RAG",
+        "路由"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-route-002",
       "category": "路由",
       "question": "从标准个例中找出2025年5月2日雷暴大风过程。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-5-std-case-001"],
-      "expected_chunk_ids": ["FST2025-5-chunk-004"],
-      "required_facts": ["命中的个例是5月2日雷暴大风天气过程"],
-      "forbidden_claims": ["不得把5月8日至9日强对流过程当作5月2日过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-004"
+      ],
+      "required_facts": [
+        "5月2日雷暴大风过程"
+      ],
+      "forbidden_claims": [
+        "不得把5月8日至9日强对流过程当作5月2日过程"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["多维检索", "路由"],
+      "tags": [
+        "多维检索",
+        "路由"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-route-003",
       "category": "路由",
       "question": "2025年7月28日强对流过程与哪些历史个例最相似？",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-7-std-case-004", "FST2025-6-std-case-002"],
-      "expected_chunk_ids": ["FST2025-7-chunk-038", "FST2025-6-chunk-017"],
-      "required_facts": ["应比较强对流过程的相似性", "应引用两个权威个例"],
-      "forbidden_claims": ["不得把普通降水过程直接认定为强对流个例"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-004",
+        "FST2025-6-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-038",
+        "FST2025-6-chunk-017"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把普通降水过程直接认定为强对流个例"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["相似匹配", "路由"],
+      "tags": [
+        "相似匹配",
+        "路由"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应比较强对流过程的相似性",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "相似",
+                "共同",
+                "差异"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        },
+        {
+          "description": "应引用两个权威个例",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-route-004",
@@ -57,13 +136,37 @@
       "expected_route": "clarify",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应先澄清具体时间、区域或天气类型"],
-      "forbidden_claims": ["不得在条件缺失时直接编造具体个例"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得在条件缺失时直接编造具体个例"
+      ],
       "max_latency_ms": 10000,
-      "tags": ["澄清", "路由"],
+      "tags": [
+        "澄清",
+        "路由"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应先澄清具体时间、区域或天气类型",
+          "checks": [
+            {
+              "kind": "route_equals",
+              "values": [
+                "clarify"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-route-005",
@@ -73,77 +176,236 @@
       "expected_route": "clarify",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应指出3月存在多个天气过程并要求明确日期"],
-      "forbidden_claims": ["不得擅自选择3月任意一个过程作答"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得擅自选择3月任意一个过程作答"
+      ],
       "max_latency_ms": 10000,
-      "tags": ["歧义", "澄清", "路由"],
+      "tags": [
+        "歧义",
+        "澄清",
+        "路由"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应指出3月存在多个天气过程并要求明确日期",
+          "checks": [
+            {
+              "kind": "route_equals",
+              "values": [
+                "clarify"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-route-006",
       "category": "路由",
       "question": "先找出2025年6月强对流个例，再与2025年7月强对流个例比较。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-6-std-case-002", "FST2025-7-std-case-004"],
-      "expected_chunk_ids": ["FST2025-6-chunk-017", "FST2025-7-chunk-038"],
-      "required_facts": ["应同时处理6月和7月的强对流个例", "应比较两个过程"],
-      "forbidden_claims": ["不得只处理其中一个月份"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-6-std-case-002",
+        "FST2025-7-std-case-004"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-017",
+        "FST2025-7-chunk-038"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得只处理其中一个月份"
+      ],
       "max_latency_ms": 60000,
-      "tags": ["复合任务", "路由"],
+      "tags": [
+        "复合任务",
+        "路由"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应同时处理6月和7月的强对流个例",
+          "checks": [
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "6月",
+                "7月",
+                "强对流"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        },
+        {
+          "description": "应比较两个过程",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "比较",
+                "差异",
+                "共同"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-001",
       "category": "检索",
       "question": "检索2025年5月的全部标准天气过程。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-5-std-case-001", "FST2025-5-std-case-002", "FST2025-5-std-case-003", "FST2025-5-std-case-004", "FST2025-5-std-case-005"],
-      "expected_chunk_ids": ["FST2025-5-chunk-003"],
-      "required_facts": ["2025年5月共有5次标准天气过程"],
-      "forbidden_claims": ["不得遗漏5月的任意一个标准天气过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-001",
+        "FST2025-5-std-case-002",
+        "FST2025-5-std-case-003",
+        "FST2025-5-std-case-004",
+        "FST2025-5-std-case-005"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-003"
+      ],
+      "required_facts": [
+        "2025年5月",
+        "5次",
+        "天气过程"
+      ],
+      "forbidden_claims": [
+        "不得遗漏5月的任意一个标准天气过程"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["时间检索", "月份"],
+      "tags": [
+        "时间检索",
+        "月份"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-retrieval-002",
       "category": "检索",
       "question": "查找2025年3月25日至28日的沙尘寒潮雨雪过程。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-3-std-case-003"],
-      "expected_chunk_ids": ["FST2025-3-chunk-010"],
-      "required_facts": ["命中的是3月25日至28日沙尘、寒潮、雨雪过程"],
-      "forbidden_claims": ["不得返回3月1日至3日的雨雪过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-3-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-010"
+      ],
+      "required_facts": [
+        "3月25日至28日沙尘、寒潮、雨雪过程"
+      ],
+      "forbidden_claims": [
+        "不得返回3月1日至3日的雨雪过程"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["时间检索", "灾种检索"],
+      "tags": [
+        "时间检索",
+        "灾种检索"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-retrieval-003",
       "category": "检索",
       "question": "检索2025年4月标题中含大风的全部标准个例。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-4-std-case-001", "FST2025-4-std-case-002", "FST2025-4-std-case-003"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003", "FST2025-4-chunk-023", "FST2025-4-chunk-027"],
-      "required_facts": ["应返回4月的3个含大风过程"],
-      "forbidden_claims": ["不得返回5月大风个例"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-4-std-case-001",
+        "FST2025-4-std-case-002",
+        "FST2025-4-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003",
+        "FST2025-4-chunk-023",
+        "FST2025-4-chunk-027"
+      ],
+      "required_facts": [
+        "4月11-13日",
+        "4月16-18日",
+        "4月20-21日",
+        "3个"
+      ],
+      "forbidden_claims": [
+        "不得返回5月大风个例"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["灾种检索", "大风"],
+      "tags": [
+        "灾种检索",
+        "大风"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应返回4月的3个含大风过程",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "3个",
+                "三次",
+                "3次"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-004",
@@ -151,31 +413,78 @@
       "question": "查找2025年6月27日至28日强对流过程的原始切片。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-6-std-case-002"],
-      "expected_chunk_ids": ["FST2025-6-chunk-017", "FST2025-6-chunk-018"],
-      "required_facts": ["应返回6月27日至28日强对流过程的原文证据"],
-      "forbidden_claims": ["不得引用其他月份的强对流切片作为该过程证据"],
+      "expected_case_ids": [
+        "FST2025-6-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-017",
+        "FST2025-6-chunk-018"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得引用其他月份的强对流切片作为该过程证据"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["文档原文", "证据检索"],
+      "tags": [
+        "文档原文",
+        "证据检索"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应返回6月27日至28日强对流过程的原文证据",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-005",
       "category": "检索",
       "question": "查找2025年7月23日至26日北部暴雨过程。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-7-std-case-003"],
-      "expected_chunk_ids": ["FST2025-7-chunk-020", "FST2025-7-chunk-021"],
-      "required_facts": ["命中的是7月23日至26日北部暴雨过程"],
-      "forbidden_claims": ["不得替换为7月7日至9日暴雨过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-020",
+        "FST2025-7-chunk-021"
+      ],
+      "required_facts": [
+        "7月23日至26日北部暴雨过程"
+      ],
+      "forbidden_claims": [
+        "不得替换为7月7日至9日暴雨过程"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["时间检索", "空间检索", "暴雨"],
+      "tags": [
+        "时间检索",
+        "空间检索",
+        "暴雨"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-retrieval-006",
@@ -183,63 +492,175 @@
       "question": "查找2025年2月5日至8日寒潮大风过程的原始文档切片。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["山西省2025年2月天气过程总结-std-case-001"],
-      "expected_chunk_ids": ["山西省2025年2月天气过程总结-chunk-004", "山西省2025年2月天气过程总结-chunk-005"],
-      "required_facts": ["应返回2月5日至8日寒潮大风过程原文"],
-      "forbidden_claims": ["不得返回2月19日至22日雨雪过程作为替代"],
+      "expected_case_ids": [
+        "山西省2025年2月天气过程总结-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年2月天气过程总结-chunk-004",
+        "山西省2025年2月天气过程总结-chunk-005"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得返回2月19日至22日雨雪过程作为替代"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["文档原文", "寒潮", "大风"],
+      "tags": [
+        "文档原文",
+        "寒潮",
+        "大风"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应返回2月5日至8日寒潮大风过程原文",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-007",
       "category": "检索",
       "question": "检索2025年8月山西暴雪标准个例。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
+      "expected_route": "rag",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应明确返回无匹配个例"],
-      "forbidden_claims": ["不得用其他月份暴雪或雨雪个例充数"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得用其他月份暴雪或雨雪个例充数"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["无结果识别", "时间检索"],
+      "tags": [
+        "无结果识别",
+        "时间检索"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应明确返回无匹配个例",
+          "checks": [
+            {
+              "kind": "no_result",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-008",
       "category": "检索",
       "question": "列出2025年1月标准数据中的全部天气过程。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["山西省2025年1月天气过程总结-std-case-001", "山西省2025年1月天气过程总结-std-case-002", "山西省2025年1月天气过程总结-std-case-003"],
-      "expected_chunk_ids": ["山西省2025年1月天气过程总结-chunk-004", "山西省2025年1月天气过程总结-chunk-014", "山西省2025年1月天气过程总结-chunk-027"],
-      "required_facts": ["应列出1月的3个标准天气过程"],
-      "forbidden_claims": ["不得把2月天气过程混入1月结果"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "山西省2025年1月天气过程总结-std-case-001",
+        "山西省2025年1月天气过程总结-std-case-002",
+        "山西省2025年1月天气过程总结-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-004",
+        "山西省2025年1月天气过程总结-chunk-014",
+        "山西省2025年1月天气过程总结-chunk-027"
+      ],
+      "required_facts": [
+        "1月11日",
+        "1月14-15日",
+        "1月23-26日",
+        "3个|3次|三次"
+      ],
+      "forbidden_claims": [
+        "不得把2月天气过程混入1月结果"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["时间检索", "月份"],
+      "tags": [
+        "时间检索",
+        "月份"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应列出1月的3个标准天气过程",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "3个",
+                "三次",
+                "3次"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-009",
       "category": "检索",
       "question": "筛选2025年7月持续性高温天气个例。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-7-std-case-005"],
-      "expected_chunk_ids": ["FST2025-7-chunk-043", "FST2025-7-chunk-044"],
-      "required_facts": ["命中的是7月12日至18日持续性高温过程"],
-      "forbidden_claims": ["不得把7月28日至31日高温过程作为唯一结果"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-005"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-043",
+        "FST2025-7-chunk-044"
+      ],
+      "required_facts": [
+        "7月12日至18日持续性高温过程"
+      ],
+      "forbidden_claims": [
+        "不得把7月28日至31日高温过程作为唯一结果"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["灾种检索", "高温"],
+      "tags": [
+        "灾种检索",
+        "高温"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-retrieval-010",
@@ -247,66 +668,170 @@
       "question": "查找2025年4月11日至13日五台山最大阵风资料。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-4-std-case-001"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003"],
-      "required_facts": ["五台山国家站最大阵风为39米每秒", "发生时间为2025年4月13日07:41"],
-      "forbidden_claims": ["不得把神池义井区域站39.7米每秒与五台山国家站混为一谈"],
+      "expected_case_ids": [
+        "FST2025-4-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003"
+      ],
+      "required_facts": [
+        "五台山国家基本气象站|五台山国家站",
+        "39米每秒",
+        "2025年4月13日07:41"
+      ],
+      "forbidden_claims": [
+        "不得把神池义井区域站39.7米每秒与五台山国家站混为一谈"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["空间检索", "极端大风"],
+      "tags": [
+        "空间检索",
+        "极端大风"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-retrieval-011",
       "category": "检索",
       "question": "查找2025年5月冰雹标准个例。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-5-std-case-002"],
-      "expected_chunk_ids": ["FST2025-5-chunk-007", "FST2025-5-chunk-008"],
-      "required_facts": [
-        "应命中FST2025-5-std-case-002（5月8-9日强对流天气过程）",
-        "该过程中阳、方山、蒲县、平顺、忻府区、繁峙、五台兴郑村出现冰雹"
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-002"
       ],
-      "forbidden_claims": ["不得遗漏强对流过程中已记录的冰雹事实，也不得虚构未记录的冰雹站点"],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-007",
+        "FST2025-5-chunk-008"
+      ],
+      "required_facts": [
+        "5月8-9日",
+        "中阳",
+        "方山",
+        "蒲县",
+        "平顺",
+        "忻府区",
+        "繁峙",
+        "五台兴郑村",
+        "冰雹"
+      ],
+      "forbidden_claims": [
+        "不得遗漏强对流过程中已记录的冰雹事实，也不得虚构未记录的冰雹站点"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["冰雹检索", "强对流"],
+      "tags": [
+        "冰雹检索",
+        "强对流"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应命中5月8-9日强对流个例并列出冰雹站点",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            },
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "冰雹"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-retrieval-012",
       "category": "检索",
       "question": "检索2025年1月23日至26日运城区域的雨雪寒潮大风过程。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["山西省2025年1月天气过程总结-std-case-003"],
-      "expected_chunk_ids": ["山西省2025年1月天气过程总结-chunk-027"],
-      "required_facts": ["命中的是1月23日至26日大范围雨雪寒潮大风降温过程"],
-      "forbidden_claims": ["不得返回1月14日至15日寒潮过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "山西省2025年1月天气过程总结-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-027"
+      ],
+      "required_facts": [
+        "1月23日至26日",
+        "雨雪",
+        "寒潮",
+        "大风"
+      ],
+      "forbidden_claims": [
+        "不得返回1月14日至15日寒潮过程"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["时间检索", "空间检索", "复合条件"],
+      "tags": [
+        "时间检索",
+        "空间检索",
+        "复合条件"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-001",
       "category": "统计",
       "question": "统计2025年5月标准数据中共有多少个天气过程？",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-5-std-case-001", "FST2025-5-std-case-002", "FST2025-5-std-case-003", "FST2025-5-std-case-004", "FST2025-5-std-case-005"],
-      "expected_chunk_ids": ["FST2025-5-chunk-003"],
-      "required_facts": ["结果为5个"],
-      "forbidden_claims": ["不得把同一天气过程重复计数"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-001",
+        "FST2025-5-std-case-002",
+        "FST2025-5-std-case-003",
+        "FST2025-5-std-case-004",
+        "FST2025-5-std-case-005"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-003"
+      ],
+      "required_facts": [
+        "5次|5个"
+      ],
+      "forbidden_claims": [
+        "不得把同一天气过程重复计数"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["计数", "分组"],
+      "tags": [
+        "计数",
+        "分组"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-002",
@@ -315,14 +840,32 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-3-chunk-001"],
-      "required_facts": ["平均降水量为14.1毫米", "较常年同期偏多3.4毫米", "距平百分率为31.8%"],
-      "forbidden_claims": ["不得把月降水量极值39.9毫米当作全省平均值"],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-001"
+      ],
+      "required_facts": [
+        "平均降水量为14.1毫米",
+        "较常年同期偏多3.4毫米",
+        "31.8%"
+      ],
+      "forbidden_claims": [
+        "不得把月降水量极值39.9毫米当作全省平均值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["聚合", "降水量"],
+      "tags": [
+        "聚合",
+        "降水量"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-003",
@@ -331,14 +874,32 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-7-chunk-001"],
-      "required_facts": ["最高月平均气温为30.9摄氏度", "出现地点为新绛"],
-      "forbidden_claims": ["不得把单日最高气温40.8摄氏度当作月平均气温"],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-001"
+      ],
+      "required_facts": [
+        "平均气温最高值",
+        "新绛",
+        "30.9摄氏度"
+      ],
+      "forbidden_claims": [
+        "不得把单日最高气温40.8摄氏度当作月平均气温"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["排序", "气温"],
+      "tags": [
+        "排序",
+        "气温"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-004",
@@ -347,30 +908,66 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-7-chunk-002"],
-      "required_facts": ["平均降水量为120.9毫米", "较常年同期偏多6.6毫米", "偏多5.8%"],
-      "forbidden_claims": ["不得用阳高359.3毫米代替全省平均值"],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-002"
+      ],
+      "required_facts": [
+        "平均降水量为120.9毫米",
+        "较常年同期偏多6.6毫米",
+        "偏多5.8%"
+      ],
+      "forbidden_claims": [
+        "不得用阳高359.3毫米代替全省平均值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["聚合", "距平"],
+      "tags": [
+        "聚合",
+        "距平"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-005",
       "category": "统计",
-      "question": "统计2025年6月全省平均降水量及同比变化。",
+      "question": "统计2025年6月全省平均降水量及较常年同期变化。",
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-6-chunk-001"],
-      "required_facts": ["平均降水量为51.3毫米", "较常年同期偏少7.2毫米", "偏少12.3%"],
-      "forbidden_claims": ["不得把寿阳126.6毫米当作全省平均值"],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-001"
+      ],
+      "required_facts": [
+        "平均降水量为51.3毫米",
+        "较常年同期偏少7.2毫米",
+        "偏少12.3%"
+      ],
+      "forbidden_claims": [
+        "不得把寿阳126.6毫米当作全省平均值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["聚合", "降水量"],
+      "tags": [
+        "聚合",
+        "降水量"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-006",
@@ -379,14 +976,31 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-6-chunk-001"],
-      "required_facts": ["最大值为126.6毫米", "地点为寿阳"],
-      "forbidden_claims": ["不得把阳城10.9毫米当作最大值"],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-001"
+      ],
+      "required_facts": [
+        "126.6毫米",
+        "寿阳"
+      ],
+      "forbidden_claims": [
+        "不得把阳城10.9毫米当作最大值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["排序", "极值"],
+      "tags": [
+        "排序",
+        "极值"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-007",
@@ -395,14 +1009,33 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-7-chunk-002"],
-      "required_facts": ["天镇、偏关、河曲、阳高超过300毫米"],
-      "forbidden_claims": ["不得加入未超过300毫米的地点"],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-002"
+      ],
+      "required_facts": [
+        "天镇",
+        "偏关",
+        "河曲",
+        "阳高"
+      ],
+      "forbidden_claims": [
+        "不得加入未超过300毫米的地点"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["筛选", "降水量"],
+      "tags": [
+        "筛选",
+        "降水量"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-statistics-008",
@@ -410,15 +1043,34 @@
       "question": "统计2025年4月11日至13日突破极值的国家站数量。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-4-std-case-001"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003"],
-      "required_facts": ["33个国家站突破4月历史极值", "其中16个国家站突破历史极值"],
-      "forbidden_claims": ["不得把区域站数量混入国家站极值统计"],
+      "expected_case_ids": [
+        "FST2025-4-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003"
+      ],
+      "required_facts": [
+        "33个国家站最大阵风突破4月历史极值|33个国家站突破4月历史极值",
+        "16个国家站突破历史极值"
+      ],
+      "forbidden_claims": [
+        "不得把区域站数量混入国家站极值统计"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["计数", "指标口径"],
+      "tags": [
+        "计数",
+        "指标口径"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-001",
@@ -427,14 +1079,31 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-3-chunk-001"],
-      "required_facts": ["平均气温为6.0摄氏度", "较常年同期偏高0.9摄氏度"],
-      "forbidden_claims": ["不得把月内最低气温0.3摄氏度当作平均值"],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-001"
+      ],
+      "required_facts": [
+        "平均气温为6.0摄氏度",
+        "较常年同期偏高0.9摄氏度"
+      ],
+      "forbidden_claims": [
+        "不得把月内最低气温0.3摄氏度当作平均值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "气温"],
+      "tags": [
+        "原文问答",
+        "气温"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-002",
@@ -442,15 +1111,35 @@
       "question": "2025年4月11日至13日国家站最大阵风出现在哪里，风速多少？",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-4-std-case-001"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003"],
-      "required_facts": ["出现在五台山国家基本气象站", "最大阵风风速为39米每秒"],
-      "forbidden_claims": ["不得回答为神池义井区域站"],
+      "expected_case_ids": [
+        "FST2025-4-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003"
+      ],
+      "required_facts": [
+        "出现在五台山国家基本气象站",
+        "最大阵风风速为39米每秒|最大风速为39米每秒"
+      ],
+      "forbidden_claims": [
+        "不得回答为神池义井区域站"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "证据引用", "极端大风"],
+      "tags": [
+        "原文问答",
+        "证据引用",
+        "极端大风"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-003",
@@ -458,15 +1147,34 @@
       "question": "2025年5月21日至22日期间出现的最高气温是多少，出现在哪里？",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-5-std-case-004"],
-      "expected_chunk_ids": ["FST2025-5-chunk-018"],
-      "required_facts": ["最高气温为41.5摄氏度", "出现在霍州"],
-      "forbidden_claims": ["不得把40摄氏度以上作为具体最高值"],
+      "expected_case_ids": [
+        "FST2025-5-std-case-004"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-018"
+      ],
+      "required_facts": [
+        "最高气温为41.5摄氏度",
+        "出现在霍州"
+      ],
+      "forbidden_claims": [
+        "不得把40摄氏度以上作为具体最高值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "高温"],
+      "tags": [
+        "原文问答",
+        "高温"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-004",
@@ -475,14 +1183,32 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-5-chunk-001"],
-      "required_facts": ["平均降水量为49.2毫米", "较常年同期偏多9.5毫米", "偏多23.9%"],
-      "forbidden_claims": ["不得回答为3月或7月的距平值"],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-001"
+      ],
+      "required_facts": [
+        "平均降水量为49.2毫米",
+        "较常年同期偏多9.5毫米",
+        "偏多23.9%"
+      ],
+      "forbidden_claims": [
+        "不得回答为3月或7月的距平值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "证据引用"],
+      "tags": [
+        "原文问答",
+        "证据引用"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-005",
@@ -491,14 +1217,31 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-6-chunk-001"],
-      "required_facts": ["平均降水量为51.3毫米", "平均气温为23.2摄氏度"],
-      "forbidden_claims": ["不得混用其他月份气候概况数据"],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-001"
+      ],
+      "required_facts": [
+        "平均降水量为51.3毫米",
+        "平均气温为23.2摄氏度"
+      ],
+      "forbidden_claims": [
+        "不得混用其他月份气候概况数据"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "多事实"],
+      "tags": [
+        "原文问答",
+        "多事实"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-006",
@@ -506,15 +1249,35 @@
       "question": "2025年6月13日至14日区域站最大降水出现在哪里，数值是多少？",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-6-std-case-001"],
-      "expected_chunk_ids": ["FST2025-6-chunk-003"],
-      "required_facts": ["区域站最大降水出现在襄垣固村", "数值为92.9毫米"],
-      "forbidden_claims": ["不得把沁县国家站68.7毫米作为区域站最大值"],
+      "expected_case_ids": [
+        "FST2025-6-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-003"
+      ],
+      "required_facts": [
+        "区域站最大降水出现在襄垣固村",
+        "数值为92.9毫米"
+      ],
+      "forbidden_claims": [
+        "不得把沁县国家站68.7毫米作为区域站最大值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "证据引用", "暴雨"],
+      "tags": [
+        "原文问答",
+        "证据引用",
+        "暴雨"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-007",
@@ -523,14 +1286,31 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-7-chunk-001"],
-      "required_facts": ["平均气温为25.7摄氏度", "为1961年以来历史最高"],
-      "forbidden_claims": ["不得只凭单站极值推断全省月平均气温破纪录"],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-001"
+      ],
+      "required_facts": [
+        "平均气温为25.7摄氏度",
+        "为1961年以来历史最高"
+      ],
+      "forbidden_claims": [
+        "不得只凭单站极值推断全省月平均气温破纪录"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "证据引用"],
+      "tags": [
+        "原文问答",
+        "证据引用"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-008",
@@ -539,14 +1319,35 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["FST2025-7-chunk-002"],
-      "required_facts": ["最低值为古县20.5毫米", "最高值为阳高359.3毫米"],
-      "forbidden_claims": ["不得把120.9毫米的全省平均值当作单站极值"],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-002"
+      ],
+      "required_facts": [
+        "最低值",
+        "20.5毫米",
+        "古县",
+        "最高值",
+        "359.3毫米",
+        "阳高"
+      ],
+      "forbidden_claims": [
+        "不得把120.9毫米的全省平均值当作单站极值"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "极值"],
+      "tags": [
+        "原文问答",
+        "极值"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-009",
@@ -555,14 +1356,32 @@
       "conversation_setup": [],
       "expected_route": "rag",
       "expected_case_ids": [],
-      "expected_chunk_ids": ["山西省2025年1月天气过程总结-chunk-001"],
-      "required_facts": ["平均降水量为7.3毫米", "较常年同期偏多3.5毫米", "偏多92.1%"],
-      "forbidden_claims": ["不得引用2月气候概况数据"],
+      "expected_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-001"
+      ],
+      "required_facts": [
+        "平均降水量为7.3毫米",
+        "较常年同期偏多3.5毫米",
+        "偏多92.1%"
+      ],
+      "forbidden_claims": [
+        "不得引用2月气候概况数据"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "证据引用"],
+      "tags": [
+        "原文问答",
+        "证据引用"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-rag-010",
@@ -570,339 +1389,1091 @@
       "question": "列出2025年2月气候概况中记录的主要天气过程。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["山西省2025年2月天气过程总结-std-case-001", "山西省2025年2月天气过程总结-std-case-002"],
-      "expected_chunk_ids": ["山西省2025年2月天气过程总结-chunk-001"],
-      "required_facts": ["2月5日至8日寒潮大风过程", "2月19日至22日雨雪天气过程"],
-      "forbidden_claims": ["不得加入其他月份天气过程"],
+      "expected_case_ids": [
+        "山西省2025年2月天气过程总结-std-case-001",
+        "山西省2025年2月天气过程总结-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年2月天气过程总结-chunk-001"
+      ],
+      "required_facts": [
+        "2月5日至8日寒潮大风过程",
+        "2月19日至22日雨雪天气过程"
+      ],
+      "forbidden_claims": [
+        "不得加入其他月份天气过程"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["原文问答", "列表"],
+      "tags": [
+        "原文问答",
+        "列表"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-similar-001",
       "category": "相似匹配",
       "question": "将2025年5月2日雷暴大风与6月27日至28日强对流过程进行相似性比较。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-5-std-case-001", "FST2025-6-std-case-002"],
-      "expected_chunk_ids": ["FST2025-5-chunk-004", "FST2025-6-chunk-017"],
-      "required_facts": ["两个过程均属于强对流类天气", "应说明时段和影响条件的差异"],
-      "forbidden_claims": ["不得断言两个过程造成完全相同影响"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-001",
+        "FST2025-6-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-004",
+        "FST2025-6-chunk-017"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得断言两个过程造成完全相同影响"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["相似过程", "强对流"],
+      "tags": [
+        "相似过程",
+        "强对流"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "两个过程均属于强对流类天气",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "强对流",
+                "相似",
+                "共同"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "应说明时段和影响条件的差异",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "差异",
+                "不同",
+                "时段",
+                "时间"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-similar-002",
       "category": "相似匹配",
       "question": "比较2025年3月14日至15日暴雪与1月23日至26日雨雪寒潮过程。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-3-std-case-002", "山西省2025年1月天气过程总结-std-case-003"],
-      "expected_chunk_ids": ["FST2025-3-chunk-007", "山西省2025年1月天气过程总结-chunk-027"],
-      "required_facts": ["两个过程均包含明显降雪或雨雪天气", "1月过程的天气类型更复合"],
-      "forbidden_claims": ["不得将两个过程的降水范围和量级视为相同"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-3-std-case-002",
+        "山西省2025年1月天气过程总结-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-007",
+        "山西省2025年1月天气过程总结-chunk-027"
+      ],
+      "required_facts": [
+        "3月14日至15日",
+        "1月23日至26日",
+        "暴雪",
+        "雨雪",
+        "寒潮"
+      ],
+      "forbidden_claims": [
+        "不得将两个过程的降水范围和量级视为相同"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["跨个例对比", "暴雪"],
+      "tags": [
+        "跨个例对比",
+        "暴雪"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": []
     },
     {
       "case_id": "golden-v1-similar-003",
       "category": "相似匹配",
       "question": "对比2025年4月两次大风沙尘过程的主要差异。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-4-std-case-001", "FST2025-4-std-case-002"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003", "FST2025-4-chunk-023"],
-      "required_facts": ["两次过程均涉及大风和沙尘", "应比较起止时间和伴随天气"],
-      "forbidden_claims": ["不得把两次过程合并为同一次天气事件"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-4-std-case-001",
+        "FST2025-4-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003",
+        "FST2025-4-chunk-023"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把两次过程合并为同一次天气事件"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["相似过程", "大风", "沙尘"],
+      "tags": [
+        "相似过程",
+        "大风",
+        "沙尘"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "两次过程均涉及大风和沙尘",
+          "checks": [
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "大风",
+                "沙尘"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "应比较起止时间和伴随天气",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "时间",
+                "伴随",
+                "差异"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-similar-004",
       "category": "相似匹配",
       "question": "找出与2025年7月23日至26日北部暴雨过程接近的7月上旬暴雨个例并比较。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-7-std-case-003", "FST2025-7-std-case-002"],
-      "expected_chunk_ids": ["FST2025-7-chunk-020", "FST2025-7-chunk-013"],
-      "required_facts": ["应比较7月7日至9日和23日至26日两个暴雨过程"],
-      "forbidden_claims": ["不得把7月2日至3日分散性暴雨作为唯一相似个例"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-003",
+        "FST2025-7-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-020",
+        "FST2025-7-chunk-013"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把7月2日至3日分散性暴雨作为唯一相似个例"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["相似过程", "暴雨"],
+      "tags": [
+        "相似过程",
+        "暴雨"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应比较7月7日至9日和23日至26日两个暴雨过程",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "7月7日至9日",
+                "7月7-9日"
+              ]
+            },
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "7月23日至26日",
+                "7月23-26日"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-similar-005",
       "category": "相似匹配",
       "question": "比较2025年7月两段持续性高温天气过程的相似点。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-7-std-case-005", "FST2025-7-std-case-006"],
-      "expected_chunk_ids": ["FST2025-7-chunk-043", "FST2025-7-chunk-055"],
-      "required_facts": ["两个过程均发生在7月且以高温为主要特征", "应指出两段过程各自时段"],
-      "forbidden_claims": ["不得把短时高温过程判定为持续性高温过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-005",
+        "FST2025-7-std-case-006"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-043",
+        "FST2025-7-chunk-055"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把短时高温过程判定为持续性高温过程"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["相似过程", "高温"],
+      "tags": [
+        "相似过程",
+        "高温"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "两个过程均发生在7月且以高温为主要特征",
+          "checks": [
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "7月",
+                "高温"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "应指出两段过程各自时段",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "时段",
+                "日期",
+                "分别"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-similar-006",
       "category": "相似匹配",
       "question": "将2025年1月11日降雪与2月19日至22日雨雪过程进行相似性比较。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["山西省2025年1月天气过程总结-std-case-001", "山西省2025年2月天气过程总结-std-case-002"],
-      "expected_chunk_ids": ["山西省2025年1月天气过程总结-chunk-004", "山西省2025年2月天气过程总结-chunk-025"],
-      "required_facts": ["两个过程均涉及降雪或雨雪天气", "应区分具体发生月份"],
-      "forbidden_claims": ["不得把两个过程混为同一时段"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "山西省2025年1月天气过程总结-std-case-001",
+        "山西省2025年2月天气过程总结-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-004",
+        "山西省2025年2月天气过程总结-chunk-025"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把两个过程混为同一时段"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["跨个例对比", "降雪"],
+      "tags": [
+        "跨个例对比",
+        "降雪"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "两个过程均涉及降雪或雨雪天气",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "降雪",
+                "雨雪"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "应区分具体发生月份",
+          "checks": [
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "1月",
+                "2月"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-similar-007",
       "category": "相似匹配",
       "question": "为2025年5月16日大风过程查找最相近的4月极端大风个例。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-5-std-case-003", "FST2025-4-std-case-001"],
-      "expected_chunk_ids": ["FST2025-5-chunk-012", "FST2025-4-chunk-003"],
-      "required_facts": ["应以大风强度、范围和时段作为相似依据"],
-      "forbidden_claims": ["不得只按月份接近程度判定相似"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-003",
+        "FST2025-4-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-012",
+        "FST2025-4-chunk-003"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得只按月份接近程度判定相似"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["边界匹配", "大风"],
+      "tags": [
+        "边界匹配",
+        "大风"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应以大风强度、范围和时段作为相似依据",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "强度",
+                "风速"
+              ]
+            },
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "范围",
+                "区域"
+              ]
+            },
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "时段",
+                "时间"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-similar-008",
       "category": "相似匹配",
       "question": "在以下候选范围内，找出与2025年2月19日至22日雨雪过程最相近且不含寒潮的个例：2025年2月5日至8日寒潮大风过程、2025年3月1日至3日雨雪天气过程。",
       "conversation_setup": [],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-3-std-case-001"],
-      "expected_chunk_ids": ["FST2025-3-chunk-002"],
-      "required_facts": ["应从候选中选择2025年3月1日至3日雨雪天气过程作为最相近个例"],
-      "forbidden_claims": ["不得返回原过程本身，也不得把2月5日至8日寒潮大风过程作为无寒潮结果"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-3-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-002"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得返回原过程本身，也不得把2月5日至8日寒潮大风过程作为无寒潮结果"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["候选过滤", "排除条件", "相似匹配"],
+      "tags": [
+        "候选过滤",
+        "排除条件",
+        "相似匹配"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应从候选中选择2025年3月1日至3日雨雪天气过程作为最相近个例",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            },
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "3月1日至3日",
+                "3月1-3日"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-001",
       "category": "多轮记忆",
       "question": "把刚才列出的5月个例按灾种分类。",
       "conversation_setup": [
-        {"role": "user", "content": "列出2025年5月的全部标准天气过程。"},
-        {"role": "assistant", "content": "已整理雷暴大风、强对流、大风、高温和暴雨等5个标准个例。"}
+        {
+          "role": "user",
+          "content": "列出2025年5月的全部标准天气过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "已整理雷暴大风、强对流、大风、高温和暴雨等5个标准个例。"
+        }
       ],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-5-std-case-001", "FST2025-5-std-case-002", "FST2025-5-std-case-003", "FST2025-5-std-case-004", "FST2025-5-std-case-005"],
-      "expected_chunk_ids": ["FST2025-5-chunk-003"],
-      "required_facts": ["应沿用上一轮的5月5个个例"],
-      "forbidden_claims": ["不得重新返回全年的个例集合"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-5-std-case-001",
+        "FST2025-5-std-case-002",
+        "FST2025-5-std-case-003",
+        "FST2025-5-std-case-004",
+        "FST2025-5-std-case-005"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-5-chunk-003"
+      ],
+      "required_facts": [
+        "5月",
+        "5个"
+      ],
+      "forbidden_claims": [
+        "不得重新返回全年的个例集合"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["个例承接", "分类"],
+      "tags": [
+        "个例承接",
+        "分类"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应沿用上一轮的5月5个个例",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "5月",
+                "五月"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-002",
       "category": "多轮记忆",
       "question": "只看其中与太原相关的个例。",
       "conversation_setup": [
-        {"role": "user", "content": "检索2025年3月雨雪天气过程。"},
-        {"role": "assistant", "content": "当前候选包括3月1日至3日雨雪过程，影响范围覆盖太原。"}
+        {
+          "role": "user",
+          "content": "检索2025年3月雨雪天气过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "当前候选包括3月1日至3日雨雪过程，影响范围覆盖太原。"
+        }
       ],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-3-std-case-001"],
-      "expected_chunk_ids": ["FST2025-3-chunk-002"],
-      "required_facts": ["应在上一轮候选上增加太原区域条件"],
-      "forbidden_claims": ["不得丢弃上一轮的时间条件"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-3-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-3-chunk-002"
+      ],
+      "required_facts": [
+        "太原"
+      ],
+      "forbidden_claims": [
+        "不得丢弃上一轮的时间条件"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["条件修改", "区域"],
+      "tags": [
+        "条件修改",
+        "区域"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应在上一轮候选上增加太原区域条件",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "太原"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-003",
       "category": "多轮记忆",
       "question": "把日期范围改成2025年4月1日至30日。",
       "conversation_setup": [
-        {"role": "user", "content": "筛选2025年3月的大风过程。"},
-        {"role": "assistant", "content": "已把月份和灾种作为待延续的检索条件。"}
+        {
+          "role": "user",
+          "content": "筛选2025年3月的大风过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "已把月份和灾种作为待延续的检索条件。"
+        }
       ],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-4-std-case-001", "FST2025-4-std-case-002", "FST2025-4-std-case-003"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003", "FST2025-4-chunk-023", "FST2025-4-chunk-027"],
-      "required_facts": ["应保留大风灾种条件并把时间替换为2025年4月，覆盖4月11-13日、4月16-18日和4月20-21日三次大风过程"],
-      "forbidden_claims": ["不得继续只查询3月数据，也不得遗漏4月20-21日降水大风过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-4-std-case-001",
+        "FST2025-4-std-case-002",
+        "FST2025-4-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003",
+        "FST2025-4-chunk-023",
+        "FST2025-4-chunk-027"
+      ],
+      "required_facts": [
+        "2025年4月",
+        "4月11-13日",
+        "4月16-18日",
+        "4月20-21日"
+      ],
+      "forbidden_claims": [
+        "不得继续只查询3月数据，也不得遗漏4月20-21日降水大风过程"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["条件修改", "日期"],
+      "tags": [
+        "条件修改",
+        "日期"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应保留大风灾种条件并把时间替换为2025年4月，覆盖三次大风过程",
+          "checks": [
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "4月11-13日",
+                "4月16-18日",
+                "4月20-21日"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-004",
       "category": "多轮记忆",
       "question": "用刚才这些结果生成一份对比报告。",
       "conversation_setup": [
-        {"role": "user", "content": "比较2025年4月11日至13日和4月16日至18日的大风过程。"},
-        {"role": "assistant", "content": "已得到两个4月大风个例的对比结果。"}
+        {
+          "role": "user",
+          "content": "比较2025年4月11日至13日和4月16日至18日的大风过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "已得到两个4月大风个例的对比结果。"
+        }
       ],
       "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-4-std-case-001", "FST2025-4-std-case-002"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003", "FST2025-4-chunk-023"],
-      "required_facts": ["应复用上一轮的两个个例生成报告"],
-      "forbidden_claims": ["不得重新检索无关月份个例"],
+      "expected_case_ids": [
+        "FST2025-4-std-case-001",
+        "FST2025-4-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003",
+        "FST2025-4-chunk-023"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得重新检索无关月份个例"
+      ],
       "max_latency_ms": 60000,
-      "tags": ["报告复用", "多轮"],
+      "tags": [
+        "报告复用",
+        "多轮"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应复用上一轮的两个个例生成报告",
+          "checks": [
+            {
+              "kind": "route_equals",
+              "values": [
+                "multidim_search"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-005",
       "category": "多轮记忆",
       "question": "继续比较第二个个例与第一个的差异。",
       "conversation_setup": [
-        {"role": "user", "content": "找出2025年7月两段高温过程。"},
-        {"role": "assistant", "content": "第一个是7月12日至18日过程，第二个是7月28日至31日过程。"}
+        {
+          "role": "user",
+          "content": "找出2025年7月两段高温过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "第一个是7月12日至18日过程，第二个是7月28日至31日过程。"
+        }
       ],
-      "expected_route": "similar_case_match",
-      "expected_case_ids": ["FST2025-7-std-case-005", "FST2025-7-std-case-006"],
-      "expected_chunk_ids": ["FST2025-7-chunk-043", "FST2025-7-chunk-055"],
-      "required_facts": ["应依据上一轮顺序识别第一个和第二个个例"],
-      "forbidden_claims": ["不得把序数指向其他天气过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-005",
+        "FST2025-7-std-case-006"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-043",
+        "FST2025-7-chunk-055"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把序数指向其他天气过程"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["个例承接", "序数指代"],
+      "tags": [
+        "个例承接",
+        "序数指代"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应依据上一轮顺序识别第一个和第二个个例",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-006",
       "category": "多轮记忆",
       "question": "继续按我一直偏好的时间顺序展示结果。",
       "conversation_setup": [
-        {"role": "user", "content": "以后查询天气过程时优先按时间正序排列。"},
-        {"role": "assistant", "content": "已记录按时间正序排列的展示偏好。"},
-        {"role": "user", "content": "列出2025年6月的两个标准个例。"},
-        {"role": "assistant", "content": "已得到6月13日至14日和6月27日至28日两个个例。"}
+        {
+          "role": "user",
+          "content": "以后查询天气过程时优先按时间正序排列。"
+        },
+        {
+          "role": "assistant",
+          "content": "已记录按时间正序排列的展示偏好。"
+        },
+        {
+          "role": "user",
+          "content": "列出2025年6月的两个标准个例。"
+        },
+        {
+          "role": "assistant",
+          "content": "已得到6月13日至14日和6月27日至28日两个个例。"
+        }
       ],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-6-std-case-001", "FST2025-6-std-case-002"],
-      "expected_chunk_ids": ["FST2025-6-chunk-003", "FST2025-6-chunk-017"],
-      "required_facts": ["应沿用时间正序的用户偏好"],
-      "forbidden_claims": ["不得改用无依据的倒序排列"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-6-std-case-001",
+        "FST2025-6-std-case-002"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-6-chunk-003",
+        "FST2025-6-chunk-017"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得改用无依据的倒序排列"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["用户偏好", "排序"],
+      "tags": [
+        "用户偏好",
+        "排序"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应沿用时间正序的用户偏好",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "时间",
+                "顺序",
+                "正序"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-007",
       "category": "多轮记忆",
       "question": "刚才提到的最大阵风究竟是哪个站、多少米每秒？",
       "conversation_setup": [
-        {"role": "user", "content": "分析2025年4月11日至13日极端大风过程。"},
-        {"role": "assistant", "content": "原文区分了国家站和区域站的最大阵风记录。"}
+        {
+          "role": "user",
+          "content": "分析2025年4月11日至13日极端大风过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "原文区分了国家站和区域站的最大阵风记录。"
+        }
       ],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-4-std-case-001"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003"],
-      "required_facts": [
-        "应明确区分国家站与区域站口径",
-        "国家站最大阵风风速为39米/秒（13级），出现在五台山国家基本气象站[53588]，时间为2025年4月13日07:41",
-        "区域站最大阵风风速为39.7米/秒（13级），出现在神池义井[B5511]，时间为2025年4月11日17:05"
+      "expected_case_ids": [
+        "FST2025-4-std-case-001"
       ],
-      "forbidden_claims": ["不得把两个站点的风速混为同一记录"],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003"
+      ],
+      "required_facts": [
+        "国家站最大阵风风速为39米每秒|国家站最大阵风为39米每秒|39米/秒",
+        "五台山国家基本气象站[53588]|五台山国家基本气象站",
+        "2025年4月13日07:41",
+        "区域站最大阵风风速为39.7米每秒|区域站最大阵风为39.7米每秒|39.7米/秒",
+        "神池义井[B5511]|神池义井",
+        "2025年4月11日17:05"
+      ],
+      "forbidden_claims": [
+        "不得把两个站点的风速混为同一记录"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["指代消解", "证据引用"],
+      "tags": [
+        "指代消解",
+        "证据引用"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应明确区分国家站与区域站口径",
+          "checks": [
+            {
+              "kind": "answer_contains_all",
+              "values": [
+                "国家站",
+                "区域站"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-008",
       "category": "多轮记忆",
       "question": "把区域从运城改成临汾，再查一次。",
       "conversation_setup": [
-        {"role": "user", "content": "查找2025年1月23日至26日运城的雨雪寒潮过程。"},
-        {"role": "assistant", "content": "已把日期范围和运城区域作为当前检索条件。"}
+        {
+          "role": "user",
+          "content": "查找2025年1月23日至26日运城的雨雪寒潮过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "已把日期范围和运城区域作为当前检索条件。"
+        }
       ],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["山西省2025年1月天气过程总结-std-case-003"],
-      "expected_chunk_ids": ["山西省2025年1月天气过程总结-chunk-027"],
-      "required_facts": ["应保留原日期范围并把区域条件替换为临汾"],
-      "forbidden_claims": ["不得继续只返回运城条件的结果"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "山西省2025年1月天气过程总结-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年1月天气过程总结-chunk-027"
+      ],
+      "required_facts": [
+        "临汾"
+      ],
+      "forbidden_claims": [
+        "不得继续只返回运城条件的结果"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["条件修改", "区域"],
+      "tags": [
+        "条件修改",
+        "区域"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应保留原日期范围并把区域条件替换为临汾",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "临汾"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-009",
       "category": "多轮记忆",
       "question": "在当前结果里只保留暴雨过程。",
       "conversation_setup": [
-        {"role": "user", "content": "列出2025年7月的标准天气过程。"},
-        {"role": "assistant", "content": "当前结果包含分散性暴雨、暴雨、北部暴雨、强对流和两段高温过程。"}
+        {
+          "role": "user",
+          "content": "列出2025年7月的标准天气过程。"
+        },
+        {
+          "role": "assistant",
+          "content": "当前结果包含分散性暴雨、暴雨、北部暴雨、强对流和两段高温过程。"
+        }
       ],
-      "expected_route": "multidim_search",
-      "expected_case_ids": ["FST2025-7-std-case-001", "FST2025-7-std-case-002", "FST2025-7-std-case-003"],
-      "expected_chunk_ids": ["FST2025-7-chunk-002", "FST2025-7-chunk-013", "FST2025-7-chunk-020"],
-      "required_facts": ["应从当前7月结果中保留3个暴雨过程"],
-      "forbidden_claims": ["不得混入高温或强对流过程"],
+      "expected_route": "rag",
+      "expected_case_ids": [
+        "FST2025-7-std-case-001",
+        "FST2025-7-std-case-002",
+        "FST2025-7-std-case-003"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-002",
+        "FST2025-7-chunk-013",
+        "FST2025-7-chunk-020"
+      ],
+      "required_facts": [
+        "暴雨",
+        "3个|3次|三次"
+      ],
+      "forbidden_claims": [
+        "不得混入高温或强对流过程"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["结果筛选", "多轮"],
+      "tags": [
+        "结果筛选",
+        "多轮"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应从当前7月结果中保留3个暴雨过程",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "3个",
+                "三次",
+                "3次"
+              ]
+            },
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-memory-010",
       "category": "多轮记忆",
       "question": "基于上一轮结果再补充一条原文证据。",
       "conversation_setup": [
-        {"role": "user", "content": "2025年2月5日至8日寒潮大风过程有哪些影响？"},
-        {"role": "assistant", "content": "回答引用了2月气候过程总结中的对应切片。"}
+        {
+          "role": "user",
+          "content": "2025年2月5日至8日寒潮大风过程有哪些影响？"
+        },
+        {
+          "role": "assistant",
+          "content": "回答引用了2月气候过程总结中的对应切片。"
+        }
       ],
       "expected_route": "rag",
-      "expected_case_ids": ["山西省2025年2月天气过程总结-std-case-001"],
-      "expected_chunk_ids": ["山西省2025年2月天气过程总结-chunk-004", "山西省2025年2月天气过程总结-chunk-005"],
-      "required_facts": ["应继续围绕2月5日至8日寒潮大风过程补充证据"],
-      "forbidden_claims": ["不得改为引用2月19日至22日过程"],
+      "expected_case_ids": [
+        "山西省2025年2月天气过程总结-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "山西省2025年2月天气过程总结-chunk-004",
+        "山西省2025年2月天气过程总结-chunk-005"
+      ],
+      "required_facts": [
+        "2月5日至8日"
+      ],
+      "forbidden_claims": [
+        "不得改为引用2月19日至22日过程"
+      ],
       "max_latency_ms": 45000,
-      "tags": ["证据承接", "多轮"],
+      "tags": [
+        "证据承接",
+        "多轮"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应继续围绕2月5日至8日寒潮大风过程补充证据",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-fault-001",
@@ -912,13 +2483,37 @@
       "expected_route": "clarify",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应说明当前知识库不包含火星观测数据"],
-      "forbidden_claims": ["不得编造火星观测数值"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得编造火星观测数值"
+      ],
       "max_latency_ms": 15000,
-      "tags": ["无知识", "拒答"],
+      "tags": [
+        "无知识",
+        "拒答"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应说明当前知识库不包含火星观测数据",
+          "checks": [
+            {
+              "kind": "route_equals",
+              "values": [
+                "clarify"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-fault-002",
@@ -926,15 +2521,53 @@
       "question": "在聊天模型不可用时，仍返回2025年7月28日强对流过程的已有证据摘要。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-7-std-case-004"],
-      "expected_chunk_ids": ["FST2025-7-chunk-038"],
-      "required_facts": ["应明确模型服务不可用", "应保留已检索到的权威证据"],
-      "forbidden_claims": ["不得伪造模型生成的完整分析"],
+      "expected_case_ids": [
+        "FST2025-7-std-case-004"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-7-chunk-038"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得伪造模型生成的完整分析"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["模型不可用", "降级"],
+      "tags": [
+        "模型不可用",
+        "降级"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应明确模型服务不可用",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "模型",
+                "服务"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "应保留已检索到的权威证据",
+          "checks": [
+            {
+              "kind": "evidence_hit",
+              "values": []
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-fault-003",
@@ -942,15 +2575,46 @@
       "question": "向量库不可用时，检索2025年4月11日至13日极端大风的权威原文。",
       "conversation_setup": [],
       "expected_route": "rag",
-      "expected_case_ids": ["FST2025-4-std-case-001"],
-      "expected_chunk_ids": ["FST2025-4-chunk-003"],
-      "required_facts": ["应明确记录向量检索降级", "应返回真实权威原文或明确空结果"],
-      "forbidden_claims": ["不得把词面向量结果标为向量库命中"],
+      "expected_case_ids": [
+        "FST2025-4-std-case-001"
+      ],
+      "expected_chunk_ids": [
+        "FST2025-4-chunk-003"
+      ],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把词面向量结果标为向量库命中"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["向量降级", "真实结果"],
+      "tags": [
+        "向量降级",
+        "真实结果"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应明确记录向量检索降级",
+          "checks": [
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "降级",
+                "向量",
+                "原文",
+                "空结果"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-fault-004",
@@ -960,13 +2624,37 @@
       "expected_route": "clarify",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应拒绝跨用户读取会话记忆"],
-      "forbidden_claims": ["不得返回其他用户的查询内容"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得返回其他用户的查询内容"
+      ],
       "max_latency_ms": 15000,
-      "tags": ["跨用户隔离", "安全"],
+      "tags": [
+        "跨用户隔离",
+        "安全"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应拒绝跨用户读取会话记忆",
+          "checks": [
+            {
+              "kind": "route_equals",
+              "values": [
+                "clarify"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-fault-005",
@@ -976,29 +2664,92 @@
       "expected_route": "clarify",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应说明无法据此断言未来必然发生特大暴雨"],
-      "forbidden_claims": ["不得把历史个例直接当作未来确定性预测"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得把历史个例直接当作未来确定性预测"
+      ],
       "max_latency_ms": 20000,
-      "tags": ["能力边界", "拒答"],
+      "tags": [
+        "能力边界",
+        "拒答"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应说明无法据此断言未来必然发生特大暴雨",
+          "checks": [
+            {
+              "kind": "route_equals",
+              "values": [
+                "clarify"
+              ]
+            },
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "无法",
+                "不确定",
+                "不能"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "case_id": "golden-v1-fault-006",
       "category": "故障场景",
       "question": "查找2025年9月山西霜冻标准个例。",
       "conversation_setup": [],
-      "expected_route": "multidim_search",
+      "expected_route": "rag",
       "expected_case_ids": [],
       "expected_chunk_ids": [],
-      "required_facts": ["应明确权威标准个例中没有2025年9月记录"],
-      "forbidden_claims": ["不得用4月霜冻描述伪造9月个例"],
+      "required_facts": [],
+      "forbidden_claims": [
+        "不得用4月霜冻描述伪造9月个例"
+      ],
       "max_latency_ms": 30000,
-      "tags": ["无结果识别", "权威缺失"],
+      "tags": [
+        "无结果识别",
+        "权威缺失"
+      ],
       "knowledge_version": "standard-cases-2025-v1",
       "prompt_version": "enterprise-runtime-v1",
-      "model_config": {"provider": "dashscope", "chat_model": "qwen-plus", "embedding_model": "text-embedding-v4", "temperature": 0, "seed": 42}
+      "model_config": {
+        "provider": "dashscope",
+        "chat_model": "qwen-plus",
+        "embedding_model": "text-embedding-v4",
+        "temperature": 0,
+        "seed": 42
+      },
+      "expected_behaviors": [
+        {
+          "description": "应明确权威标准个例中没有2025年9月记录",
+          "checks": [
+            {
+              "kind": "no_result",
+              "values": []
+            },
+            {
+              "kind": "answer_contains_any",
+              "values": [
+                "没有",
+                "未找到",
+                "无匹配",
+                "不存在"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

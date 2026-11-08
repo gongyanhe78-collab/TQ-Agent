@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import unittest
 
+from backend.app.core.config import get_settings
 from backend.app.services.model_client.chat import DashScopeChatClient, get_intent_llm_client
 from backend.app.services.model_client.embedding import DashScopeEmbeddingClient
 from backend.app.services.model_client.rerank import DashScopeRerankClient
@@ -130,7 +131,7 @@ class ModelClientCacheTests(unittest.TestCase):
         self.assertEqual(answer, '{"intent":"rag"}')
         self.assertEqual(capture.chat.completions.options["extra_body"], {"enable_thinking": False})
         self.assertEqual(capture.chat.completions.options["response_format"], {"type": "json_object"})
-        self.assertEqual(intent_client.max_retries, 0)
+        self.assertEqual(intent_client.max_retries, get_settings().model_intent_max_retries)
         self.assertIsNone(default_client.enable_thinking)
         self.assertIsNone(default_client.max_retries)
 

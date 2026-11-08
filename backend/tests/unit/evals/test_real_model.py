@@ -6,10 +6,14 @@ from backend.evals.metrics.answer import (
     forbidden_claim_count,
     required_fact_coverage,
 )
+from backend.app.agents.case_multidim_search.schemas import CaseSearchQuery
 from backend.evals.runners.real_model import (
+    真实模型执行器,
     _判断拒答,
     _提取引用证据,
     _构建记忆上下文,
+    _窗口超出知识范围,
+    _是否模型降级演练,
 )
 
 
@@ -51,6 +55,36 @@ def test_abstention_requires_clarify_or_explicit_refusal() -> None:
     assert _判断拒答("请补充具体日期。", "clarify", False) is True
 
 
+def test_answer_generation_uses_production_token_budget() -> None:
+    """真实评测回答不能使用低于生产默认值的 800 token 截断预算。"""
+
+    class RecordingChat:
+        """记录回答调用参数，不访问外部模型。"""
+
+        def __init__(self) -> None:
+            self.max_tokens = None
+
+        def answer_with_context(self, _question, _blocks, *, max_tokens):
+            self.max_tokens = max_tokens
+            return "完整回答"
+
+    recorder = RecordingChat()
+    runner = object.__new__(真实模型执行器)
+    runner.llm_client = recorder
+    runner._证据上下文 = lambda chunk_ids, case_ids, route: ["证据块"]
+    runner._记忆上下文块 = lambda memory: ""
+
+    answer = runner._生成回答(
+        "测试问题",
+        chunk_ids=["chunk-1"],
+        case_ids=[],
+        route="rag",
+    )
+
+    assert answer == "完整回答"
+    assert recorder.max_tokens == 2048
+
+
 def test_required_fact_coverage_normalizes_temperature_units() -> None:
     """℃ 与“摄氏度”应视为同一事实，空白不影响覆盖判断。"""
 
@@ -63,3 +97,25 @@ def test_forbidden_claim_count_ignores_whitespace_differences() -> None:
     """禁止结论的匹配同样忽略空白差异，避免漏判。"""
 
     assert forbidden_claim_count("一定 会出现特大暴雨", ["一定会出现特大暴雨"]) == 1
+
+
+def test_explicit_query_window_detects_out_of_knowledge_range() -> None:
+    """2025年8月查询必须被识别为超出当前知识库截止日期。"""
+
+    assert _窗口超出知识范围(
+        CaseSearchQuery(years=[2025], months=[8]),
+        "2025-01-11",
+        "2025-07-31",
+    ) is True
+    assert _窗口超出知识范围(
+        CaseSearchQuery(years=[2025], months=[7]),
+        "2025-01-11",
+        "2025-07-31",
+    ) is False
+
+
+def test_model_degradation_drill_detection() -> None:
+    """只有明确的模型不可用演练才走确定性证据摘要。"""
+
+    assert _是否模型降级演练("在聊天模型不可用时，仍返回已有证据摘要。") is True
+    assert _是否模型降级演练("检索2025年8月山西暴雪标准个例。") is False
