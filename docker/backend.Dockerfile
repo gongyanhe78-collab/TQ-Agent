@@ -51,6 +51,8 @@ WORKDIR /app
 
 COPY --from=builder /opt/venv /opt/venv
 COPY --chown=appuser:appuser alembic.ini ./alembic.ini
+COPY --chown=appuser:appuser requirements-dev.txt ./requirements-dev.txt
+COPY --chown=appuser:appuser pyproject.toml ./pyproject.toml
 COPY --chown=appuser:appuser backend ./backend
 COPY --chown=appuser:appuser scripts ./scripts
 COPY --chown=appuser:appuser docker ./docker

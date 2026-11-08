@@ -5,6 +5,7 @@ from collections import OrderedDict
 from threading import Lock
 
 from backend.app.core.config import get_settings
+from backend.app.core.resilience import CircuitOpenError, get_circuit_breaker
 
 
 class DashScopeEmbeddingClient:
@@ -26,6 +27,13 @@ class DashScopeEmbeddingClient:
         self._client_lock = Lock()
         self._query_cache: OrderedDict[str, list[float]] = OrderedDict()
         self._query_cache_lock = Lock()
+        # 熔断器：向量服务连续失败后快速失败，由上层回退结构化检索。
+        self._breaker = get_circuit_breaker(
+            "embedding",
+            failure_threshold=settings.circuit_failure_threshold,
+            cooldown_seconds=settings.circuit_cooldown_seconds,
+        )
+        self._read_timeout_seconds = settings.model_read_timeout_seconds
         self._query_cache_limit = 256
 
     def is_available(self) -> bool:
@@ -40,13 +48,20 @@ class DashScopeEmbeddingClient:
         """按批次调用云端 Embedding 接口。"""
         if not self.is_available():
             raise RuntimeError("未配置 DashScope API Key，无法调用云端向量模型")
+        if not self._breaker.allow():
+            raise CircuitOpenError(f"服务 {self._breaker.name} 熔断打开")
         client = self._client()
         embeddings: list[list[float]] = []
-        for start in range(0, len(texts), self.batch_size):
-            batch = texts[start:start + self.batch_size]
-            response = client.embeddings.create(model=self.model, input=batch)
-            embeddings.extend(item.embedding for item in response.data)
-        return embeddings
+        try:
+            for start in range(0, len(texts), self.batch_size):
+                batch = texts[start:start + self.batch_size]
+                response = client.embeddings.create(model=self.model, input=batch)
+                embeddings.extend(item.embedding for item in response.data)
+            self._breaker.record_success()
+            return embeddings
+        except Exception:
+            self._breaker.record_failure()
+            raise
 
     def embed_query(self, text: str) -> list[float]:
         """为单条用户查询生成云端向量。"""
@@ -69,7 +84,11 @@ class DashScopeEmbeddingClient:
             if self._openai_client is None:
                 from openai import OpenAI
 
-                self._openai_client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+                self._openai_client = OpenAI(
+                    api_key=self.api_key,
+                    base_url=self.base_url,
+                    timeout=self._read_timeout_seconds,
+                )
             return self._openai_client
 
 

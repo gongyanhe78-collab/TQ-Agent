@@ -7,6 +7,7 @@ from collections import OrderedDict
 from threading import Lock
 
 from backend.app.core.config import get_settings
+from backend.app.core.resilience import CircuitOpenError, get_circuit_breaker
 
 
 def _rerank_document_text(hit) -> str:
@@ -62,6 +63,12 @@ class DashScopeRerankClient:
         self._client_lock = Lock()
         self._result_cache: OrderedDict[str, list[int]] = OrderedDict()
         self._cache_lock = Lock()
+        # 熔断器：重排序连续失败后快速失败，由 ModelFirstReranker 回退关键词排序。
+        self._breaker = get_circuit_breaker(
+            "rerank",
+            failure_threshold=settings.circuit_failure_threshold,
+            cooldown_seconds=settings.circuit_cooldown_seconds,
+        )
         self._cache_limit = 128
 
     def is_available(self) -> bool:
@@ -90,8 +97,15 @@ class DashScopeRerankClient:
             if cached_indices is not None:
                 self._result_cache[cache_key] = cached_indices
                 return [hits[index] for index in cached_indices if 0 <= index < len(hits)][:top_n]
-        response = self._post(payload)
-        results = self._extract_results(response.json())
+        if not self._breaker.allow():
+            raise CircuitOpenError(f"服务 {self._breaker.name} 熔断打开")
+        try:
+            response = self._post(payload)
+            results = self._extract_results(response.json())
+            self._breaker.record_success()
+        except Exception:
+            self._breaker.record_failure()
+            raise
         if not results:
             raise RuntimeError("rerank 响应没有返回有效结果")
         ordered = []

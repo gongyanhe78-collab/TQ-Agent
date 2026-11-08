@@ -8,7 +8,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -209,6 +208,28 @@ class Settings:
     )
     dashscope_rerank_endpoint: str = field(
         default_factory=lambda: os.getenv("DASHSCOPE_RERANK_ENDPOINT", "")
+    )
+
+    # 模型与外部服务降级：统一超时和熔断参数，连续失败时快速失败。
+    model_read_timeout_seconds: float = field(
+        default_factory=lambda: float(
+            _env_value("MODEL_READ_TIMEOUT_SECONDS", "60")
+        )
+    )
+    model_connect_timeout_seconds: float = field(
+        default_factory=lambda: float(
+            _env_value("MODEL_CONNECT_TIMEOUT_SECONDS", "10")
+        )
+    )
+    circuit_failure_threshold: int = field(
+        default_factory=lambda: int(
+            _env_value("CIRCUIT_FAILURE_THRESHOLD", "5")
+        )
+    )
+    circuit_cooldown_seconds: float = field(
+        default_factory=lambda: float(
+            _env_value("CIRCUIT_COOLDOWN_SECONDS", "30")
+        )
     )
 
     # 开放域联网搜索：普通聊天模型直接回答库外问题并启用联网搜索。

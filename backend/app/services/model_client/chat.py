@@ -2,13 +2,14 @@
 from __future__ import annotations
 
 import json
-from threading import Lock
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
+from threading import Lock
+from typing import Any
 
 from backend.app.core.config import get_settings
+from backend.app.core.resilience import CircuitOpenError, get_circuit_breaker
 from backend.app.models import ExtractedCase
-
 
 SYSTEM_PROMPT = (
     "你是一个气象灾害个例抽取助手。基于章节标题和正文判断是否属于灾害天气个例，"
@@ -54,6 +55,13 @@ class DashScopeChatClient:
         self.model = model or settings.dashscope_chat_model
         self.enable_thinking = enable_thinking
         self.max_retries = max_retries
+        # 熔断器：连续失败后快速失败，冷却窗口结束后自动恢复探测。
+        self._breaker = get_circuit_breaker(
+            "chat",
+            failure_threshold=settings.circuit_failure_threshold,
+            cooldown_seconds=settings.circuit_cooldown_seconds,
+        )
+        self._read_timeout_seconds = settings.model_read_timeout_seconds
         self._openai_client = None
         self._client_lock = Lock()
 
@@ -70,12 +78,28 @@ class DashScopeChatClient:
                 from openai import OpenAI
 
                 # 复用连接池可以减少每次意图、RAG 和 Agent 调用前的握手耗时。
-                client_options = {"api_key": self.api_key, "base_url": self.base_url}
+                client_options = {
+                    "api_key": self.api_key,
+                    "base_url": self.base_url,
+                    "timeout": self._read_timeout_seconds,
+                }
                 if self.max_retries is not None:
                     # 意图判断失败后已有本地安全兜底，不应让 SDK 自动重试阻塞统一入口。
                     client_options["max_retries"] = self.max_retries
                 self._openai_client = OpenAI(**client_options)
             return self._openai_client
+
+    def _guard(self) -> None:
+        """熔断打开时快速失败，避免每个请求重复等待不可用服务。"""
+        if not self._breaker.allow():
+            raise CircuitOpenError(f"服务 {self._breaker.name} 熔断打开")
+
+    def _finish(self, ok: bool) -> None:
+        """记录本次调用成功或失败，用于熔断状态转换。"""
+        if ok:
+            self._breaker.record_success()
+        else:
+            self._breaker.record_failure()
 
     def refine_case(self, candidate: ExtractedCase) -> LlmRefinementResult:
         """调用云端模型判断并精炼候选个例。"""
@@ -94,30 +118,36 @@ class DashScopeChatClient:
             "date_range": candidate.date_range,
             "content": candidate.content,
         }
-        completion = self._client().chat.completions.create(
-            model=self.model,
-            temperature=0.3,
-            response_format={"type": "json_object"},
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": (
-                        "请判断以下章节是否属于灾害个例，并返回 JSON："
-                        '{"is_case": bool, "title": str, "date_range": str, "content": str, "reason": str}\n'
-                        + json.dumps(prompt, ensure_ascii=False)
-                    ),
-                },
-            ],
-        )
-        data = json.loads(completion.choices[0].message.content or "{}")
-        return LlmRefinementResult(
-            is_case=bool(data.get("is_case")),
-            title=str(data.get("title", candidate.title)),
-            date_range=str(data.get("date_range", candidate.date_range)),
-            content=str(data.get("content", candidate.content)),
-            reason=str(data.get("reason", "")),
-        )
+        self._guard()
+        try:
+            completion = self._client().chat.completions.create(
+                model=self.model,
+                temperature=0.3,
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {
+                        "role": "user",
+                        "content": (
+                            "请判断以下章节是否属于灾害个例，并返回 JSON："
+                            '{"is_case": bool, "title": str, "date_range": str, "content": str, "reason": str}\n'
+                            + json.dumps(prompt, ensure_ascii=False)
+                        ),
+                    },
+                ],
+            )
+            data = json.loads(completion.choices[0].message.content or "{}")
+            self._finish(True)
+            return LlmRefinementResult(
+                is_case=bool(data.get("is_case")),
+                title=str(data.get("title", candidate.title)),
+                date_range=str(data.get("date_range", candidate.date_range)),
+                content=str(data.get("content", candidate.content)),
+                reason=str(data.get("reason", "")),
+            )
+        except Exception:
+            self._finish(False)
+            raise
 
     def answer_with_context(
         self,
@@ -149,8 +179,14 @@ class DashScopeChatClient:
         if json_mode:
             # 结构化意图调用启用 JSON 模式，避免代码围栏或解释文字破坏任务计划解析。
             request_options["response_format"] = {"type": "json_object"}
-        completion = self._client().chat.completions.create(**request_options)
-        return completion.choices[0].message.content or ""
+        self._guard()
+        try:
+            completion = self._client().chat.completions.create(**request_options)
+            self._finish(True)
+            return completion.choices[0].message.content or ""
+        except Exception:
+            self._finish(False)
+            raise
 
     def stream_answer_with_context(
         self,
@@ -167,27 +203,33 @@ class DashScopeChatClient:
             extra_body["enable_search"] = True
             if forced_search:
                 extra_body["search_options"] = {"forced_search": True}
-        stream = self._client().chat.completions.create(
-            model=self.model,
-            temperature=0.3,
-            stream=True,
-            extra_body=extra_body,
-            # 主 RAG 的自然承接语和正文共用一次流式生成，不再另起后处理模型请求。
-            messages=self._answer_messages(
-                question,
-                context_blocks,
-                include_closing=True,
-                session_guidance_prompt=session_guidance_prompt,
-            ),
-        )
-        for chunk in stream:
-            choices = getattr(chunk, "choices", None) or []
-            if not choices:
-                continue
-            delta = getattr(choices[0], "delta", None)
-            text = getattr(delta, "content", None) if delta else None
-            if text:
-                yield text
+        self._guard()
+        try:
+            stream = self._client().chat.completions.create(
+                model=self.model,
+                temperature=0.3,
+                stream=True,
+                extra_body=extra_body,
+                # 主 RAG 的自然承接语和正文共用一次流式生成，不再另起后处理模型请求。
+                messages=self._answer_messages(
+                    question,
+                    context_blocks,
+                    include_closing=True,
+                    session_guidance_prompt=session_guidance_prompt,
+                ),
+            )
+            for chunk in stream:
+                choices = getattr(chunk, "choices", None) or []
+                if not choices:
+                    continue
+                delta = getattr(choices[0], "delta", None)
+                text = getattr(delta, "content", None) if delta else None
+                if text:
+                    yield text
+            self._finish(True)
+        except Exception:
+            self._finish(False)
+            raise
 
     def stream_general_chat(
         self,
@@ -205,27 +247,33 @@ class DashScopeChatClient:
             extra_body["enable_search"] = True
             if forced_search:
                 extra_body["search_options"] = {"forced_search": True}
-        stream = self._client().chat.completions.create(
-            model=self.model,
-            temperature=0.3,
-            stream=True,
-            extra_body=extra_body,
-            messages=[
-                {
-                    "role": "system",
-                    "content": system_prompt or general_chat_system_prompt(),
-                },
-                {"role": "user", "content": str(question)},
-            ],
-        )
-        for chunk in stream:
-            choices = getattr(chunk, "choices", None) or []
-            if not choices:
-                continue
-            delta = getattr(choices[0], "delta", None)
-            text = getattr(delta, "content", None) if delta else None
-            if text:
-                yield text
+        self._guard()
+        try:
+            stream = self._client().chat.completions.create(
+                model=self.model,
+                temperature=0.3,
+                stream=True,
+                extra_body=extra_body,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": system_prompt or general_chat_system_prompt(),
+                    },
+                    {"role": "user", "content": str(question)},
+                ],
+            )
+            for chunk in stream:
+                choices = getattr(chunk, "choices", None) or []
+                if not choices:
+                    continue
+                delta = getattr(choices[0], "delta", None)
+                text = getattr(delta, "content", None) if delta else None
+                if text:
+                    yield text
+            self._finish(True)
+        except Exception:
+            self._finish(False)
+            raise
 
     def normalize_feedback_guidance(
         self,
@@ -444,3 +492,4 @@ def get_followup_llm_client() -> DashScopeChatClient:
         enable_thinking=False,
         max_retries=0,
     )
+
