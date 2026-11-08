@@ -12,11 +12,7 @@
     @submit="handleLogin"
   />
 
-  <el-container
-    v-else
-    class="app-shell"
-    :class="{ 'session-collapsed': sessionPanelCollapsed }"
-  >
+  <el-container v-else class="app-shell" :class="{ 'session-collapsed': sessionPanelCollapsed }">
     <SessionList
       class="session-column"
       :class="{ collapsed: sessionPanelCollapsed }"
@@ -146,7 +142,9 @@ const loadSessionMessages = async (sessionId) => {
 };
 
 // 同一原问题的所有助手版本折叠为一个显示槽，切换时整条回答及其操作状态同步变化。
-const displayMessages = computed(() => buildDisplayedMessages(chatMessages.value, selectedVersionByGroup));
+const displayMessages = computed(() =>
+  buildDisplayedMessages(chatMessages.value, selectedVersionByGroup)
+);
 
 const ensureActiveSession = async () => {
   await loadSessions();
@@ -198,13 +196,16 @@ const makeSessionTitle = (text) => {
   return (cleaned || value).slice(0, 14);
 };
 
-const activeSession = () => sessions.value.find((session) => session.session_id === activeSessionId.value);
+const activeSession = () =>
+  sessions.value.find((session) => session.session_id === activeSessionId.value);
 
 const renameNewSessionAfterFirstQuestion = async (questionText) => {
   const session = activeSession();
   if (!session || chatMessages.value.length > 0 || session.title !== "新会话") return;
   const updated = await updateSessionTitle(session.session_id, makeSessionTitle(questionText));
-  sessions.value = sessions.value.map((item) => (item.session_id === updated.session_id ? updated : item));
+  sessions.value = sessions.value.map((item) =>
+    item.session_id === updated.session_id ? updated : item
+  );
 };
 
 const handleCreateSession = async (title = "新会话") => {
@@ -310,18 +311,20 @@ const streamAssistantAnswer = async (text, assistantMessage, extraPayload = {}) 
           assistantMessage.images = metadataImages.length
             ? metadataImages
             : imagesFromHits(metadata.hits || []);
-          assistantMessage.image_display_mode = metadata.image_display_mode || assistantMessage.image_display_mode;
+          assistantMessage.image_display_mode =
+            metadata.image_display_mode || assistantMessage.image_display_mode;
           assistantMessage.visuals = metadata.visuals || [];
           assistantMessage.reports = metadata.reports || [];
           // 正文结束后的轻量 metadata 会先于 done 到达，用它立即启用消息操作。
           assistantMessage.message_id = metadata.message_id || assistantMessage.message_id;
-          assistantMessage.regenerated_from_message_id = metadata.regenerated_from_message_id
-            || assistantMessage.regenerated_from_message_id;
-          assistantMessage.regeneration_instruction = metadata.regeneration_instruction
-            || assistantMessage.regeneration_instruction;
-          assistantMessage.source_user_message_id = metadata.source_user_message_id
-            || assistantMessage.source_user_message_id;
-          assistantMessage.version_group_id = metadata.version_group_id || assistantMessage.version_group_id;
+          assistantMessage.regenerated_from_message_id =
+            metadata.regenerated_from_message_id || assistantMessage.regenerated_from_message_id;
+          assistantMessage.regeneration_instruction =
+            metadata.regeneration_instruction || assistantMessage.regeneration_instruction;
+          assistantMessage.source_user_message_id =
+            metadata.source_user_message_id || assistantMessage.source_user_message_id;
+          assistantMessage.version_group_id =
+            metadata.version_group_id || assistantMessage.version_group_id;
           assistantMessage.version = metadata.version || assistantMessage.version;
         },
         onDelta: (delta) => {
@@ -331,15 +334,17 @@ const streamAssistantAnswer = async (text, assistantMessage, extraPayload = {}) 
           assistantMessage.reports = payload.reports || assistantMessage.reports;
           assistantMessage.message_id = payload.message_id || assistantMessage.message_id;
           assistantMessage.status = payload.status || "completed";
-          assistantMessage.regenerated_from_message_id = payload.regenerated_from_message_id || null;
+          assistantMessage.regenerated_from_message_id =
+            payload.regenerated_from_message_id || null;
           assistantMessage.regeneration_instruction = payload.regeneration_instruction || "";
           assistantMessage.source_user_message_id = payload.source_user_message_id || null;
-          assistantMessage.version_group_id = payload.version_group_id || assistantMessage.version_group_id;
+          assistantMessage.version_group_id =
+            payload.version_group_id || assistantMessage.version_group_id;
           assistantMessage.version = payload.version || 1;
           await loadSessions();
         },
       },
-      { signal: controller.signal },
+      { signal: controller.signal }
     );
   } catch (error) {
     handleStreamFailure(assistantMessage, error);
@@ -376,10 +381,14 @@ const handleRegenerate = async (request) => {
   if (queryLoading.value || !message?.message_id || !activeSessionId.value) return;
   const assistantMessage = pushLocalMessage("assistant", "");
   assistantMessage.regenerated_from_message_id = message.message_id;
-  assistantMessage.version_group_id = message.version_group_id || resolveVersionGroup(
-    message,
-    new Map(chatMessages.value.filter((item) => item.message_id).map((item) => [item.message_id, item])),
-  );
+  assistantMessage.version_group_id =
+    message.version_group_id ||
+    resolveVersionGroup(
+      message,
+      new Map(
+        chatMessages.value.filter((item) => item.message_id).map((item) => [item.message_id, item])
+      )
+    );
   assistantMessage.version = Number(message.version_navigation?.total || message.version || 1) + 1;
   // 新版本生成时回到该组最新答案；用户之后仍可通过 1 / N 导航查看旧版本。
   delete selectedVersionByGroup[assistantMessage.version_group_id];

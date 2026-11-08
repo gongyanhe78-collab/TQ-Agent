@@ -38,10 +38,7 @@
 
     <ChatComposer ref="composerRef" :loading="loading" @submit="emit('query', $event)" />
 
-    <EvidencePreview
-      v-model:open="imagePreviewOpen"
-      :image="imagePreview"
-    />
+    <EvidencePreview v-model:open="imagePreviewOpen" :image="imagePreview" />
   </section>
 </template>
 
@@ -102,15 +99,19 @@ const openImagePreview = (image) => {
 
 // 新消息和流式增量到达时保持视图停留在最新内容。
 watch(
-  () => props.messages
-    .map((message) => `${message.local_id || message.message_id}:${message.content}:${message.progress?.message || ""}`)
-    .join("|"),
+  () =>
+    props.messages
+      .map(
+        (message) =>
+          `${message.local_id || message.message_id}:${message.content}:${message.progress?.message || ""}`
+      )
+      .join("|"),
   async () => {
     await nextTick();
     if (messageList.value) {
       messageList.value.scrollTop = messageList.value.scrollHeight;
     }
-  },
+  }
 );
 </script>
 

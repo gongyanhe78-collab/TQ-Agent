@@ -8,7 +8,9 @@
       placeholder="输入问题"
       @keydown.ctrl.enter.prevent="submit"
     />
-    <el-button type="primary" native-type="submit" :icon="Promotion" :loading="loading">发送</el-button>
+    <el-button type="primary" native-type="submit" :icon="Promotion" :loading="loading"
+      >发送</el-button
+    >
   </form>
 </template>
 
@@ -54,7 +56,9 @@ defineExpose({ setQuestion });
 .composer :deep(.el-textarea__inner) {
   background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 0 0 1px #deded9 inset, 0 5px 18px rgba(35, 35, 32, 0.06);
+  box-shadow:
+    0 0 0 1px #deded9 inset,
+    0 5px 18px rgba(35, 35, 32, 0.06);
   color: #292927;
   font-family: inherit;
   min-height: 78px !important;
@@ -66,7 +70,9 @@ defineExpose({ setQuestion });
 }
 
 .composer :deep(.el-textarea__inner:focus) {
-  box-shadow: 0 0 0 1px #999991 inset, 0 5px 18px rgba(35, 35, 32, 0.06);
+  box-shadow:
+    0 0 0 1px #999991 inset,
+    0 5px 18px rgba(35, 35, 32, 0.06);
 }
 
 .composer :deep(.el-button--primary) {

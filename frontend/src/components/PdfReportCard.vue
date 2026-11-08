@@ -10,8 +10,8 @@
     </header>
     <div class="pdf-thumbnail">
       <img
-          v-if="thumbnailObjectUrl && !thumbnailError"
-          :src="thumbnailObjectUrl"
+        v-if="thumbnailObjectUrl && !thumbnailError"
+        :src="thumbnailObjectUrl"
         alt="PDF 报告第一页缩略图"
         @error="thumbnailError = true"
       />
@@ -38,7 +38,9 @@
       :src="`${previewUrl}#toolbar=1&navpanes=0&view=FitH`"
       title="PDF 报告预览"
     />
-    <div v-else class="pdf-dialog-placeholder">{{ previewError || (previewLoading ? "正在加载完整报告..." : "报告预览尚未加载") }}</div>
+    <div v-else class="pdf-dialog-placeholder">
+      {{ previewError || (previewLoading ? "正在加载完整报告..." : "报告预览尚未加载") }}
+    </div>
   </el-dialog>
 </template>
 
@@ -46,11 +48,7 @@
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { Download } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import {
-  downloadAuthenticatedFile,
-  fetchAuthenticatedBlob,
-  getApiErrorMessage,
-} from "../api";
+import { downloadAuthenticatedFile, fetchAuthenticatedBlob, getApiErrorMessage } from "../api";
 
 const props = defineProps({
   report: { type: Object, required: true },
@@ -73,7 +71,8 @@ const reportPath = computed(() => {
 
 const thumbnailPath = computed(() => {
   const explicit = props.report.thumbnail_url || "";
-  if (explicit) return /^https?:\/\//i.test(explicit) || explicit.startsWith("/") ? explicit : `/${explicit}`;
+  if (explicit)
+    return /^https?:\/\//i.test(explicit) || explicit.startsWith("/") ? explicit : `/${explicit}`;
   const filename = String(props.report.filename || "").replace(/\.pdf$/i, ".thumbnail.png");
   return filename ? `/api/case-multidim/report-thumbnails/${encodeURIComponent(filename)}` : "";
 });
@@ -120,7 +119,7 @@ watch(
     releasePreviewUrl();
     loadThumbnail();
   },
-  { immediate: true },
+  { immediate: true }
 );
 
 // 只有用户点击查看时才加载完整 PDF，列表缩略图始终使用稳定的 PNG 地址。
@@ -155,10 +154,7 @@ onBeforeUnmount(() => {
 const download = async () => {
   if (!reportPath.value) return;
   try {
-    await downloadAuthenticatedFile(
-      reportPath.value,
-      props.report.filename || "case-report.pdf",
-    );
+    await downloadAuthenticatedFile(reportPath.value, props.report.filename || "case-report.pdf");
   } catch (error) {
     ElMessage.error(`报告下载失败：${getApiErrorMessage(error)}`);
   }
@@ -166,22 +162,122 @@ const download = async () => {
 </script>
 
 <style scoped>
-.pdf-card { background: #fff; border: 1px solid #deded9; border-radius: 7px; margin-top: 14px; overflow: hidden; }
-.pdf-head { align-items: center; border-bottom: 1px solid #e4e4e0; display: flex; gap: 10px; min-height: 58px; padding: 10px 12px; }
-.pdf-icon { background: #b42318; border-radius: 4px; color: #fff; display: grid; flex: none; font-size: 11px; font-weight: 700; height: 34px; place-items: center; width: 34px; }
-.pdf-title { display: grid; flex: 1; min-width: 0; }
-.pdf-title strong, .pdf-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pdf-title strong { color: #292927; font-size: 14px; }
-.pdf-title span { color: #777771; font-size: 11px; }
-.pdf-thumbnail { background: #ecece8; height: 310px; overflow: hidden; position: relative; width: 100%; }
-.pdf-thumbnail img { display: block; height: 100%; object-fit: contain; object-position: top center; width: 100%; }
-.pdf-placeholder { align-items: center; color: #777771; display: flex; height: 100%; justify-content: center; padding: 20px; text-align: center; }
-.pdf-thumbnail-action { background: transparent; border: 0; cursor: pointer; inset: 0; padding: 0; position: absolute; width: 100%; }
-.pdf-thumbnail-action:disabled { cursor: default; }
-.pdf-thumbnail-action span { background: rgba(45, 45, 43, .94); bottom: 12px; color: #fff; font-size: 12px; left: 50%; padding: 7px 12px; position: absolute; transform: translateX(-50%); }
-.pdf-thumbnail-action:disabled span { display: none; }
-.pdf-frame { border: 0; height: 82vh; width: 100%; }
-.pdf-dialog-placeholder { align-items: center; color: #777771; display: flex; height: 60vh; justify-content: center; padding: 20px; }
-:global(.pdf-dialog .el-dialog__body) { padding: 0; }
-@media (max-width: 760px) { .pdf-thumbnail { height: 240px; } .pdf-frame { height: 78vh; } }
+.pdf-card {
+  background: #fff;
+  border: 1px solid #deded9;
+  border-radius: 7px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+.pdf-head {
+  align-items: center;
+  border-bottom: 1px solid #e4e4e0;
+  display: flex;
+  gap: 10px;
+  min-height: 58px;
+  padding: 10px 12px;
+}
+.pdf-icon {
+  background: #b42318;
+  border-radius: 4px;
+  color: #fff;
+  display: grid;
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  height: 34px;
+  place-items: center;
+  width: 34px;
+}
+.pdf-title {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.pdf-title strong,
+.pdf-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pdf-title strong {
+  color: #292927;
+  font-size: 14px;
+}
+.pdf-title span {
+  color: #777771;
+  font-size: 11px;
+}
+.pdf-thumbnail {
+  background: #ecece8;
+  height: 310px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.pdf-thumbnail img {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  object-position: top center;
+  width: 100%;
+}
+.pdf-placeholder {
+  align-items: center;
+  color: #777771;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+.pdf-thumbnail-action {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  inset: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+}
+.pdf-thumbnail-action:disabled {
+  cursor: default;
+}
+.pdf-thumbnail-action span {
+  background: rgba(45, 45, 43, 0.94);
+  bottom: 12px;
+  color: #fff;
+  font-size: 12px;
+  left: 50%;
+  padding: 7px 12px;
+  position: absolute;
+  transform: translateX(-50%);
+}
+.pdf-thumbnail-action:disabled span {
+  display: none;
+}
+.pdf-frame {
+  border: 0;
+  height: 82vh;
+  width: 100%;
+}
+.pdf-dialog-placeholder {
+  align-items: center;
+  color: #777771;
+  display: flex;
+  height: 60vh;
+  justify-content: center;
+  padding: 20px;
+}
+:global(.pdf-dialog .el-dialog__body) {
+  padding: 0;
+}
+@media (max-width: 760px) {
+  .pdf-thumbnail {
+    height: 240px;
+  }
+  .pdf-frame {
+    height: 78vh;
+  }
+}
 </style>

@@ -136,7 +136,7 @@ def configure_logging(settings: Any) -> None:
     ):
         return
     handler = logging.StreamHandler()
-    handler._risk_context_handler = True
+    handler._risk_context_handler = True  # type: ignore[attr-defined]
     handler.setFormatter(
         JsonContextFormatter()
         if bool(getattr(settings, "log_json", False))

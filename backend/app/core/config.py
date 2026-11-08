@@ -28,6 +28,7 @@ def _dashscope_api_key() -> str:
         os.getenv("DASHSCOPE_API_KEY")
         or os.getenv("ALIYUN_API_KEY")
         or os.getenv("ALiYunAPI", "")
+        or ""
     )
 
 

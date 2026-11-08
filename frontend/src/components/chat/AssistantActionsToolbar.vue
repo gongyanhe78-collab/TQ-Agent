@@ -1,6 +1,10 @@
 <template>
   <div class="message-actions">
-    <div v-if="message.version_navigation?.total > 1" class="version-switcher" aria-label="回答版本切换">
+    <div
+      v-if="message.version_navigation?.total > 1"
+      class="version-switcher"
+      aria-label="回答版本切换"
+    >
       <button
         class="version-button"
         type="button"
@@ -10,7 +14,9 @@
       >
         <el-icon><ArrowLeft /></el-icon>
       </button>
-      <span class="version-label">{{ message.version_navigation.current }} / {{ message.version_navigation.total }}</span>
+      <span class="version-label"
+        >{{ message.version_navigation.current }} / {{ message.version_navigation.total }}</span
+      >
       <button
         class="version-button"
         type="button"
@@ -57,7 +63,12 @@
       </button>
     </el-tooltip>
     <el-tooltip content="重新生成" placement="bottom">
-      <button class="action-button" type="button" aria-label="重新生成" @click="emit('regenerate', message)">
+      <button
+        class="action-button"
+        type="button"
+        aria-label="重新生成"
+        @click="emit('regenerate', message)"
+      >
         <el-icon><RefreshRight /></el-icon>
       </button>
     </el-tooltip>

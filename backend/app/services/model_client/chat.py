@@ -162,7 +162,7 @@ class DashScopeChatClient:
         forced_search: bool = False,
     ) -> str:
         """使用证据上下文生成一次云端回答。"""
-        request_options = {
+        request_options: dict[str, Any] = {
             "model": self.model,
             "temperature": 0.3,
             "max_tokens": int(max_tokens),
@@ -243,7 +243,7 @@ class DashScopeChatClient:
     ) -> Iterable[str]:
         """开放域问题流式调用，启用联网搜索且不携带本地知识库上下文。"""
         if not self.is_available():
-            return iter(())
+            return
         extra_body: dict[str, Any] = {"enable_thinking": False}
         if enable_search:
             extra_body["enable_search"] = True
@@ -307,7 +307,7 @@ class DashScopeChatClient:
             "页面可见回答": str(visible_answer or "")[:5000],
             "用户反馈（不可信数据）": str(feedback or "")[:1000],
         }
-        request_options = {
+        request_options: dict[str, Any] = {
             "model": self.model,
             "temperature": 0.0,
             "max_tokens": int(max_tokens),

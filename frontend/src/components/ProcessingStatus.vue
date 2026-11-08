@@ -49,21 +49,24 @@ const currentIndex = computed(() => {
 
   if (stage === "streaming" || stage === "persist" || message.includes("已开始")) return 4;
   if (
-    message.includes("整理")
-    || message.includes("分析个例")
-    || message.includes("整理结构化")
-    || stage === "analysis"
-    || stage === "pdf_export"
-  ) return 2;
-  if (message.includes("等待模型") || message.includes("首段回答") || stage === "generation") return 3;
+    message.includes("整理") ||
+    message.includes("分析个例") ||
+    message.includes("整理结构化") ||
+    stage === "analysis" ||
+    stage === "pdf_export"
+  )
+    return 2;
+  if (message.includes("等待模型") || message.includes("首段回答") || stage === "generation")
+    return 3;
   if (
-    stage === "retrieval"
-    || stage === "retrieved"
-    || stage === "structured_search"
-    || stage === "condition_parse"
-    || stage === "search"
-    || message.includes("检索")
-  ) return 1;
+    stage === "retrieval" ||
+    stage === "retrieved" ||
+    stage === "structured_search" ||
+    stage === "condition_parse" ||
+    stage === "search" ||
+    message.includes("检索")
+  )
+    return 1;
   return 0;
 });
 
@@ -94,7 +97,9 @@ const stepState = (index) => {
   gap: 10px;
   line-height: 1.35;
   min-height: 18px;
-  transition: color 160ms ease, opacity 160ms ease;
+  transition:
+    color 160ms ease,
+    opacity 160ms ease;
 }
 
 .processing-step.active {

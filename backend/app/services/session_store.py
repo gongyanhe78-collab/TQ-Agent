@@ -49,7 +49,10 @@ class SessionStore:
                 "INSERT INTO sessions (session_id, title, created_at, updated_at) VALUES (?, ?, ?, ?)",
                 (session_id, title or "新会话", now, now),
             )
-        return self.get_session(session_id)
+        result = self.get_session(session_id)
+        if result is None:
+            raise RuntimeError("会话写入后未能读取到会话")
+        return result
 
     def list_sessions(self) -> list[dict]:
         """
@@ -104,7 +107,10 @@ class SessionStore:
                 "UPDATE sessions SET title = ?, updated_at = ? WHERE session_id = ?",
                 (title or "新会话", now, session_id),
             )
-        return self.get_session(session_id)
+        result = self.get_session(session_id)
+        if result is None:
+            raise RuntimeError("会话更新后未能读取到会话")
+        return result
 
     def delete_session(self, session_id: str) -> bool:
         """

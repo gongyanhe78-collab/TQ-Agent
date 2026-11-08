@@ -26,12 +26,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import {
-  ArrowDown,
-  Loading,
-  Refresh,
-  SwitchButton,
-} from "@element-plus/icons-vue";
+import { ArrowDown, Loading, Refresh, SwitchButton } from "@element-plus/icons-vue";
 
 import { getApiErrorMessage, rebuildKnowledgeBase } from "../../api";
 
@@ -57,7 +52,7 @@ const rebuildKnowledge = async () => {
         confirmButtonText: "开始重建",
         cancelButtonText: "取消",
         type: "warning",
-      },
+      }
     );
   } catch {
     return;

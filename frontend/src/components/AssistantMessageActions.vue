@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Loading } from "@element-plus/icons-vue";
 import {
@@ -49,6 +49,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["regenerate", "select-version"]);
+// 通过本地响应式引用同步反馈状态，避免直接改写传入的 message 对象。
+const localMessage = reactive(props.message);
 const feedback = ref(props.message.feedback || "none");
 const improvementDialogVisible = ref(false);
 const improvementCategory = ref("off_topic");
@@ -62,7 +64,7 @@ watch(
   () => {
     feedback.value = props.message.feedback || "none";
     improvementDescription.value = props.message.feedback_reason || "";
-  },
+  }
 );
 
 const writeClipboard = async (text) => {
@@ -109,8 +111,8 @@ const persistFeedback = async (rating, reason = "") => {
     reason,
   });
   feedback.value = result.rating || rating;
-  props.message.feedback = feedback.value;
-  props.message.feedback_reason = reason;
+  localMessage.feedback = feedback.value;
+  localMessage.feedback_reason = reason;
   return result;
 };
 
@@ -157,9 +159,8 @@ const submitImprovement = async (regenerate) => {
     const result = await persistFeedback("needs_improvement", reason);
     improvementDialogVisible.value = false;
     // 仅提交会异步生成当前会话的临时回答要求，提示用户它不会阻塞本轮页面。
-    const savedMessage = result?.guidance_status === "pending"
-      ? "反馈已保存，正在应用到本会话"
-      : "反馈已保存";
+    const savedMessage =
+      result?.guidance_status === "pending" ? "反馈已保存，正在应用到本会话" : "反馈已保存";
     ElMessage.success(regenerate ? "反馈已保存，正在按原因重新生成" : savedMessage);
     if (regenerate) {
       emit("regenerate", { message: props.message, instruction: reason });
@@ -243,6 +244,8 @@ const handleMoreCommand = (command) => {
 }
 
 @keyframes pdf-download-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

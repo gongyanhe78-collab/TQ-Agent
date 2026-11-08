@@ -524,6 +524,37 @@ npm run dev -- --host 127.0.0.1 --port 5173
 
 本地源码开发应通过 `DATABASE_URL` 和 `REDIS_URL` 明确连接可用的 PostgreSQL 与 Redis。未配置这两个变量时，历史测试和旧脚本可能仍使用兼容的 SQLite 路径，但 Docker Compose 才是第一阶段推荐的完整运行方式。
 
+### 🧪 本地质量检查命令
+
+提交前建议先在本机执行与 CI 相同的检查命令，避免推送到仓库后才发现门禁失败：
+
+```powershell
+# 后端：静态检查与单元测试（对应 CI 快速门禁）
+python -m ruff check backend/app scripts
+python -m mypy --follow-imports=skip backend/app/security/rate_limit.py backend/app/observability/logging.py backend/app/core/config.py backend/app/api/routes/sessions.py backend/app/db/session_repository.py backend/app/services/session_store.py backend/app/services/model_client/chat.py
+python -m pytest backend/tests/unit -q
+```
+
+```powershell
+# 后端：集成测试（需要 PostgreSQL 与 Redis，对应 CI 集成门禁）
+$env:DATABASE_URL = "postgresql+psycopg://risk:risk@127.0.0.1:5432/risk"
+$env:REDIS_URL = "redis://127.0.0.1:6379/0"
+python -m pytest backend/tests/integration -q
+```
+
+```powershell
+# 后端：确定性核心评测子集（对应 CI 评测门禁）
+python -m pytest backend/tests/unit/evals backend/tests/integration/evals -q
+```
+
+```powershell
+# 前端：lint、格式与构建（对应 CI 前端门禁）
+cd frontend
+npm run lint
+npm run format:check
+npm run build
+```
+
 ## 📖 使用说明
 
 ### 💬 统一聊天入口

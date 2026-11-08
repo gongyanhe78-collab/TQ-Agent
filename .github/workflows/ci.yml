@@ -12,44 +12,13 @@ permissions:
   contents: read
 
 jobs:
-  backend:
-    name: 后端编译、迁移与测试
+  backend-fast-gate:
+    name: 快速门禁：后端静态检查与单元测试
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
-
-    services:
-      postgres:
-        image: postgres:16.4-alpine3.20
-        env:
-          POSTGRES_DB: risk_test
-          POSTGRES_USER: risk_test
-          POSTGRES_PASSWORD: ci_only_postgres_password
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U risk_test -d risk_test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-
-      redis:
-        image: redis:7.2.5-alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 3s
-          --health-retries 10
-
+    timeout-minutes: 20
     env:
-      DATABASE_URL: postgresql+psycopg://risk_test:ci_only_postgres_password@127.0.0.1:5432/risk_test
-      REDIS_URL: redis://127.0.0.1:6379/0
-      REDIS_CACHE_ENABLED: "true"
-      AUTH_JWT_SECRET: ci-only-placeholder-not-for-production
       PYTHONDONTWRITEBYTECODE: "1"
       PYTHONUNBUFFERED: "1"
-
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -61,10 +30,10 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.txt
 
-      - name: 安装后端依赖
+      - name: 安装后端依赖（含开发与静态检查工具）
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt "pytest>=8,<10"
+          python -m pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Python 编译检查
         run: |
@@ -73,24 +42,27 @@ jobs:
             python -m compileall -q scripts
           fi
 
-      - name: 执行 Alembic 迁移
+      - name: Ruff 静态检查
+        run: python -m ruff check backend/app scripts
+
+      - name: Mypy 核心接口检查
         run: |
-          if [ -f backend/alembic.ini ]; then
-            (cd backend && python -m alembic upgrade head)
-          elif [ -f alembic.ini ]; then
-            python -m alembic upgrade head
-          else
-            echo "Alembic 配置尚未落盘，当前提交跳过迁移步骤。"
-          fi
+          python -m mypy --follow-imports=skip \
+            backend/app/security/rate_limit.py \
+            backend/app/observability/logging.py \
+            backend/app/core/config.py \
+            backend/app/api/routes/sessions.py \
+            backend/app/db/session_repository.py \
+            backend/app/services/session_store.py \
+            backend/app/services/model_client/chat.py
 
-      - name: 后端测试
-        run: python -m pytest backend/tests -q
+      - name: 后端单元测试
+        run: python -m pytest backend/tests/unit -q
 
-  frontend:
-    name: 前端依赖、构建与 Compose 校验
+  frontend-fast-gate:
+    name: 快速门禁：前端 lint、格式与构建
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -106,9 +78,107 @@ jobs:
         working-directory: frontend
         run: npm ci --no-audit --no-fund
 
+      - name: ESLint 检查
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Prettier 格式检查
+        working-directory: frontend
+        run: npm run format:check
+
       - name: 前端生产构建
         working-directory: frontend
         run: npm run build
 
       - name: Compose 配置校验
         run: docker compose config --quiet
+
+  integration-gate:
+    name: 集成门禁：PostgreSQL、Redis、迁移与数据隔离
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16.4-alpine3.20
+        env:
+          POSTGRES_DB: risk_test
+          POSTGRES_USER: risk_test
+          POSTGRES_PASSWORD: ci_only_postgres_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U risk_test -d risk_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7.2.5-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://risk_test:ci_only_postgres_password@127.0.0.1:5432/risk_test
+      REDIS_URL: redis://127.0.0.1:6379/0
+      REDIS_CACHE_ENABLED: "true"
+      AUTH_JWT_SECRET: ci-only-placeholder-not-for-production
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: 安装后端依赖
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: 执行 Alembic 迁移
+        run: |
+          if [ -f backend/alembic.ini ]; then
+            (cd backend && python -m alembic upgrade head)
+          elif [ -f alembic.ini ]; then
+            python -m alembic upgrade head
+          else
+            echo "Alembic 配置尚未落盘，当前提交跳过迁移步骤。"
+          fi
+
+      - name: 后端集成测试（含鉴权、迁移与数据隔离）
+        run: python -m pytest backend/tests/integration -q
+
+  eval-gate:
+    name: 评测门禁：确定性核心评测子集
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: 安装后端依赖
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: 确定性核心评测子集
+        run: |
+          python -m pytest backend/tests/unit/evals backend/tests/integration/evals -q

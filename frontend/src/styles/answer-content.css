@@ -9,8 +9,12 @@
   white-space: normal;
 }
 
-.markdown-body p { margin: 0 0 13px; }
-.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body p {
+  margin: 0 0 13px;
+}
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
 .markdown-body h1,
 .markdown-body h2,
 .markdown-body h3,
@@ -22,10 +26,18 @@
   margin: 24px 0 10px;
   break-after: avoid;
 }
-.markdown-body h1 { font-size: 22px; }
-.markdown-body h2 { font-size: 19px; }
-.markdown-body h3 { font-size: 17px; }
-.markdown-body h4 { font-size: 15px; }
+.markdown-body h1 {
+  font-size: 22px;
+}
+.markdown-body h2 {
+  font-size: 19px;
+}
+.markdown-body h3 {
+  font-size: 17px;
+}
+.markdown-body h4 {
+  font-size: 15px;
+}
 .markdown-body ul,
 .markdown-body ol {
   margin: 8px 0 14px;
@@ -96,8 +108,12 @@
   font-weight: 650;
   white-space: nowrap;
 }
-.markdown-body tbody tr:nth-child(even) { background: #f3f3f0; }
-.markdown-body tbody tr:last-child td { border-bottom: 0; }
+.markdown-body tbody tr:nth-child(even) {
+  background: #f3f3f0;
+}
+.markdown-body tbody tr:last-child td {
+  border-bottom: 0;
+}
 
 @media print {
   .markdown-body {

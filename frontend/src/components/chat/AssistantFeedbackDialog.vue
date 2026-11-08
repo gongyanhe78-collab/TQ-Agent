@@ -27,9 +27,7 @@
     <template #footer>
       <div class="feedback-dialog-actions">
         <el-button @click="visible = false">取消</el-button>
-        <el-button :loading="submitting" @click="emit('submit', false)">
-          仅提交反馈
-        </el-button>
+        <el-button :loading="submitting" @click="emit('submit', false)"> 仅提交反馈 </el-button>
         <el-button type="primary" :loading="submitting" @click="emit('submit', true)">
           按此原因重新生成
         </el-button>

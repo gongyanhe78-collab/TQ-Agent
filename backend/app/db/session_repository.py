@@ -45,13 +45,11 @@ class SharedMessageRepository:
         now = utc_now()
         with Session(self.engine) as db:
             row = db.get(SharedMessageSnapshot, token)
+            expires_at = _as_utc(row.expires_at) if row is not None else None
             if (
                 row is None
                 or row.revoked_at is not None
-                or (
-                    row.expires_at is not None
-                    and _as_utc(row.expires_at) <= now
-                )
+                or (expires_at is not None and expires_at <= now)
             ):
                 return None
             return {
@@ -718,13 +716,11 @@ class SqlAlchemySessionStore:
         now = utc_now()
         with Session(self.engine) as db:
             row = db.get(SharedMessageSnapshot, token)
+            expires_at = _as_utc(row.expires_at) if row is not None else None
             if (
                 row is None
                 or row.revoked_at is not None
-                or (
-                    row.expires_at is not None
-                    and _as_utc(row.expires_at) <= now
-                )
+                or (expires_at is not None and expires_at <= now)
             ):
                 return None
             return {

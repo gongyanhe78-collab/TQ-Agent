@@ -12,10 +12,7 @@
     :class="message.role"
   >
     <div class="bubble" :class="{ answer: message.role === 'assistant' }">
-      <ProcessingStatus
-        v-if="isProcessingMessage(message)"
-        :progress="message.progress"
-      />
+      <ProcessingStatus v-if="isProcessingMessage(message)" :progress="message.progress" />
       <template v-if="showTextContent(message)">
         <div
           v-if="message.role === 'assistant'"
@@ -27,7 +24,11 @@
       </template>
 
       <SmartCaseResult
-        v-if="message.role === 'assistant' && message.agent_type === 'smart_case_match' && message.agent_result?.matched_cases"
+        v-if="
+          message.role === 'assistant' &&
+          message.agent_type === 'smart_case_match' &&
+          message.agent_result?.matched_cases
+        "
         :result="message.agent_result"
       />
 
@@ -42,7 +43,10 @@
             <div v-for="item in visual.items || []" :key="item.label" class="bar-row">
               <span class="bar-label">{{ item.label }}</span>
               <div class="bar-track">
-                <span class="bar-fill" :style="{ width: `${barPercent(item.value, visual.items)}%` }" />
+                <span
+                  class="bar-fill"
+                  :style="{ width: `${barPercent(item.value, visual.items)}%` }"
+                />
               </div>
               <span class="bar-value">{{ item.value }}</span>
             </div>
@@ -51,12 +55,16 @@
             <table class="visual-table">
               <thead>
                 <tr>
-                  <th v-for="column in visual.columns || []" :key="column.key">{{ column.label }}</th>
+                  <th v-for="column in visual.columns || []" :key="column.key">
+                    {{ column.label }}
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(row, rowIndex) in visual.rows || []" :key="rowIndex">
-                  <td v-for="column in visual.columns || []" :key="column.key">{{ row[column.key] }}</td>
+                  <td v-for="column in visual.columns || []" :key="column.key">
+                    {{ row[column.key] }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -64,7 +72,10 @@
         </section>
       </div>
 
-      <div v-if="message.role === 'assistant' && visibleReports(message).length" class="answer-reports">
+      <div
+        v-if="message.role === 'assistant' && visibleReports(message).length"
+        class="answer-reports"
+      >
         <PdfReportCard
           v-for="report in visibleReports(message)"
           :key="report.report_id || report.url"

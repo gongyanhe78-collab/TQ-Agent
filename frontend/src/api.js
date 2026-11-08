@@ -1,9 +1,13 @@
 import axios from "axios";
 
-const normalizeOrigin = (value) => String(value || "").trim().replace(/\/+$/, "");
-const browserApiOrigin = typeof window !== "undefined"
-  ? normalizeOrigin(window.localStorage.getItem("risk-api-origin"))
-  : "";
+const normalizeOrigin = (value) =>
+  String(value || "")
+    .trim()
+    .replace(/\/+$/, "");
+const browserApiOrigin =
+  typeof window !== "undefined"
+    ? normalizeOrigin(window.localStorage.getItem("risk-api-origin"))
+    : "";
 const configuredApiOrigin = normalizeOrigin(import.meta.env.VITE_API_ORIGIN);
 
 // 生产环境固定使用同源相对地址；开发环境可通过 Vite 环境变量切到联调后端。
@@ -31,9 +35,7 @@ let authExpiredNotified = false;
 const storeAuthSession = (data) => {
   accessToken = String(data?.access_token || "");
   const expiresIn = Math.max(0, Number(data?.expires_in) || 0);
-  accessTokenExpiresAt = accessToken && expiresIn
-    ? Date.now() + expiresIn * 1000
-    : 0;
+  accessTokenExpiresAt = accessToken && expiresIn ? Date.now() + expiresIn * 1000 : 0;
   authExpiredNotified = false;
   return data;
 };
@@ -95,7 +97,7 @@ api.interceptors.response.use(
       notifyAuthExpired();
       return Promise.reject(refreshError.response?.status === 401 ? error : refreshError);
     }
-  },
+  }
 );
 
 const responseDetail = async (response) => {
@@ -156,7 +158,11 @@ export const getFeedbackClientId = () => {
   return value;
 };
 export const fetchSessionMessages = async (sessionId) =>
-  (await api.get(`/sessions/${sessionId}/messages`, { params: { client_id: getFeedbackClientId() } })).data;
+  (
+    await api.get(`/sessions/${sessionId}/messages`, {
+      params: { client_id: getFeedbackClientId() },
+    })
+  ).data;
 export const fetchSessionMessage = async (sessionId, messageId) =>
   (await api.get(`/sessions/${sessionId}/messages/${messageId}`)).data;
 export const deleteSession = async (sessionId) => (await api.delete(`/sessions/${sessionId}`)).data;

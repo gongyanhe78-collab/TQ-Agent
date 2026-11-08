@@ -3,7 +3,10 @@ export const resolveVersionGroup = (message, byId) => {
   if (message.version_group_id) return message.version_group_id;
   let current = message;
   const visited = new Set();
-  while (current?.regenerated_from_message_id && !visited.has(current.regenerated_from_message_id)) {
+  while (
+    current?.regenerated_from_message_id &&
+    !visited.has(current.regenerated_from_message_id)
+  ) {
     visited.add(current.regenerated_from_message_id);
     const parent = byId.get(current.regenerated_from_message_id);
     if (!parent) break;
@@ -15,7 +18,9 @@ export const resolveVersionGroup = (message, byId) => {
 
 // 把同组回答折叠到第一次出现的位置，默认展示最新版本，并附加切换所需的导航状态。
 export const buildDisplayedMessages = (messages, selectedVersionByGroup = {}) => {
-  const byId = new Map(messages.filter((item) => item.message_id).map((item) => [item.message_id, item]));
+  const byId = new Map(
+    messages.filter((item) => item.message_id).map((item) => [item.message_id, item])
+  );
   const groups = new Map();
   for (const message of messages) {
     if (message.role !== "assistant") continue;

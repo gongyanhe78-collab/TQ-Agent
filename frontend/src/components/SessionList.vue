@@ -10,7 +10,13 @@
         :title="collapsed ? '展开聊天记录' : '收起聊天记录'"
         @click="$emit('toggle-collapse')"
       />
-      <el-button v-if="!collapsed" class="new-session-button" :icon="Plus" :loading="loading" @click="$emit('new-session')">
+      <el-button
+        v-if="!collapsed"
+        class="new-session-button"
+        :icon="Plus"
+        :loading="loading"
+        @click="$emit('new-session')"
+      >
         新建
       </el-button>
     </header>
