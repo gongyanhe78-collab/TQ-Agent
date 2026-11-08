@@ -968,7 +968,9 @@ class QueryIntentAgent:
             "外部新过程要求分析、预测、研判、预警或参考经验时，intent必须是similar_case_match，"
             "任务计划必须包含similar_case_match，不能生成用于定位该新过程的RAG个例检索任务。"
             "只能引用available_case_refs中存在且属于knowledge_case的case_id，不得创造个例、日期或天气事实。"
-            "intent只能是rag、multidim_search、similar_case_match、clarify。"
+            "intent只能是rag、multidim_search、similar_case_match、clarify、general_chat。"
+            "与本地气象知识库（山西气象、历史个例、统计、预警）无关的通用闲聊或实时信息，"
+            "例如其他地区天气、新闻、常识，选择general_chat；"
             "只有明确要求生成或导出报告才选择multidim_search；"
             "只有描述当前、未来或知识库范围外的新风险过程并要求分析才选择similar_case_match；"
             "简单统计、库内个例分析和普通知识问答全部选择rag。"
@@ -1107,7 +1109,7 @@ class QueryIntentAgent:
 
         intent = str(payload.get("intent") or "")
         model_decision = None
-        if intent in {"rag", "multidim_search", "similar_case_match", "clarify"}:
+        if intent in {"rag", "multidim_search", "similar_case_match", "clarify", "general_chat"}:
             model_decision = CandidateDecision(
                 intent,
                 max(0.0, min(1.0, float(payload.get("intent_confidence") or payload.get("confidence") or 0.0))),
@@ -1380,6 +1382,18 @@ class QueryIntentAgent:
                 result[key] = value
         return result
 
+    @staticmethod
+    def _looks_open_domain(text: str) -> bool:
+        """粗判是否为开放域问题：不含任何本地气象知识库特征词。"""
+        knowledge_terms = (
+            "山西", "太原", "大同", "朔州", "忻州", "阳泉", "吕梁", "晋中",
+            "长治", "晋城", "临汾", "运城", "暴雨", "暴雪", "寒潮", "大风",
+            "沙尘", "高温", "干旱", "冻雨", "强对流", "降水", "降雪", "雨雪",
+            "降温", "预警", "预报", "个例", "环流", "冷空气", "天气过程",
+            "雷达", "云图",
+        )
+        return not any(term in text for term in knowledge_terms)
+
     def _rule_decision(
         self,
         text: str,
@@ -1426,8 +1440,13 @@ class QueryIntentAgent:
         """让大模型只判断任务类型，不接受其生成的业务条件。"""
         # 明确的业务动作已经由规则高置信确定，跳过额外模型调用可降低延迟，
         # 同时避免模型误把“检索”和“相似匹配”等明确指令改判。
-        if rule.hard or (rule.intent == "rag" and rule.confidence >= 0.9):
-            # 简单聚合和普通问答已有稳定规则结论，不再为路由额外等待一次云端模型。
+        if rule.hard or (
+            rule.intent == "rag"
+            and rule.confidence >= 0.9
+            and not self._looks_open_domain(text)
+        ):
+            # 简单聚合和普通问答已有稳定规则结论，不再为路由额外等待一次云端模型；
+            # 疑似开放域问题时仍调用模型，允许其改判为 general_chat。
             return None
         try:
             if not self.llm_client or not self.llm_client.is_available():
@@ -1436,7 +1455,8 @@ class QueryIntentAgent:
             return None
         instruction = (
             "你是气象个例系统的意图识别器，只判断任务类型，不回答业务问题。"
-            "只输出JSON，intent只能是rag、multidim_search、similar_case_match、clarify。"
+            "只输出JSON，intent只能是rag、multidim_search、similar_case_match、clarify、general_chat。"
+            "与本地气象知识库无关的通用闲聊或实时信息选择general_chat；"
             "只有用户明确要求生成或导出报告时才选择multidim_search；"
             "只有用户描述当前、未来或知识库范围外的新风险过程并要求分析时才选择similar_case_match；"
             "简单统计、库内查询和其他知识问答全部选择rag；"
@@ -1465,7 +1485,7 @@ class QueryIntentAgent:
         except Exception as exc:
             LOGGER.warning("[意图分发] 大模型判断失败，使用规则候选：%s", exc)
             return None
-        if intent not in {"rag", "multidim_search", "similar_case_match", "clarify"}:
+        if intent not in {"rag", "multidim_search", "similar_case_match", "clarify", "general_chat"}:
             return None
         return CandidateDecision(intent, max(0.0, min(1.0, confidence)), reason, "llm")
 
@@ -1488,7 +1508,7 @@ class QueryIntentAgent:
         if (
             rule.intent == "rag"
             and rule.source == "rule"
-            and model.intent in {"multidim_search", "similar_case_match"}
+            and model.intent in {"multidim_search", "similar_case_match", "general_chat"}
             and model.confidence >= 0.85
         ):
             # 默认 RAG 只是兜底候选；模型结合完整目录确认了重型任务后应采用语义判断。
@@ -1551,6 +1571,8 @@ class QueryIntentAgent:
             return "多维检索智能体", "/api/case-multidim/natural/parse"
         if intent == "similar_case_match":
             return "相似个例智能体", "/api/smart-case-match/conversation/stream"
+        if intent == "general_chat":
+            return "开放域聊天", ""
         return "", ""
 
     def _asks_for_report(self, text: str) -> bool:

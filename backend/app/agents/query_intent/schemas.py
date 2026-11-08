@@ -6,7 +6,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 
-IntentName = Literal["rag", "multidim_search", "similar_case_match", "clarify"]
+IntentName = Literal["rag", "multidim_search", "similar_case_match", "clarify", "general_chat"]
 TaskType = Literal[
     "knowledge_qa",
     "case_identification",
@@ -21,8 +21,9 @@ TaskType = Literal[
     "similar_case_match",
     "report_generation",
     "clarification",
+    "general_chat",
 ]
-TaskRoute = Literal["rag", "multidim_search", "similar_case_match", "clarify"]
+TaskRoute = Literal["rag", "multidim_search", "similar_case_match", "clarify", "general_chat"]
 
 
 class TaskPlanItem(BaseModel):
@@ -86,7 +87,7 @@ class IntentRouteResponse(BaseModel):
     reason: str = Field(default="", description="最终决定的简短依据")
     need_clarification: bool = Field(default=False, description="是否需要用户选择目标智能体")
     clarification_question: str = Field(default="", description="低置信度时展示的追问")
-    suggested_intent: Literal["rag", "multidim_search", "similar_case_match"] | None = Field(
+    suggested_intent: Literal["rag", "multidim_search", "similar_case_match", "general_chat"] | None = Field(
         default=None,
         description="存在倾向但仍需确认时的建议意图",
     )

@@ -358,6 +358,29 @@ class RepairableMisroutedMetricLlm:
         }, ensure_ascii=False)
 
 
+
+
+class GeneralChatLlm:
+    """模拟意图模型把与本地知识库无关的问题路由到普通聊天。"""
+
+    def is_available(self) -> bool:
+        return True
+
+    def answer_with_context(self, _prompt, _context, max_tokens=0):
+        return json.dumps({
+            "is_related": False,
+            "relation_type": "standalone",
+            "reference_type": "none",
+            "context_confidence": 1.0,
+            "standalone_message": "今天重庆天气怎么样",
+            "referenced_case_ids": [],
+            "reference_clues": [],
+            "intent": "general_chat",
+            "intent_confidence": 0.98,
+            "intent_reason": "与本地知识库无关的实时天气查询",
+        }, ensure_ascii=False)
+
+
 class IntentAgentTest(unittest.TestCase):
     """覆盖白名单分发、时间边界和上一轮意图承接。"""
 
@@ -799,6 +822,22 @@ class IntentAgentTest(unittest.TestCase):
         self.assertEqual(result.referenced_case_ids, ["case-july-28"])
         self.assertEqual(result.context_resolution_source, "explicit_knowledge_lookup")
 
+
+
+    def test_open_domain_question_routes_to_general_chat(self) -> None:
+        """开放域实时信息问题由模型语义判断路由到普通聊天。"""
+        llm = GeneralChatLlm()
+        agent = agent_module.QueryIntentAgent(
+            llm_client=llm,
+            audit_path=Path(self.temp_dir.name) / "general-chat-audit.jsonl",
+            case_provider=self.agent.case_provider,
+        )
+
+        result = agent.route(schema_module.IntentRouteRequest(
+            message="今天重庆天气怎么样",
+        ))
+
+        self.assertEqual(result.intent, "general_chat")
 
 if __name__ == "__main__":
     unittest.main()
