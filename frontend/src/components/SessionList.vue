@@ -1,7 +1,7 @@
 <template>
   <aside class="session-panel" :class="{ collapsed }">
     <header class="session-header">
-      <h2 v-if="!collapsed">聊天记录</h2>
+      <h2 v-if="!collapsed">💬 聊天记录</h2>
       <el-button
         class="collapse-button"
         text
