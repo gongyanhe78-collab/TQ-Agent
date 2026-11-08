@@ -8,6 +8,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
 
 from backend.app.api.routes import system
 
@@ -93,6 +94,50 @@ class SystemRouteTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["build"]["status"], "missing")
+
+    def test_health_reports_dependency_readiness(self) -> None:
+        """健康接口应返回 postgres/redis/vector 三项依赖就绪状态。"""
+        response = self.client.get("/api/health")
+
+        payload = response.json()
+        self.assertEqual(payload["status"], "ok")
+        self.assertIn("postgres", payload)
+        self.assertIn("redis", payload)
+        self.assertEqual(payload["vector"], "ok")
+        self.assertEqual(payload["postgres"], "unknown")
+        self.assertEqual(payload["redis"], "unknown")
+
+    def test_readiness_returns_200_when_all_dependencies_ok(self) -> None:
+        """关键依赖全部可用时就绪接口返回 200。"""
+        engine = create_engine("sqlite+pysqlite:///:memory:")
+        self.services.engine = engine
+        self.services.context_cache = SimpleNamespace(ping=lambda: True)
+        try:
+            response = self.client.get("/api/ready")
+            payload = response.json()
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(payload["status"], "ready")
+            self.assertEqual(payload["postgres"], "ok")
+            self.assertEqual(payload["redis"], "ok")
+            self.assertEqual(payload["vector"], "ok")
+        finally:
+            engine.dispose()
+
+    def test_readiness_returns_503_when_vector_store_is_down(self) -> None:
+        """向量库不可用时就绪接口应返回 503，健康接口仍返回 200。"""
+        class _BrokenDocumentStore:
+            def collection_info(self) -> dict:
+                raise RuntimeError("vector store down")
+
+        self.services.document_store = _BrokenDocumentStore()
+        ready = self.client.get("/api/ready")
+        self.assertEqual(ready.status_code, 503)
+        self.assertEqual(ready.json()["status"], "not_ready")
+        self.assertEqual(ready.json()["vector"], "down")
+        health = self.client.get("/api/health")
+        self.assertEqual(health.status_code, 200)
+        self.assertEqual(health.json()["status"], "ok")
+        self.assertEqual(health.json()["vector"], "down")
 
 
 if __name__ == "__main__":
