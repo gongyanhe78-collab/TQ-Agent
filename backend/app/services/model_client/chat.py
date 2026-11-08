@@ -27,6 +27,15 @@ class LlmRefinementResult:
     reason: str = ""
 
 
+def general_chat_system_prompt() -> str:
+    """开放域普通聊天使用的通用中文提示词。"""
+    return (
+        "你是气象与通用知识助手。回答开放域问题时优先使用联网搜索获取的实时信息，"
+        "并如实说明信息来源；对于山西省气象历史、个例分析、统计和预警类问题，"
+        "可以提示用户回到本地知识库提问以获得可追溯的权威资料。不要编造搜索结果。"
+    )
+
+
 class DashScopeChatClient:
     """通过 OpenAI 兼容协议调用云端 DashScope 聊天模型。"""
 
@@ -117,6 +126,8 @@ class DashScopeChatClient:
         max_tokens: int = 2048,
         timeout_seconds: float | None = None,
         json_mode: bool = False,
+        enable_search: bool = False,
+        forced_search: bool = False,
     ) -> str:
         """使用证据上下文生成一次云端回答。"""
         request_options = {
@@ -129,6 +140,12 @@ class DashScopeChatClient:
         if self.enable_thinking is not None:
             # 意图模型只需返回短 JSON，关闭思考模式可显著降低首包后的路由等待时间。
             request_options["extra_body"] = {"enable_thinking": self.enable_thinking}
+        if enable_search:
+            request_options.setdefault("extra_body", {})["enable_search"] = True
+            if forced_search:
+                request_options.setdefault("extra_body", {})["search_options"] = {
+                    "forced_search": True
+                }
         if json_mode:
             # 结构化意图调用启用 JSON 模式，避免代码围栏或解释文字破坏任务计划解析。
             request_options["response_format"] = {"type": "json_object"}
@@ -141,14 +158,20 @@ class DashScopeChatClient:
         context_blocks: list[str],
         *,
         session_guidance_prompt: str = "",
+        enable_search: bool = False,
+        forced_search: bool = False,
     ) -> Iterable[str]:
-        """按云端接口返回顺序输出增量文本。"""
+        """按云端接口返回顺序输出增量文本，可按需启用联网搜索。"""
+        extra_body: dict[str, Any] = {"enable_thinking": False}
+        if enable_search:
+            extra_body["enable_search"] = True
+            if forced_search:
+                extra_body["search_options"] = {"forced_search": True}
         stream = self._client().chat.completions.create(
             model=self.model,
             temperature=0.3,
             stream=True,
-            # 主回答流式请求显式关闭思考模式，避免首个可见字符前等待隐藏推理结果。
-            extra_body={"enable_thinking": False},
+            extra_body=extra_body,
             # 主 RAG 的自然承接语和正文共用一次流式生成，不再另起后处理模型请求。
             messages=self._answer_messages(
                 question,
@@ -156,6 +179,44 @@ class DashScopeChatClient:
                 include_closing=True,
                 session_guidance_prompt=session_guidance_prompt,
             ),
+        )
+        for chunk in stream:
+            choices = getattr(chunk, "choices", None) or []
+            if not choices:
+                continue
+            delta = getattr(choices[0], "delta", None)
+            text = getattr(delta, "content", None) if delta else None
+            if text:
+                yield text
+
+    def stream_general_chat(
+        self,
+        question: str,
+        *,
+        system_prompt: str = "",
+        enable_search: bool = True,
+        forced_search: bool = True,
+    ) -> Iterable[str]:
+        """开放域问题流式调用，启用联网搜索且不携带本地知识库上下文。"""
+        if not self.is_available():
+            return iter(())
+        extra_body: dict[str, Any] = {"enable_thinking": False}
+        if enable_search:
+            extra_body["enable_search"] = True
+            if forced_search:
+                extra_body["search_options"] = {"forced_search": True}
+        stream = self._client().chat.completions.create(
+            model=self.model,
+            temperature=0.3,
+            stream=True,
+            extra_body=extra_body,
+            messages=[
+                {
+                    "role": "system",
+                    "content": system_prompt or general_chat_system_prompt(),
+                },
+                {"role": "user", "content": str(question)},
+            ],
         )
         for chunk in stream:
             choices = getattr(chunk, "choices", None) or []
